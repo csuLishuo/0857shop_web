@@ -32,6 +32,7 @@
         height: px2rem(58);
         width: px2rem(564);
         position: relative;
+        overflow: hidden;
         img{
           width: px2rem(25);
           height: px2rem(25);
