@@ -336,22 +336,77 @@
         }
       }
       .listbox{
+        padding-left: px2rem(24);
         .wrapper{
-          .van-card{
-            background-color: #fff;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: space-between;
+          background: #fff;
+          padding: px2rem(22) px2rem(24) px2rem(22) 0;
+          border-bottom: px2rem(1) solid #f0f0f0;
+          .img-box{
+            width: px2rem(225);
+            height: px2rem(225);
+            border-radius: px2rem(6);
+            overflow: hidden;
+            img{
+              width: 100%;
+              height: 100%;
+            }
           }
-          .tags{
-            span{
-              display: inline-block;
-              height: px2rem(30);
-              line-height: px2rem(30);
-              border: 1px solid #ff981e;
-              text-align: center;
-              padding: 0 px2rem(10);
-              font-size: px2rem(20);
-              color: #ff981e;
-              border-radius: px2rem(10);
-              margin-right: px2rem(20);
+          .right-box{
+            width: px2rem(450);
+            .title{
+              font-size: px2rem(28);
+              width: px2rem(390);
+              line-height: px2rem(38);
+              margin-top: px2rem(16);
+              font-weight: bold;
+              color: #393939;
+            }
+            .des{
+              line-height: px2rem(40);
+              font-size: px2rem(22);
+              color: #7c7c7c;
+            }
+            .tag-box{
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              align-items: center;
+              justify-content: flex-start;
+              .tag{
+                height: px2rem(30);
+                line-height: px2rem(30);
+                padding: 0 px2rem(10);
+                border: px2rem(1) solid #ff981e;
+                border-radius: px2rem(10);
+                color: #ff981e;
+                font-size: px2rem(20);
+              }
+            }
+            .price-box{
+              margin-top: px2rem(30);
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              align-items: center;
+              justify-content: space-between;
+              .price{
+                color: #ff6c00;
+                font-size: px2rem(24);
+                font-weight: bold;
+                span{
+                  font-size: px2rem(34);
+                  vertical-align: bottom;
+                }
+              }
+              .info{
+                color: #bababa;
+                font-size: px2rem(18);
+              }
             }
           }
         }
@@ -548,18 +603,18 @@
       </div>
       <div class="listbox">
         <div class="wrapper">
-          <van-card
-            price="2.00"
-            desc="描述信息"
-            title="PZAAO 中空缎面款色休闲短袖PZAAO 中空缎面款色休闲短袖PZAAO 中空缎面款色休闲短袖PZAAO 中空缎面款色休闲短袖"
-            :thumb="images[0]"
-            origin-price="10.00"
-          >
-            <div slot="tags" class="tags">
-              <span>标签</span>
-              <span>标签</span>
+          <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+          <div class="right-box">
+            <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
+            <div class="des">已售2008件/库存10000件</div>
+            <div class="tag-box">
+              <div class="tag">满38减10</div>
             </div>
-          </van-card>
+            <div class="price-box">
+              <div class="price">￥<span>599.00</span></div>
+              <div class="info">包邮 · 七天退换货</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
