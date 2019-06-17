@@ -5,6 +5,21 @@
   }
   .myCenter-container{
     .area-1{
+      background-image: url("../images/img2.png");
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+      position: relative;
+      .setting-box{
+        position: absolute;
+        top: px2rem(30);
+        right: px2rem(26);
+        width: px2rem(37);
+        height: px2rem(37);
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
       .wrapper{
         width: px2rem(698);
         margin: px2rem(100) auto 0;
@@ -155,6 +170,21 @@
             background: rgba(255,0,0,0.1);
             width: px2rem(56);
             height: px2rem(56);
+            position: relative;
+            span{
+              position: absolute;
+              top: px2rem(-10);
+              right: px2rem(-10);
+              height: px2rem(30);
+              line-height: px2rem(30);
+              border-radius: px2rem(15);
+              min-width: px2rem(30);
+              padding: 0 px2rem(2);
+              color: #fff;
+              text-align: center;
+              background: #ff0000;
+              font-size: px2rem(24)
+            }
             img{
               width: 100%;
               height: 100%;
@@ -168,11 +198,48 @@
         }
       }
     }
+    .area-3{
+      width: px2rem(698);
+      margin: px2rem(20) auto 0;
+      background: #fff;
+      border-radius: px2rem(18);
+      // padding-bottom: px2rem(24);
+      .area-3-1{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        .wrap{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          width: 25%;
+          margin: px2rem(25) 0;
+          .img-box{
+            background: rgba(255,0,0,0.1);
+            width: px2rem(56);
+            height: px2rem(56);
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .name{
+            font-size: px2rem(23);
+            color: #4c4c4c;
+            margin-top: px2rem(22);
+          }
+        }
+      }
+    }
   }
 </style>
 <template>
   <div class="myCenter-container">
     <div class="area-1 clearfix">
+      <div class="setting-box"><img src="../images/icon26.png" alt=""></div>
       <div class="wrapper">
         <div class="top-box">
           <div class="left-box">
@@ -210,20 +277,61 @@
       </div>
       <div class="area-2-1">
         <div class="wrap">
-          <div class="img-box"><img src="../images/icon22.png" alt=""></div>
+          <div class="img-box">
+            <img src="../images/icon22.png" alt="">
+            <span>99</span>
+          </div>
           <div class="name">待付款</div>
         </div>
         <div class="wrap">
-          <div class="img-box"><img src="../images/icon23.png" alt=""></div>
+          <div class="img-box">
+            <img src="../images/icon23.png" alt="">
+            <span>1</span>
+          </div>
           <div class="name">待发货</div>
         </div>
         <div class="wrap">
-          <div class="img-box"><img src="../images/icon24.png" alt=""></div>
+          <div class="img-box">
+            <img src="../images/icon24.png" alt="">
+            <span>1</span>
+          </div>
           <div class="name">待收货</div>
         </div>
         <div class="wrap">
           <div class="img-box"><img src="../images/icon25.png" alt=""></div>
           <div class="name">已完成</div>
+        </div>
+      </div>
+    </div>
+    <div class="area-3 clearfix">
+      <div class="area-3-1">
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon27.png" alt=""></div>
+          <div class="name">我的砍价</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon28.png" alt=""></div>
+          <div class="name">我的拼团</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon29.png" alt=""></div>
+          <div class="name">代理权限</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon30.png" alt=""></div>
+          <div class="name">我的收益</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon31.png" alt=""></div>
+          <div class="name">我的评价</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon32.png" alt=""></div>
+          <div class="name">客服</div>
+        </div>
+        <div class="wrap">
+          <div class="img-box"><img src="../images/icon33.png" alt=""></div>
+          <div class="name">申请成为代理</div>
         </div>
       </div>
     </div>
