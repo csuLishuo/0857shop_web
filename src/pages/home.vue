@@ -647,10 +647,22 @@ export default {
         mask: true,
         message: '加载中...'
       })
+    },
+    getBannerList () {
+      this.$post('/api/banner/getBannerListByBannerType', {
+        bannerType: 1
+      }).then(res => {
+        if (res.code === 200) {
+          console.log(res)
+        } else {
+          console.log(res)
+        }
+      })
     }
   },
   mounted () {
     // this.test()
+    this.getBannerList()
   },
   watch: {
   }
