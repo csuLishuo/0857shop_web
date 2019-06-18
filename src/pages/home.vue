@@ -115,7 +115,7 @@
     .area-1{
       background: #fff;
       .title{
-        background-image: url("../images/img-1.png");
+        background-image: url("../images/img1.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
         width: px2rem(259);
