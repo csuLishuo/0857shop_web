@@ -5,6 +5,7 @@ import Home from '@/pages/home'
 import Category from '@/pages/category'
 import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
+import DetailPage from '@/pages/detailPage'
 
 Vue.use(Router)
 
@@ -39,6 +40,14 @@ export default new Router({
     component: MyCenter,
     meta: {
       keepAlive: false,
+      isBack: false
+    }
+  }, {
+    path: '/detailPage',
+    name: 'detailPage',
+    component: DetailPage,
+    meta: {
+      keepAlive: true,
       isBack: false
     }
   }]

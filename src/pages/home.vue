@@ -322,6 +322,7 @@
           position: relative;
           &.on{
             color: #000000;
+            font-weight: bold;
             span{
               position: absolute;
               bottom: 0;
