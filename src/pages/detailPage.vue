@@ -279,6 +279,110 @@
         }
       }
     }
+    .pop-select{
+      .van-popup{
+        max-height: 60%;
+        overflow: scroll;
+        padding: px2rem(20) px2rem(20) px2rem(100);
+      }
+      .goodDetail{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        background: #fff;
+        padding-bottom: px2rem(40);
+        border-bottom: px2rem(1) solid #ededed;
+        .img-box{
+          width: px2rem(225);
+          height: px2rem(225);
+          border-radius: px2rem(6);
+          overflow: hidden;
+          margin-right: px2rem(20);
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: center;
+          img{
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+        .right-box{
+          width: px2rem(450);
+          height: px2rem(225);
+          position: relative;
+          .price-box-pop{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            .price{
+              color: #ff3f31;
+              font-size: px2rem(24);
+              font-weight: bold;
+              margin-bottom: px2rem(10);
+              span{
+                font-size: px2rem(34);
+                vertical-align: bottom;
+              }
+            }
+            .info{
+              color: #898989;
+              font-size: px2rem(28);
+            }
+          }
+        }
+      }
+      .label-list{
+        padding: px2rem(20) 0;
+        border-bottom: px2rem(1) solid #ededed;
+        .name{
+          font-size: px2rem(28);
+          color: #000;
+        }
+        .wrapper{
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: flex-start;
+          margin-top: px2rem(24);
+          .wrap{
+            padding: 0 px2rem(23);
+            height: px2rem(64);
+            line-height: px2rem(64);
+            border-radius: px2rem(12);
+            background: #f5f5f5;
+            color: #010101;
+            font-size: px2rem(24);
+            text-align: center;
+            margin-right: px2rem(25);
+            &.on{
+              color: #ff3f31;
+              border: 1px solid #ff3f31;
+              background: #ffeae9;
+            }
+          }
+        }
+      }
+      .num-box{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: px2rem(30);
+        .name{
+          font-size: px2rem(28);
+          color: #000;
+        }
+        .van-stepper{
+          display: flex;
+        }
+      }
+    }
   }
 </style>
 <template>
@@ -370,6 +474,41 @@
         </van-tab>
       </van-tabs>
     </div>
+    <div class="pop-select">
+      <van-popup v-model="showPop_select" position="bottom">
+        <div class="goodDetail">
+          <div class="img-box">
+            <img src="../images/icon3.png" alt="">
+          </div>
+          <div class="right-box">
+            <div class="price-box-pop">
+              <div class="price">￥<span>599.00</span></div>
+              <div class="info">包邮 · 七天退换货</div>
+            </div>
+          </div>
+        </div>
+        <div class="label-list">
+          <div class="name">颜色</div>
+          <div class="wrapper">
+            <div class="wrap on">红色</div>
+            <div class="wrap">红色</div>
+          </div>
+        </div>
+        <div class="label-list">
+          <div class="name">尺码</div>
+          <div class="wrapper">
+            <div class="wrap on">红色</div>
+            <div class="wrap">红色</div>
+          </div>
+        </div>
+        <div class="num-box">
+          <div class="name">购买数量</div>
+          <div class="step-view">
+            <van-stepper v-model="value" min="1" max="99" />
+          </div>
+        </div>
+      </van-popup>
+    </div>
     <div class="bottom-box">
       <div class="icon-box">
         <img src="../images/icon36.png" alt="">
@@ -400,7 +539,8 @@ export default {
         require('../images/img1.png'),
         require('../images/icon3.png')
       ],
-      detailId: ''
+      detailId: '',
+      showPop_select: true
     }
   },
   methods: {
