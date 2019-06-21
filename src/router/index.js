@@ -6,6 +6,7 @@ import Category from '@/pages/category'
 import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
 import DetailPage from '@/pages/detailPage'
+import OrderConfirm from '@/pages/orderConfirm'
 
 Vue.use(Router)
 
@@ -46,6 +47,14 @@ export default new Router({
     path: '/detailPage',
     name: 'detailPage',
     component: DetailPage,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/orderConfirm',
+    name: 'orderConfirm',
+    component: OrderConfirm,
     meta: {
       keepAlive: true,
       isBack: false
