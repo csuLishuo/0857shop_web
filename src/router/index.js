@@ -7,6 +7,7 @@ import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
 import DetailPage from '@/pages/detailPage'
 import OrderConfirm from '@/pages/orderConfirm'
+import successBuy from '@/pages/success_buy'
 
 Vue.use(Router)
 
@@ -55,6 +56,14 @@ export default new Router({
     path: '/orderConfirm',
     name: 'orderConfirm',
     component: OrderConfirm,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/success_buy',
+    name: 'success_buy',
+    component: successBuy,
     meta: {
       keepAlive: true,
       isBack: false
