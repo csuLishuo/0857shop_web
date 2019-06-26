@@ -311,12 +311,7 @@
       align-items: center;
       justify-content: space-between;
       .right-box{
-        background-image: linear-gradient(-90deg, 
-      		#ff3657 0%, 
-      		#ff7836 100%), 
-	        linear-gradient(
-      		#ff3f31, 
-      		#ff3f31);
+        background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         width: px2rem(257);
         height: px2rem(100);
         line-height: px2rem(100);
@@ -429,7 +424,7 @@
           </div>
         </div>
       </van-checkbox-group>
-      
+
     </div>
     <div class="area-bottom">
       <div class="left-box">

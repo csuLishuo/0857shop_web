@@ -430,8 +430,8 @@
     </div>
     <div class="banner">
       <van-swipe :autoplay="3000">
-        <van-swipe-item v-for="(image, index) in images" :key="index">
-          <img :src="image" />
+        <van-swipe-item v-for="(item, index) in bannerData" :key="index">
+          <img :src="filePath + item.bannerPic" alt="">
         </van-swipe-item>
       </van-swipe>
     </div>
@@ -639,7 +639,8 @@ export default {
         require('../images/icon1_on.png'),
         require('../images/icon2.png'),
         require('../images/icon3.png')
-      ]
+      ],
+      bannerData: []
     }
   },
   methods: {
@@ -653,11 +654,14 @@ export default {
       this.$post('/api/banner/getBannerListByBannerType', {
         bannerType: 1
       }).then(res => {
-        if (res.code === 200) {
-          console.log(res)
+        if (res.result === 0) {
+          this.bannerData = res.data
+          this.filePath = res.filePath
         } else {
-          console.log(res)
+          Toast.fail(res.message)
         }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
       })
     }
   },
