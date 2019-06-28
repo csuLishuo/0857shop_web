@@ -441,7 +441,6 @@
 
 <script>
 import { Toast } from 'vant'
-import tabbar from '../components/tabbar'
 
 export default {
   name: 'category',

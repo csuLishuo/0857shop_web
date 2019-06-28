@@ -211,7 +211,6 @@
         <div class="name ellipsis-2">PZAAO 中空缎面款色休中空缎面款色休中空缎面款色休中空缎面款色休..PZAAO 中空缎面款色休..</div>
       </div>
     </div>
-    <a href="tencent://message/?uin=1077321622&Site=sc.chinaz.com&Menu=yes">tencent咨询</a>
     <tabbar :activeIndex="1"></tabbar>
   </div>
 </template>

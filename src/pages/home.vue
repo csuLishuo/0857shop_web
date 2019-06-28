@@ -440,11 +440,11 @@
         <div class="img-box"><img src="../images/icon8.png" alt=""></div>
         <div class="text">签到</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(2)">
         <div class="img-box"><img src="../images/icon9.png" alt=""></div>
         <div class="text">团购</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(3)">
         <div class="img-box"><img src="../images/icon10.png" alt=""></div>
         <div class="text">秒杀</div>
       </div>
@@ -452,7 +452,7 @@
         <div class="img-box"><img src="../images/icon11.png" alt=""></div>
         <div class="text">抽奖</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(5)">
         <div class="img-box"><img src="../images/icon12.png" alt=""></div>
         <div class="text">砍价</div>
       </div>
@@ -650,6 +650,21 @@ export default {
         message: '加载中...'
       })
     },
+    go (status) {
+      if (status === 2) {
+        this.$router.push({
+          path: '/groupBuyList'
+        })
+      } else if (status === 3) {
+        this.$router.push({
+          path: '/seckillList'
+        })
+      } else if (status === 5) {
+        this.$router.push({
+          path: '/barginList'
+        })
+      }
+    },
     getBannerList () {
       this.$post('/api/banner/getBannerListByBannerType', {
         bannerType: 1
@@ -667,7 +682,7 @@ export default {
   },
   mounted () {
     // this.test()
-    this.getBannerList()
+    // this.getBannerList()
   },
   watch: {
   }

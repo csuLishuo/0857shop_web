@@ -5,12 +5,7 @@
   }
   .success_buy-container{
     .area-1{
-      background-image: linear-gradient(-90deg, 
-		#ff2736 0%, 
-		#ff2b71 100%), 
-	linear-gradient(
-		#000000, 
-		#000000);
+      background-image: linear-gradient(-90deg, #ff2736 0%, #ff2b71 100%), linear-gradient(#000000, #000000);
       height: px2rem(366);
       .area-1-1{
         padding-left: px2rem(38);
