@@ -11,6 +11,10 @@ import successBuy from '@/pages/success_buy'
 import GroupBuyList from '@/pages/groupBuyList'
 import SeckillList from '@/pages/seckillList'
 import BarginList from '@/pages/barginList'
+import Detail_seckill from '@/pages/detail_seckill'
+import Detail_groupBuy from '@/pages/detail_groupBuy'
+import Detail_bargin from '@/pages/detail_bargin'
+import StepCount from '@/pages/stepCount'
 
 Vue.use(Router)
 
@@ -91,6 +95,38 @@ export default new Router({
     path: '/barginList',
     name: 'barginList',
     component: BarginList,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/detail_seckill',
+    name: 'detail_seckill',
+    component: Detail_seckill,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/detail_groupBuy',
+    name: 'detail_groupBuy',
+    component: Detail_groupBuy,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/detail_bargin',
+    name: 'detail_bargin',
+    component: Detail_bargin,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/stepCount',
+    name: 'stepCount',
+    component: StepCount,
     meta: {
       keepAlive: true,
       isBack: false

@@ -3,7 +3,7 @@
     //$px为需要转换的字号
     @return $px * 1 / 100 * 1rem;
   }
-  .detailPage-container{
+  .detail_seckill-container{
     padding-bottom: px2rem(100);
     .van-swipe-item{
       height: px2rem(612) !important;
@@ -12,16 +12,22 @@
         height: 100%;
       }
     }
-    .price-box{
+    .price-wrapper{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
+      background: #ff3f31;
+      padding: 0 px2rem(20);
+      .price-box{
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       height: px2rem(112);
       /*line-height: px2rem(112);*/
-      padding: 0 px2rem(20);
-      background: #ff3f31;
       .price{
         color: #fff;
         font-size: px2rem(50);
@@ -32,9 +38,30 @@
           font-size: px2rem(84);
         }
       }
+      .price-origin{
+        font-size: px2rem(24);
+        color: #fff;
+        opacity: 0.3;
+      }
       .info{
         color: #fffefe;
         font-size: px2rem(18);
+      }
+    }
+    .right-box{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        height: px2rem(80);
+        .time-box{
+          padding: 0 px2rem(16);
+          background: rgba(0, 0, 0, 0.1);
+          line-height: px2rem(36);
+          color: #ffe92d;
+          font-size: px2rem(20);
+          border-radius: px2rem(18);
+        }
       }
     }
     .title{
@@ -184,21 +211,36 @@
       }
       .btn{
         width: 34%;
-        font-size: px2rem(30);
-        font-weight: bold;
+        height: px2rem(100);
         color: #fff;
-        line-height: px2rem(100);
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .price{
+          font-size: px2rem(26);
+          line-height: px2rem(36)
+        }
+        .text{
+          font-size: px2rem(28);
+          line-height: px2rem(36);
+        }
         &.btn-1{
-          background-color: #404040;
+          background-image: linear-gradient(-90deg, 
+		#ff7836 0%, 
+		#ffd851 100%), 
+	linear-gradient(
+		#404040, 
+		#404040);
         }
         &.btn-2{
-          background-image: linear-gradient(-90deg,
-            #ff3657 0%,
-            #ff7836 100%),
-          linear-gradient(
-              #ff3f31,
-              #ff3f31);
+          background-image: linear-gradient(-90deg, 
+		#ff2736 0%, 
+		#ff2b71 100%), 
+	linear-gradient(
+		#ff3f31, 
+		#ff3f31);
         }
       }
     }
@@ -386,7 +428,7 @@
   }
 </style>
 <template>
-  <div class="detailPage-container">
+  <div class="detail_seckill-container">
     <div class="tabs">
       <van-tabs sticky v-model="active">
         <van-tab title="商品详情">
@@ -397,10 +439,23 @@
               </van-swipe-item>
             </van-swipe>
           </div>
-          <div class="price-box">
-            <div class="price">￥<span>599.00</span></div>
-            <div class="info">已售1389/剩2000</div>
-          </div>
+          <div class="price-wrapper">
+            <div class="price-box">
+              <div class="price">￥<span>599.00</span></div>
+              <div class="info">
+                <div class="price-origin">￥699.00</div>
+                <span>已售1389/剩2000</span>
+              </div>
+            </div>
+            <div class="right-box">
+              <div class="time-box">
+                <div class="time">开始：12: 00: 00</div>
+              </div>
+              <div class="time-box">
+                <div class="time">开始：12: 00: 00</div>
+              </div>
+            </div>
+          </div> 
           <div class="title">
             <div class="text ellipsis-2">
               【同价618】旗舰店 卡西欧（CASIO）樱花色新 款女表时尚防水运动学生表BGD-560
@@ -518,8 +573,14 @@
         <img src="../images/icon37.png" alt="">
         <div class="text">收藏</div>
       </div>
-      <div class="btn btn-1">加入购物车</div>
-      <div class="btn btn-2">立即购买</div>
+      <div class="btn btn-1">
+        <div class="price">￥100000</div>
+        <div class="text">单独购买</div>
+      </div>
+      <div class="btn btn-2">
+        <div class="price">￥10000</div>
+        <div class="text">发起拼团</div>
+      </div>
     </div>
   </div>
 </template>
@@ -527,12 +588,12 @@
 import { Toast, ImagePreview } from 'vant'
 
 export default {
-  name: 'detailPage',
+  name: 'detail_groupBuy',
   components: {
   },
   data () {
     return {
-      active: 1,
+      active: 0,
       images: [
         require('../images/icon1.png'),
         require('../images/icon1_on.png'),
@@ -540,7 +601,7 @@ export default {
         require('../images/icon3.png')
       ],
       detailId: '',
-      showPop_select: true
+      showPop_select: false
     }
   },
   methods: {

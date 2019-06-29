@@ -460,7 +460,7 @@
         <div class="img-box"><img src="../images/icon13.png" alt=""></div>
         <div class="text">任务</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(7)">
         <div class="img-box"><img src="../images/icon14.png" alt=""></div>
         <div class="text">计步</div>
       </div>
@@ -662,6 +662,10 @@ export default {
       } else if (status === 5) {
         this.$router.push({
           path: '/barginList'
+        })
+      } else if (status === 7) {
+        this.$router.push({
+          path: '/stepCount'
         })
       }
     },
