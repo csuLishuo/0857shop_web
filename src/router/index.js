@@ -15,6 +15,10 @@ import Detail_seckill from '@/pages/detail_seckill'
 import Detail_groupBuy from '@/pages/detail_groupBuy'
 import Detail_bargin from '@/pages/detail_bargin'
 import StepCount from '@/pages/stepCount'
+import MyCollection from '@/pages/myCollection'
+import MyAddress from '@/pages/myAddress'
+import EditAddress from '@/pages/editAddress'
+import MyReward from '@/pages/myReward'
 
 Vue.use(Router)
 
@@ -127,6 +131,38 @@ export default new Router({
     path: '/stepCount',
     name: 'stepCount',
     component: StepCount,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myCollection',
+    name: 'myCollection',
+    component: MyCollection,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myAddress',
+    name: 'myAddress',
+    component: MyAddress,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/editAddress',
+    name: 'editAddress',
+    component: EditAddress,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myReward',
+    name: 'myReward',
+    component: MyReward,
     meta: {
       keepAlive: true,
       isBack: false

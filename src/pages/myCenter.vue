@@ -320,15 +320,15 @@
           </div>
         </div>
         <div class="area-1-1">
-          <div class="wrap">
+          <div class="wrap" @click="go(1)">
             <div class="img-box"><img src="../images/icon18.png" alt=""></div>
             <div class="name">我的收藏</div>
           </div>
-          <div class="wrap">
+          <div class="wrap" @click="go(2)">
             <div class="img-box"><img src="../images/icon19.png" alt=""></div>
             <div class="name">收货地址</div>
           </div>
-          <div class="wrap">
+          <div class="wrap" @click="go(3)">
             <div class="img-box"><img src="../images/icon20.png" alt=""></div>
             <div class="name">我的奖品</div>
           </div>
@@ -428,6 +428,21 @@ export default {
     }
   },
   methods: {
+    go (status) {
+      if (status === 1) {
+        this.$router.push({
+          path: '/myCollection'
+        })
+      } else if (status === 2) {
+        this.$router.push({
+          path: '/myAddress'
+        })
+      } else if (status === 3) {
+        this.$router.push({
+          path: '/myReward'
+        })
+      }
+    },
     test () {
       Toast.loading({
         mask: true,
