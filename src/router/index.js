@@ -19,6 +19,9 @@ import MyCollection from '@/pages/myCollection'
 import MyAddress from '@/pages/myAddress'
 import EditAddress from '@/pages/editAddress'
 import MyReward from '@/pages/myReward'
+import MyOrder from '@/pages/myOrder'
+import MyBargin from '@/pages/myBargin'
+import MyGroupBuy from '@/pages/myGroupBuy'
 
 Vue.use(Router)
 
@@ -163,6 +166,30 @@ export default new Router({
     path: '/myReward',
     name: 'myReward',
     component: MyReward,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myOrder',
+    name: 'myOrder',
+    component: MyOrder,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myBargin',
+    name: 'myBargin',
+    component: MyBargin,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/myGroupBuy',
+    name: 'myGroupBuy',
+    component: MyGroupBuy,
     meta: {
       keepAlive: true,
       isBack: false

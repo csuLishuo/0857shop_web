@@ -335,7 +335,7 @@
         </div>
       </div>
     </div>
-    <div class="area-2 clearfix">
+    <div class="area-2 clearfix" @click="go(4)">
       <div class="title-box">
         <div class="name">我的订单</div>
         <div class="icon-box"><img src="../images/icon21.png" alt=""></div>
@@ -370,11 +370,11 @@
     </div>
     <div class="area-3 clearfix">
       <div class="area-3-1">
-        <div class="wrap">
+        <div class="wrap" @click="go(5)">
           <div class="img-box"><img src="../images/icon27.png" alt=""></div>
           <div class="name">我的砍价</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="go(6)">
           <div class="img-box"><img src="../images/icon28.png" alt=""></div>
           <div class="name">我的拼团</div>
         </div>
@@ -440,6 +440,18 @@ export default {
       } else if (status === 3) {
         this.$router.push({
           path: '/myReward'
+        })
+      } else if (status === 4) {
+        this.$router.push({
+          path: '/myOrder'
+        })
+      } else if (status === 5) {
+        this.$router.push({
+          path: '/myBargin'
+        })
+      } else if (status === 6) {
+        this.$router.push({
+          path: '/myGroupBuy'
         })
       }
     },
