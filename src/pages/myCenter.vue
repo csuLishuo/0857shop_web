@@ -378,7 +378,7 @@
           <div class="img-box"><img src="../images/icon28.png" alt=""></div>
           <div class="name">我的拼团</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="go(7)">
           <div class="img-box"><img src="../images/icon29.png" alt=""></div>
           <div class="name">代理权限</div>
         </div>
@@ -452,6 +452,10 @@ export default {
       } else if (status === 6) {
         this.$router.push({
           path: '/myGroupBuy'
+        })
+      } else if (status === 7) {
+        this.$router.push({
+          path: '/agency'
         })
       }
     },

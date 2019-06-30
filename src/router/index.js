@@ -22,6 +22,10 @@ import MyReward from '@/pages/myReward'
 import MyOrder from '@/pages/myOrder'
 import MyBargin from '@/pages/myBargin'
 import MyGroupBuy from '@/pages/myGroupBuy'
+import Agency from '@/pages/agency'
+import Delivery from '@/pages/delivery'
+import Receive from '@/pages/receive'
+import ReceiveCode from '@/pages/receiveCode'
 
 Vue.use(Router)
 
@@ -190,6 +194,38 @@ export default new Router({
     path: '/myGroupBuy',
     name: 'myGroupBuy',
     component: MyGroupBuy,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/agency',
+    name: 'agency',
+    component: Agency,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 快递发货
+    path: '/delivery',
+    name: 'delivery',
+    component: Delivery,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 快递收货
+    path: '/receive',
+    name: 'receive',
+    component: Receive,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 收货码
+    path: '/receiveCode',
+    name: 'receiveCode',
+    component: ReceiveCode,
     meta: {
       keepAlive: true,
       isBack: false
