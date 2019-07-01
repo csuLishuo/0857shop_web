@@ -26,6 +26,8 @@ import Agency from '@/pages/agency'
 import Delivery from '@/pages/delivery'
 import Receive from '@/pages/receive'
 import ReceiveCode from '@/pages/receiveCode'
+import DistributionCard from '@/pages/distributionCard'
+import MyIncome from '@/pages/myIncome'
 
 Vue.use(Router)
 
@@ -226,6 +228,22 @@ export default new Router({
     path: '/receiveCode',
     name: 'receiveCode',
     component: ReceiveCode,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 分销购物卡
+    path: '/distributionCard',
+    name: 'distributionCard',
+    component: DistributionCard,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的收益
+    path: '/myIncome',
+    name: 'myIncome',
+    component: MyIncome,
     meta: {
       keepAlive: true,
       isBack: false

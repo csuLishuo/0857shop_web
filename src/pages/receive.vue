@@ -27,6 +27,13 @@
         text-align: center;
       }
     }
+    .imgDel-box{
+      width: px2rem(702);
+      margin: px2rem(20) auto;
+      img{
+        width: 100%;
+      }
+    }
   }
 </style>
 <template>
@@ -40,6 +47,9 @@
       <van-tab title="未签收"></van-tab>
       <van-tab title="已签收"></van-tab>
     </van-tabs>
+    <div class="imgDel-box">
+      <img src="../images/imgDel1.png" alt="">
+    </div>
   </div>
 </template>
 

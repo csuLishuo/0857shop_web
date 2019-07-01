@@ -382,7 +382,7 @@
           <div class="img-box"><img src="../images/icon29.png" alt=""></div>
           <div class="name">代理权限</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="go(8)">
           <div class="img-box"><img src="../images/icon30.png" alt=""></div>
           <div class="name">我的收益</div>
         </div>
@@ -456,6 +456,10 @@ export default {
       } else if (status === 7) {
         this.$router.push({
           path: '/agency'
+        })
+      } else if (status === 8) {
+        this.$router.push({
+          path: '/myIncome'
         })
       }
     },
