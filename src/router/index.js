@@ -28,6 +28,12 @@ import Receive from '@/pages/receive'
 import ReceiveCode from '@/pages/receiveCode'
 import DistributionCard from '@/pages/distributionCard'
 import MyIncome from '@/pages/myIncome'
+import ApplyWithdraw from '@/pages/applyWithdraw'
+import SuccessWithdraw from '@/pages/success_withdraw'
+import MyProfit from '@/pages/myProfit'
+import WithdrawDetail from '@/pages/withdrawDetail'
+import MyGroup from '@/pages/myGroup'
+import PopularizeQrCode from '@/pages/popularizeQrCode'
 
 Vue.use(Router)
 
@@ -244,6 +250,54 @@ export default new Router({
     path: '/myIncome',
     name: 'myIncome',
     component: MyIncome,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 申请提现
+    path: '/applyWithdraw',
+    name: 'applyWithdraw',
+    component: ApplyWithdraw,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 提现成功
+    path: '/success_withdraw',
+    name: 'success_withdraw',
+    component: SuccessWithdraw,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的分润
+    path: '/myProfit',
+    name: 'myProfit',
+    component: MyProfit,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 提现明细
+    path: '/withdrawDetail',
+    name: 'withdrawDetail',
+    component: WithdrawDetail,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的团队
+    path: '/myGroup',
+    name: 'myGroup',
+    component: MyGroup,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 推广二维码
+    path: '/popularizeQrCode',
+    name: 'popularizeQrCode',
+    component: PopularizeQrCode,
     meta: {
       keepAlive: true,
       isBack: false

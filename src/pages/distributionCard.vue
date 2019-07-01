@@ -152,7 +152,7 @@
       <div class="name">用户须知</div>
       <div class="des">尊敬的用户，提现需要后台审核，最低提现不得低于100元，提现后，就是发健身房哈的交话费是的是角度看是，的积分是地方，是看得见的看法。</div>
     </div>
-    <div class="btn-bottom">
+    <div class="btn-bottom" @click="go">
       我要提现
     </div>
   </div>
@@ -173,9 +173,9 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
+    go () {
       this.$router.push({
-        path: '/detail_seckill'
+        path: '/applyWithdraw'
       })
     },
     test () {

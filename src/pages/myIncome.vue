@@ -223,13 +223,13 @@
           </div>
           <div class="name">提现明细</div>
         </div>
-        <div class="wrap" @click="go(3)">
+        <div class="wrap" @click="go(4)">
           <div class="img-box">
             <img src="../images/icon52.png" alt="">
           </div>
           <div class="name">我的团队</div>
         </div>
-        <div class="wrap" @click="go(3)">
+        <div class="wrap" @click="go(5)">
           <div class="img-box">
             <img src="../images/icon53.png" alt="">
           </div>
@@ -262,7 +262,19 @@ export default {
         })
       } else if (status === 2) {
         this.$router.push({
-          path: '/myAddress'
+          path: '/myProfit'
+        })
+      } else if (status === 3) {
+        this.$router.push({
+          path: '/withdrawDetail'
+        })
+      } else if (status === 4) {
+        this.$router.push({
+          path: '/myGroup'
+        })
+      } else if (status === 5) {
+        this.$router.push({
+          path: '/popularizeQrCode'
         })
       }
     },
