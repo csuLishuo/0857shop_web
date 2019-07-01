@@ -34,6 +34,7 @@ import MyProfit from '@/pages/myProfit'
 import WithdrawDetail from '@/pages/withdrawDetail'
 import MyGroup from '@/pages/myGroup'
 import PopularizeQrCode from '@/pages/popularizeQrCode'
+import MyComment from '@/pages/myComment'
 
 Vue.use(Router)
 
@@ -298,6 +299,14 @@ export default new Router({
     path: '/popularizeQrCode',
     name: 'popularizeQrCode',
     component: PopularizeQrCode,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的评价
+    path: '/myComment',
+    name: 'myComment',
+    component: MyComment,
     meta: {
       keepAlive: true,
       isBack: false
