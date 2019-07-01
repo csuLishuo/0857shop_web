@@ -77,19 +77,19 @@
       }
     }
     .btn-bottom {
-	        width: px2rem(690);
-	        height: px2rem(80);
-          line-height: px2rem(80);
-	        background-color: rgba(240,0,0,1);
-	        border-radius: px2rem(80);
-          position: fixed;
-          bottom: px2rem(40);
-          left: px2rem(30);
-          right: px2rem(30);
-          font-size: px2rem(30);
-          color: #fff;
-          text-align: center;
-        }
+      width: px2rem(690);
+      height: px2rem(80);
+      line-height: px2rem(80);
+      background-color: rgba(240,0,0,1);
+      border-radius: px2rem(80);
+      position: fixed;
+      bottom: px2rem(40);
+      left: px2rem(30);
+      right: px2rem(30);
+      font-size: px2rem(30);
+      color: #fff;
+      text-align: center;
+    }
   }
 </style>
 <template>

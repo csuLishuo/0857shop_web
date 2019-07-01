@@ -21,34 +21,34 @@
       background: #ff3f31;
       padding: 0 px2rem(20);
       .price-box{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-start;
-      height: px2rem(112);
-      /*line-height: px2rem(112);*/
-      .price{
-        color: #fff;
-        font-size: px2rem(50);
-        font-weight: bold;
         display: flex;
-        align-items: flex-end;
-        span{
-          font-size: px2rem(84);
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        height: px2rem(112);
+        /*line-height: px2rem(112);*/
+        .price{
+          color: #fff;
+          font-size: px2rem(50);
+          font-weight: bold;
+          display: flex;
+          align-items: flex-end;
+          span{
+            font-size: px2rem(84);
+          }
+        }
+        .price-origin{
+          font-size: px2rem(24);
+          color: #fff;
+          opacity: 0.3;
+        }
+        .info{
+          color: #fffefe;
+          font-size: px2rem(18);
         }
       }
-      .price-origin{
-        font-size: px2rem(24);
-        color: #fff;
-        opacity: 0.3;
-      }
-      .info{
-        color: #fffefe;
-        font-size: px2rem(18);
-      }
-    }
-    .right-box{
+      .right-box{
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -227,20 +227,10 @@
           line-height: px2rem(36);
         }
         &.btn-1{
-          background-image: linear-gradient(-90deg, 
-		#ff7836 0%, 
-		#ffd851 100%), 
-	linear-gradient(
-		#404040, 
-		#404040);
+          background-image: linear-gradient(-90deg, #ff7836 0%, #ffd851 100%), linear-gradient(#404040, #404040);
         }
         &.btn-2{
-          background-image: linear-gradient(-90deg, 
-		#ff2736 0%, 
-		#ff2b71 100%), 
-	linear-gradient(
-		#ff3f31, 
-		#ff3f31);
+          background-image: linear-gradient(-90deg, #ff2736 0%, #ff2b71 100%), linear-gradient(#ff3f31, #ff3f31);
         }
       }
     }
@@ -455,7 +445,7 @@
                 <div class="time">开始：12: 00: 00</div>
               </div>
             </div>
-          </div> 
+          </div>
           <div class="title">
             <div class="text ellipsis-2">
               【同价618】旗舰店 卡西欧（CASIO）樱花色新 款女表时尚防水运动学生表BGD-560

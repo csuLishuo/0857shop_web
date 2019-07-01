@@ -29,18 +29,18 @@
     }
     .goodsList{
       margin-top: px2rem(20);
-        background: #fff;
+      background: #fff;
       padding-left: px2rem(24);
       .wrapper{
         padding: px2rem(22) px2rem(24) px2rem(22) 0;
         border-bottom: px2rem(1) solid #f0f0f0;
         .wrap-1{
-display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        background: #fff;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: space-between;
+          background: #fff;
         }
         .img-box{
           width: px2rem(225);
@@ -188,30 +188,29 @@ display: flex;
     <div class="goodsList">
       <div>
         <van-swipe-cell
-              :right-width="70"
-            >
-            <div class="wrapper" @click="goDetail">
-              <div class="wrap-1">
-<div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="des">红色；175；女款</div>
-          <div class="label">共1件商品 合计：￥1267.00</div>
-        </div>
+          :right-width="70"
+        >
+          <div class="wrapper" @click="goDetail">
+            <div class="wrap-1">
+              <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+              <div class="right-box">
+                <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
+                <div class="des">红色；175；女款</div>
+                <div class="label">共1件商品 合计：￥1267.00</div>
               </div>
-              <div class="wrap-2">
-                <div class="text">等待付款</div>
-                <div class="btn-box">
-                  <div class="btn">取消订单</div>
-                </div>
+            </div>
+            <div class="wrap-2">
+              <div class="text">等待付款</div>
+              <div class="btn-box">
+                <div class="btn">取消订单</div>
               </div>
-        
-      </div>
-              <div slot="right" class="del-good">
-                <span>删除</span>
-                <img src="../images/icon01.png">
-              </div>
-            </van-swipe-cell>
+            </div>
+          </div>
+          <div slot="right" class="del-good">
+            <span>删除</span>
+            <img src="../images/icon01.png">
+          </div>
+        </van-swipe-cell>
       </div>
     </div>
   </div>

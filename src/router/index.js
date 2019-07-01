@@ -11,9 +11,9 @@ import successBuy from '@/pages/success_buy'
 import GroupBuyList from '@/pages/groupBuyList'
 import SeckillList from '@/pages/seckillList'
 import BarginList from '@/pages/barginList'
-import Detail_seckill from '@/pages/detail_seckill'
-import Detail_groupBuy from '@/pages/detail_groupBuy'
-import Detail_bargin from '@/pages/detail_bargin'
+import detailSeckill from '@/pages/detail_seckill'
+import detailGroupBuy from '@/pages/detail_groupBuy'
+import detailBargin from '@/pages/detail_bargin'
 import StepCount from '@/pages/stepCount'
 import MyCollection from '@/pages/myCollection'
 import MyAddress from '@/pages/myAddress'
@@ -113,7 +113,7 @@ export default new Router({
   }, {
     path: '/detail_seckill',
     name: 'detail_seckill',
-    component: Detail_seckill,
+    component: detailSeckill,
     meta: {
       keepAlive: true,
       isBack: false
@@ -121,7 +121,7 @@ export default new Router({
   }, {
     path: '/detail_groupBuy',
     name: 'detail_groupBuy',
-    component: Detail_groupBuy,
+    component: detailGroupBuy,
     meta: {
       keepAlive: true,
       isBack: false
@@ -129,7 +129,7 @@ export default new Router({
   }, {
     path: '/detail_bargin',
     name: 'detail_bargin',
-    component: Detail_bargin,
+    component: detailBargin,
     meta: {
       keepAlive: true,
       isBack: false

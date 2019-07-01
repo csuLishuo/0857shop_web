@@ -93,15 +93,15 @@
       background: #fff;
       padding: px2rem(60) 0 px2rem(40);
       .btn{
-      width: px2rem(490);
-	    height: px2rem(74);
-	    background-color: #ff2b6e;
-	    border-radius: px2rem(37);
-      text-align: center;
-      line-height: px2rem(74);
-      font-size: px2rem(30);
-      margin: 0 auto 0;
-      color: #fff;
+        width: px2rem(490);
+        height: px2rem(74);
+        background-color: #ff2b6e;
+        border-radius: px2rem(37);
+        text-align: center;
+        line-height: px2rem(74);
+        font-size: px2rem(30);
+        margin: 0 auto 0;
+        color: #fff;
       }
     }
     .area-3{
