@@ -43,6 +43,8 @@ import successApply from '@/pages/success_apply'
 import SettingUp from '@/pages/settingUp'
 import AboutUs from '@/pages/aboutUs'
 import CommentFeedback from '@/pages/commentFeedback'
+import PublishComment from '@/pages/publishComment'
+import Lottery from '@/pages/lottery'
 
 Vue.use(Router)
 
@@ -379,6 +381,22 @@ export default new Router({
     path: '/commentFeedback',
     name: 'commentFeedback',
     component: CommentFeedback,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 发表评价
+    path: '/publishComment',
+    name: 'publishComment',
+    component: PublishComment,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 抽奖
+    path: '/lottery',
+    name: 'lottery',
+    component: Lottery,
     meta: {
       keepAlive: true,
       isBack: false

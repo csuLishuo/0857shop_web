@@ -61,7 +61,10 @@
         top: px2rem(206);
         left: 50%;
         margin-left: px2rem(-215);
-        background: rgba(0,0,0,0.3);
+        background-image: url("../images/img10.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
         text-align: center;
         .wrap-1{
           font-size: px2rem(26);

@@ -448,7 +448,7 @@
         <div class="img-box"><img src="../images/icon10.png" alt=""></div>
         <div class="text">秒杀</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(4)">
         <div class="img-box"><img src="../images/icon11.png" alt=""></div>
         <div class="text">抽奖</div>
       </div>
@@ -464,7 +464,7 @@
         <div class="img-box"><img src="../images/icon14.png" alt=""></div>
         <div class="text">计步</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="more">
         <div class="img-box"><img src="../images/icon15.png" alt=""></div>
         <div class="text">更多</div>
       </div>
@@ -644,11 +644,8 @@ export default {
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
+    more () {
+      Toast('敬请期待')
     },
     go (status) {
       if (status === 1) {
@@ -662,6 +659,10 @@ export default {
       } else if (status === 3) {
         this.$router.push({
           path: '/seckillList'
+        })
+      } else if (status === 4) {
+        this.$router.push({
+          path: '/lottery'
         })
       } else if (status === 5) {
         this.$router.push({

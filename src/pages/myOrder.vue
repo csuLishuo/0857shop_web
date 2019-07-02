@@ -146,6 +146,10 @@
             font-size: px2rem(26);
             color: #6f6f6f;
             text-align: center;
+            &.btn-1{
+              border: 1px solid #ff3f31;
+              color: #ff3f31;
+            }
           }
         }
       }
@@ -186,11 +190,7 @@
       <van-tab title="已完成"></van-tab>
     </van-tabs>
     <div class="goodsList">
-      <div>
-        <van-swipe-cell
-          :right-width="70"
-        >
-          <div class="wrapper" @click="goDetail">
+      <div class="wrapper">
             <div class="wrap-1">
               <div class="img-box"><img src="../images/icon3.png" alt=""></div>
               <div class="right-box">
@@ -206,11 +206,21 @@
               </div>
             </div>
           </div>
-          <div slot="right" class="del-good">
-            <span>删除</span>
-            <img src="../images/icon01.png">
+      <div class="wrapper">
+        <div class="wrap-1">
+          <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+          <div class="right-box">
+            <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
+            <div class="des">红色；175；女款</div>
+            <div class="label">共1件商品 合计：￥1267.00</div>
           </div>
-        </van-swipe-cell>
+        </div>
+        <div class="wrap-2">
+          <div class="text">收货成功</div>
+          <div class="btn-box">
+            <div class="btn btn-1" @click="goComment">去评价</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -231,6 +241,11 @@ export default {
   methods: {
     goBack () {
       this.$router.back(-1)
+    },
+    goComment () {
+      this.$router.push({
+        name: 'publishComment'
+      })
     },
     goDetail () {
       this.$router.push({

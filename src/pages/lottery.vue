@@ -3,9 +3,11 @@
     //$px为需要转换的字号
     @return $px * 1 / 100 * 1rem;
   }
-  .commentFeedback-container{
+  .lottery-container{
+    min-height: 100%;
+    background: #FF464C;
     .topBar{
-      background: #fff;
+      background: #FF464C;
       height: px2rem(100);
       padding: 0 px2rem(36);
       position: relative;
@@ -27,49 +29,20 @@
         text-align: center;
       }
     }
-    .area-1{
-      margin-top: px2rem(20);
-      background: #fff;
-      padding-left: px2rem(30);
-      .line{
-        .icon-box{
-          width: px2rem(145);
-        }
+    .imgDel-box{
+      width: 100%;
+      img{
+        width: 100%;
       }
     }
   }
 </style>
 <template>
-  <div class="commentFeedback-container">
+  <div class="lottery-container">
     <div class="topBar">
-      <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
-      <div class="title">意见反馈</div>
+      <div class="left-box" @click="goBack"><img src="../images/icon38.png" alt=""></div>
     </div>
-    <div class="area-1">
-      <div class="form-box">
-        <div class="line">
-          <van-field
-            type="tel"
-            clearable
-            placeholder="请输入手机号码"
-          >
-            <div class="icon-box" slot="left-icon">联系电话</div>
-          </van-field>
-        </div>
-      </div>
-    </div>
-    <div class="area-1">
-      <div class="form-box">
-        <div class="line">
-          <van-field
-            type="textarea"
-            clearable
-            placeholder="意见反馈"
-          >
-          </van-field>
-        </div>
-      </div>
-    </div>
+    <div class="imgDel-box"><img src="../images/imgDel5.png" alt=""></div>
   </div>
 </template>
 
@@ -77,7 +50,7 @@
 import { Toast } from 'vant'
 
 export default {
-  name: 'commentFeedback',
+  name: 'lottery',
   components: {
   },
   data () {
