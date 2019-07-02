@@ -38,6 +38,11 @@ import MyComment from '@/pages/myComment'
 import SignIn from '@/pages/signIn'
 import Mission from '@/pages/mission'
 import ApplyAgency from '@/pages/applyAgency'
+import ApplyAgencyForm from '@/pages/applyAgencyForm'
+import successApply from '@/pages/success_apply'
+import SettingUp from '@/pages/settingUp'
+import AboutUs from '@/pages/aboutUs'
+import CommentFeedback from '@/pages/commentFeedback'
 
 Vue.use(Router)
 
@@ -334,6 +339,46 @@ export default new Router({
     path: '/applyAgency',
     name: 'applyAgency',
     component: ApplyAgency,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 申请成为代理
+    path: '/applyAgencyForm',
+    name: 'applyAgencyForm',
+    component: ApplyAgencyForm,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 申请成为代理成功
+    path: '/success_apply',
+    name: 'success_apply',
+    component: successApply,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 设置
+    path: '/settingUp',
+    name: 'settingUp',
+    component: SettingUp,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 关于我们
+    path: '/aboutUs',
+    name: 'aboutUs',
+    component: AboutUs,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 意见反馈
+    path: '/commentFeedback',
+    name: 'commentFeedback',
+    component: CommentFeedback,
     meta: {
       keepAlive: true,
       isBack: false

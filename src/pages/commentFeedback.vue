@@ -3,10 +3,7 @@
     //$px为需要转换的字号
     @return $px * 1 / 100 * 1rem;
   }
-  .applyAgency-container{
-    min-height: 100%;
-    background: #fff;
-    padding-bottom: px2rem(160);
+  .commentFeedback-container{
     .topBar{
       background: #fff;
       height: px2rem(100);
@@ -30,52 +27,13 @@
         text-align: center;
       }
     }
-    .img-box{
-      margin-top: px2rem(100);
-      img{
-        width: 100%;
-      }
-    }
-    .line-1{
-      font-size: px2rem(68);
-      font-weight: bold;
-      text-align: center;
-      margin-top: px2rem(46);
-    }
-    .line-2{
-      font-size: px2rem(28);
-      font-weight: bold;
-      text-align: center;
-      margin-top: px2rem(30);
-      color: #666;
-    }
-    .btn-bottom {
-      width: px2rem(690);
-      height: px2rem(80);
-      line-height: px2rem(80);
-      background-color: #fbb931;
-      border-radius: px2rem(80);
-      position: fixed;
-      bottom: px2rem(40);
-      left: px2rem(30);
-      right: px2rem(30);
-      font-size: px2rem(30);
-      color: #fff;
-      text-align: center;
-    }
   }
 </style>
 <template>
-  <div class="applyAgency-container">
+  <div class="commentFeedback-container">
     <div class="topBar">
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
-      <div class="title">申请代理</div>
-    </div>
-    <div class="img-box"><img src="../images/img7.png" alt=""></div>
-    <div class="line-1">成为代理</div>
-    <div class="line-2">让你在工作之余也能赚钱，赶快加入吧</div>
-    <div class="btn-bottom" @click="go">
-      立即申请
+      <div class="title">意见反馈</div>
     </div>
   </div>
 </template>
@@ -84,7 +42,7 @@
 import { Toast } from 'vant'
 
 export default {
-  name: 'applyAgency',
+  name: 'commentFeedback',
   components: {
   },
   data () {
@@ -96,9 +54,9 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
-    go () {
+    goDetail () {
       this.$router.push({
-        name: 'applyAgencyForm'
+        name: 'detail_bargin'
       })
     },
     openPop () {

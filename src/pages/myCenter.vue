@@ -304,7 +304,7 @@
 <template>
   <div class="myCenter-container">
     <div class="area-1 clearfix">
-      <div class="setting-box"><img src="../images/icon26.png" alt=""></div>
+      <div class="setting-box" @click="go(12)"><img src="../images/icon26.png" alt=""></div>
       <div class="wrapper">
         <div class="top-box">
           <div class="left-box">
@@ -468,6 +468,10 @@ export default {
       } else if (status === 11) {
         this.$router.push({
           path: '/applyAgency'
+        })
+      } else if (status === 12) {
+        this.$router.push({
+          path: '/settingUp'
         })
       }
     },
