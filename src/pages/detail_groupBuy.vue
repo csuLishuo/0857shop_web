@@ -30,12 +30,12 @@
         /*line-height: px2rem(112);*/
         .price{
           color: #fff;
-          font-size: px2rem(50);
+          font-size: px2rem(30);
           font-weight: bold;
           display: flex;
           align-items: flex-end;
           span{
-            font-size: px2rem(84);
+            font-size: px2rem(50);
           }
         }
         .price-origin{

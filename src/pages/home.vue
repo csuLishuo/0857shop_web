@@ -436,7 +436,7 @@
       </van-swipe>
     </div>
     <div class="links">
-      <div class="wrapper">
+      <div class="wrapper" @click="go(1)">
         <div class="img-box"><img src="../images/icon8.png" alt=""></div>
         <div class="text">签到</div>
       </div>
@@ -456,7 +456,7 @@
         <div class="img-box"><img src="../images/icon12.png" alt=""></div>
         <div class="text">砍价</div>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" @click="go(6)">
         <div class="img-box"><img src="../images/icon13.png" alt=""></div>
         <div class="text">任务</div>
       </div>
@@ -651,7 +651,11 @@ export default {
       })
     },
     go (status) {
-      if (status === 2) {
+      if (status === 1) {
+        this.$router.push({
+          path: '/signIn'
+        })
+      } else if (status === 2) {
         this.$router.push({
           path: '/groupBuyList'
         })
@@ -662,6 +666,10 @@ export default {
       } else if (status === 5) {
         this.$router.push({
           path: '/barginList'
+        })
+      } else if (status === 6) {
+        this.$router.push({
+          path: '/mission'
         })
       } else if (status === 7) {
         this.$router.push({

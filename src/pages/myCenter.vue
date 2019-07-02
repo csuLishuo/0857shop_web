@@ -394,7 +394,7 @@
           <div class="img-box"><img src="../images/icon32.png" alt=""></div>
           <div class="name">客服</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="go(11)">
           <div class="img-box"><img src="../images/icon33.png" alt=""></div>
           <div class="name">申请成为代理</div>
         </div>
@@ -464,6 +464,10 @@ export default {
       } else if (status === 9) {
         this.$router.push({
           path: '/myComment'
+        })
+      } else if (status === 11) {
+        this.$router.push({
+          path: '/applyAgency'
         })
       }
     },

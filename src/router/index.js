@@ -35,6 +35,9 @@ import WithdrawDetail from '@/pages/withdrawDetail'
 import MyGroup from '@/pages/myGroup'
 import PopularizeQrCode from '@/pages/popularizeQrCode'
 import MyComment from '@/pages/myComment'
+import SignIn from '@/pages/signIn'
+import Mission from '@/pages/mission'
+import ApplyAgency from '@/pages/applyAgency'
 
 Vue.use(Router)
 
@@ -307,6 +310,30 @@ export default new Router({
     path: '/myComment',
     name: 'myComment',
     component: MyComment,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的评价
+    path: '/signIn',
+    name: 'signIn',
+    component: SignIn,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的评价
+    path: '/mission',
+    name: 'mission',
+    component: Mission,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 申请代理
+    path: '/applyAgency',
+    name: 'applyAgency',
+    component: ApplyAgency,
     meta: {
       keepAlive: true,
       isBack: false
