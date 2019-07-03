@@ -35,9 +35,9 @@
       background-position: top;
       .wrapper{
         width: px2rem(708);
-	      background-image: linear-gradient(-30deg,	#ff3939 49%, #ff8c47 100%), linear-gradient(	#ffffff, 	#ffffff);
-	      background-blend-mode: normal, normal;
-	      border-radius: px2rem(30);
+        background-image: linear-gradient(-30deg,#ff3939 49%, #ff8c47 100%), linear-gradient(#ffffff, #ffffff);
+        background-blend-mode: normal, normal;
+        border-radius: px2rem(30);
         margin: px2rem(146) auto 0;
         position: relative;
         .portrait-box{
