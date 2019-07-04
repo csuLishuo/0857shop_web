@@ -217,7 +217,7 @@ export default new Router({
       keepAlive: true,
       isBack: false
     }
-  }, {
+  }, { // 代理权限
     path: '/agency',
     name: 'agency',
     component: Agency,
