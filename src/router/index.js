@@ -45,6 +45,8 @@ import AboutUs from '@/pages/aboutUs'
 import CommentFeedback from '@/pages/commentFeedback'
 import PublishComment from '@/pages/publishComment'
 import Lottery from '@/pages/lottery'
+import Login from '@/pages/login'
+import Register from '@/pages/register'
 
 Vue.use(Router)
 
@@ -397,6 +399,22 @@ export default new Router({
     path: '/lottery',
     name: 'lottery',
     component: Lottery,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 注册
+    path: '/register',
+    name: 'register',
+    component: Register,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 登录
+    path: '/login',
+    name: 'login',
+    component: Login,
     meta: {
       keepAlive: true,
       isBack: false

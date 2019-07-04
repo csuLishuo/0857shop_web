@@ -5,7 +5,24 @@
 import qs from 'qs'
 import axios from 'axios'
 import {SERVER_BAS_URL, REQUESTDATA, debug, PROJECT_NAME} from './define'
+//POST传参序列化(请求拦截器)
+axios.interceptors.request.use((config) => {
+  //在发送请求之前做某件事
+  if(config.method  === 'post'){
+    if (sessionStorage.getItem("Jwt")) {
+      config.headers.common['Jwt'] = sessionStorage.getItem("Jwt")
+    }
+  }
+  return config
+})
+//返回状态判断(响应拦截器)
+axios.interceptors.response.use((res) =>{
+  if(res.headers.jwt!=null){
+    sessionStorage.setItem("Jwt",res.headers.jwt)
+  }
 
+  return res;
+});
 /**
  * lf核心JS
  * @type _L4.$|Function
