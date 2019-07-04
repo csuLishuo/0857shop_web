@@ -640,7 +640,8 @@ export default {
         require('../images/icon2.png'),
         require('../images/icon3.png')
       ],
-      bannerData: []
+      bannerData: [],
+      filePath: ''
     }
   },
   methods: {
@@ -695,7 +696,7 @@ export default {
   },
   mounted () {
     // this.test()
-    // this.getBannerList()
+    this.getBannerList()
   },
   watch: {
   }

@@ -82,7 +82,7 @@
           clearable
           placeholder="手机号"
         >
-          <div class="icon-box" slot="left-icon"><img src="../images/icon12.png" alt=""></div>
+          <div class="icon-box" slot="left-icon"><img src="../images/icon57.png" alt=""></div>
         </van-field>
       </div>
       <div class="line line-2">
@@ -92,7 +92,7 @@
           placeholder="密码"
           required
         >
-          <div class="icon-box" slot="left-icon"><img src="../images/icon13.png" alt=""></div>
+          <div class="icon-box" slot="left-icon"><img src="../images/icon58.png" alt=""></div>
         </van-field>
       </div>
     </div>

@@ -109,7 +109,7 @@
             align-items: center;
             justify-content: flex-start;
             .img-box{
-              background: rgba(255,0,0,0.1);
+              /*background: rgba(255,0,0,0.1);*/
               width: px2rem(56);
               height: px2rem(56);
               img{
@@ -168,7 +168,7 @@
           align-items: center;
           justify-content: flex-start;
           .img-box{
-            background: rgba(255,0,0,0.1);
+            /*background: rgba(255,0,0,0.1);*/
             width: px2rem(56);
             height: px2rem(56);
             position: relative;
@@ -219,7 +219,7 @@
           width: 25%;
           margin: px2rem(25) 0;
           .img-box{
-            background: rgba(255,0,0,0.1);
+            /*background: rgba(255,0,0,0.1);*/
             width: px2rem(56);
             height: px2rem(56);
             img{
