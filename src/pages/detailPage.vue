@@ -382,6 +382,17 @@
           display: flex;
         }
       }
+      .btn{
+        background-image: linear-gradient(-90deg, #ff3657 0%, 	#ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
+        width: px2rem(704);
+        height: px2rem(78);
+        text-align: center;
+        border-radius: px2rem(39);
+        margin: px2rem(100) auto 0;
+        font-size: px2rem(32);
+        color: #fff;
+        line-height: px2rem(78);
+      }
     }
   }
 </style>
@@ -507,6 +518,7 @@
             <van-stepper v-model="value" min="1" max="99" />
           </div>
         </div>
+        <div class="btn">确定</div>
       </van-popup>
     </div>
     <div class="bottom-box">
