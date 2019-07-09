@@ -424,8 +424,8 @@
         <van-tab title="商品详情">
           <div class="banner">
             <van-swipe :autoplay="3000">
-              <van-swipe-item v-for="(image, index) in images" :key="index">
-                <img :src="image" />
+              <van-swipe-item v-for="(item, index) in bannerData" :key="index">
+                <img :src="filePath + item" alt="">
               </van-swipe-item>
             </van-swipe>
           </div>
@@ -576,6 +576,7 @@
 </template>
 <script>
 import { Toast, ImagePreview } from 'vant'
+import lf from 'lf'
 
 export default {
   name: 'detail_groupBuy',
@@ -591,10 +592,27 @@ export default {
         require('../images/icon3.png')
       ],
       detailId: '',
-      showPop_select: false
+      showPop_select: false,
+      value: '',
+      detailData: {},
+      filePath: '',
+      bannerData: []
     }
   },
   methods: {
+    getDetailData () {
+      this.$post('/api/goodsGroupRules/getGoodsGroupRulesByGoodsId', {
+        goodsId: this.detailData
+      }).then(res => {
+        if (res.result === 0) {
+          this.detailData = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     test () {
       Toast.loading({
         mask: true,
@@ -612,8 +630,13 @@ export default {
     // this.test()
   },
   created () {
-    this.detailId = this.$route.params.id
-    console.log('detailId', this.detailId)
+    this.detailData = JSON.parse(this.$route.params.detailData)
+    this.filePath = sessionStorage.getItem('filePath')
+    this.bannerData = this.detailData.pics.split(';')
+    console.log('111', this.detailData)
+    console.log('222', this.bannerData)
+    console.log('333', this.filePath)
+    // this.getDetailData()
   },
   watch: {
   }

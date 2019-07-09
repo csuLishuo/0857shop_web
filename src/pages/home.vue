@@ -549,74 +549,36 @@
     </div>
     <div class="area-3">
       <div class="scroll-box">
-        <div class="item on">
+        <div class="item" :class="{'on':sendData.categoryId == 0}" @click="changeCate(0)">
           热门
-          <span></span>
         </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
-        </div>
-        <div class="item">
-          热门
-          <span></span>
+        <div class="item" :class="{'on':sendData.categoryId == item.id}" v-for="item in categoryList" :key="item.id" @click="changeCate(item.id)">
+          {{item.chname}}
         </div>
       </div>
       <div class="listbox">
-        <div class="wrapper">
-          <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-          <div class="right-box">
-            <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-            <div class="des">已售2008件/库存10000件</div>
-            <div class="tag-box">
-              <div class="tag">满38减10</div>
-            </div>
-            <div class="price-box">
-              <div class="price">￥<span>599.00</span></div>
-              <div class="info">包邮 · 七天退换货</div>
+        <van-list
+          v-model="loadingList"
+          :finished="finished"
+          :immediate-check="false"
+          finished-text="没有更多了"
+          @load="getOneMorePage"
+        >
+          <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item)">
+            <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+            <div class="right-box">
+              <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+              <div class="des">已售{{item.totalSales}}/库存{{JSON.parse(item.attrs)[0].stock}}</div>
+              <!--<div class="tag-box">
+                <div class="tag">满38减10</div>
+              </div>-->
+              <div class="price-box">
+                <div class="price">￥<span>{{item.nowPrice}}</span></div>
+                <div class="info">包邮 · 七天退换货</div>
+              </div>
             </div>
           </div>
-        </div>
+        </van-list>
       </div>
     </div>
     <tabbar :activeIndex="0"></tabbar>
@@ -641,7 +603,19 @@ export default {
         require('../images/icon3.png')
       ],
       bannerData: [],
-      filePath: ''
+      filePath: '',
+      categoryList: [],
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        categoryId: 0,
+        title: '',
+        pageNumber: 1,
+        pageSize: 5
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
@@ -679,6 +653,19 @@ export default {
         })
       }
     },
+    changeCate (id) {
+      this.sendData.pageNumber = 1
+      this.finished = false
+      this.goodsList = []
+      this.sendData.categoryId = id
+      this.getGoodsList()
+    },
+    search () {
+      this.finished = false
+      this.sendData.pageNumber = 1
+      this.goodsList = []
+      this.getGoodsList()
+    },
     getBannerList () {
       this.$post('/api/banner/getBannerListByBannerType', {
         bannerType: 1
@@ -692,11 +679,59 @@ export default {
       }).catch(res => {
         Toast.fail('系统内部错误')
       })
+    },
+    getGoodsCategory () {
+      this.$post('/api/goodsIssue/getGoodsCategoryByLevel', {
+        level: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.categoryList = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsIssue/getGoodsIssueListByCategoryId', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
     }
   },
   mounted () {
     // this.test()
     this.getBannerList()
+    this.getGoodsCategory()
+    this.getGoodsList()
   },
   watch: {
   }
