@@ -122,7 +122,7 @@
             }
           }
           .price-box{
-            margin-top: px2rem(30);
+            margin-top: px2rem(60);
             .price{
               color: #ff3e31;
               font-size: px2rem(24);
@@ -164,46 +164,38 @@
       <!--搜索-->
       <!--<div class="right-box"><img src="../images/icon45.png" alt=""></div>-->
     </div>
-    <div class="banner">
+    <!--<div class="banner">
       <van-swipe :autoplay="3000">
         <van-swipe-item v-for="(item, index) in images" :key="index">
           <img :src="item" alt="">
         </van-swipe-item>
       </van-swipe>
-    </div>
+    </div>-->
     <div class="goodsList">
-      <div class="wrapper" @click="goDetail">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="people">
-            <div class="img-box"><img src="../images/img2.png" alt=""></div>
-            <div class="img-box"><img src="../images/img1.png" alt=""></div>
-            <div class="img-box"><img src="../images/img1.png" alt=""></div>
-            <div class="text">135人正在砍价</div>
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail">
+          <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+          <div class="right-box">
+            <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+            <!--<div class="people">
+              <div class="img-box"><img src="../images/img2.png" alt=""></div>
+              <div class="img-box"><img src="../images/img1.png" alt=""></div>
+              <div class="img-box"><img src="../images/img1.png" alt=""></div>
+              <div class="text">135人正在砍价</div>
+            </div>-->
+            <div class="price-box">
+              <div class="price">￥<span>{{item.nowPrice}}</span></div>
+            </div>
+            <div class="btn">砍价免费拿</div>
           </div>
-          <div class="price-box">
-            <div class="price">￥<span>599.00</span></div>
-          </div>
-          <div class="btn">砍价免费拿</div>
         </div>
-      </div>
-      <div class="wrapper">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="people">
-            <div class="img-box"><img src="../images/img2.png" alt=""></div>
-            <div class="img-box"><img src="../images/img1.png" alt=""></div>
-            <div class="img-box"><img src="../images/img1.png" alt=""></div>
-            <div class="text">135人正在砍价</div>
-          </div>
-          <div class="price-box">
-            <div class="price">￥<span>599.00</span></div>
-          </div>
-          <div class="btn">砍价免费拿</div>
-        </div>
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -222,10 +214,60 @@ export default {
         require('../images/icon1_on.png'),
         require('../images/icon2.png'),
         require('../images/icon3.png')
-      ]
+      ],
+      bannerData: [],
+      filePath: '',
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 5
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    changeCate (id) {
+      this.sendData.pageNumber = 1
+      this.finished = false
+      this.goodsList = []
+      this.sendData.categoryId = id
+      this.getGoodsList()
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsFree/getGoodsFreeList', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goBack () {
       this.$router.back(-1)
     },
@@ -233,16 +275,10 @@ export default {
       this.$router.push({
         name: 'detail_bargin'
       })
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
     }
   },
   mounted () {
-    // this.test()
+    this.getGoodsList()
   },
   watch: {
   }
