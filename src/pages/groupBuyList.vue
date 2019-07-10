@@ -180,13 +180,13 @@
         {{item.chname}}
       </div>
     </div>
-    <div class="banner">
+    <!--<div class="banner">
       <van-swipe :autoplay="3000">
         <van-swipe-item v-for="(item, index) in images" :key="index">
           <img :src="item" alt="">
         </van-swipe-item>
       </van-swipe>
-    </div>
+    </div>-->
     <div class="goodsList">
       <van-list
         v-model="loadingList"
@@ -238,7 +238,6 @@ export default {
       totalPage: '',
       sendData: {
         categoryId: 0,
-        title: '',
         pageNumber: 1,
         pageSize: 5
       },

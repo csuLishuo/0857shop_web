@@ -236,25 +236,9 @@
       <!--<div class="right-box"><img src="../images/icon45.png" alt=""></div>-->
     </div>
     <div class="area-1">
-      <div class="wrapper">
-        <div class="time">00:00</div>
-        <div class="des">已结束</div>
-      </div>
-      <div class="wrapper">
-        <div class="time">00:00</div>
-        <div class="des">已结束</div>
-      </div>
-      <div class="wrapper on">
-        <div class="time">00:00</div>
-        <div class="des">抢购进行中</div>
-      </div>
-      <div class="wrapper">
-        <div class="time">00:00</div>
-        <div class="des">已结束</div>
-      </div>
-      <div class="wrapper">
-        <div class="time">00:00</div>
-        <div class="des">已结束</div>
+      <div class="wrapper" :class="{'on' : item.statusText == '抢购进行中'}" v-for="item in timeList" :key="item.id">
+        <div class="time">{{item.title}}</div>
+        <div class="des">{{item.statusText}}</div>
       </div>
     </div>
     <div class="area-2">
@@ -262,41 +246,36 @@
       <div class="right-box">
         <div class="text">距结束</div>
         <div class="time-box">
-          <div class="time">05</div>
+          <div class="time">{{countDown.hour}}</div>
           <div class="time-text">:</div>
-          <div class="time">05</div>
+          <div class="time">{{countDown.minute}}</div>
           <div class="time-text">:</div>
-          <div class="time">05</div>
+          <div class="time">{{countDown.second}}</div>
         </div>
       </div>
     </div>
     <div class="goodsList">
-      <div class="wrapper" @click="goDetail">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="des">已购2008件<span>/剩余10000件</span></div>
-          <div class="bar"><span></span></div>
-          <div class="price-box">
-            <div class="price-origin">￥599.00</div>
-            <div class="price">￥<span>599.00</span></div>
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <div class="wrapper" v-for="item in goodsList" :key="item.id">
+          <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+          <div class="right-box">
+            <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+            <div class="des">已购{{item.totalSales}}<span>/剩余{{JSON.parse(item.attrs)[0].stock}}件</span></div>
+            <div class="bar"><span></span></div>
+            <div class="price-box">
+              <div class="price-origin">￥{{item.marketPrice}}</div>
+              <div class="price">￥<span>{{item.nowPrice}}</span></div>
+            </div>
+            <div class="btn" @click="goDetail">马上抢购</div>
           </div>
-          <div class="btn">马上抢购</div>
         </div>
-      </div>
-      <div class="wrapper">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="des">已购2008件<span>/剩余10000件</span></div>
-          <div class="bar"><span></span></div>
-          <div class="price-box">
-            <div class="price-origin">￥599.00</div>
-            <div class="price">￥<span>599.00</span></div>
-          </div>
-          <div class="btn">马上抢购</div>
-        </div>
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -315,7 +294,26 @@ export default {
         require('../images/icon1_on.png'),
         require('../images/icon2.png'),
         require('../images/icon3.png')
-      ]
+      ],
+      filePath: '',
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        flashSaleId: '',
+        pageNumber: 1,
+        pageSize: 5
+      },
+      loadingList: false,
+      finished: false,
+      timeList: [],
+      interval: null,
+      countDown: {
+        day: '00',
+        hour: '00',
+        minute: '00',
+        second: '00'
+      }
     }
   },
   methods: {
@@ -327,15 +325,132 @@ export default {
         path: '/detail_seckill'
       })
     },
+    getTimeList () {
+      this.$post('/api/goodsFlashSale/getFlashSaleListByStatus').then(res => {
+        if (res.result === 0) {
+          this.timeList = res.data
+          this.timeList.forEach((v, i) => {
+            let startTime = new Date(v.startTime).getTime()
+            let currentTime = new Date(v.currentTime).getTime()
+            // let endTime = new Date(v.endTime).getTime()
+            let endTime = new Date('2019-07-10 22:00:00').getTime()
+            let statusText
+            if (currentTime < startTime) {
+              statusText = '未开始'
+            } else if (currentTime > endTime) {
+              statusText = '已结束'
+            } else {
+              statusText = '抢购进行中'
+            }
+            v.statusText = statusText
+            if (statusText === '抢购进行中') {
+              this.sendData.flashSaleId = v.id
+              this.getGoodsList()
+              this.getCountDown(currentTime, endTime)
+            }
+            console.log('22222222', new Date(endTime - currentTime))
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getCountDown (currentTime, endTime) {
+      var self = this
+      var total = (endTime - currentTime) / 1000
+      this.interval = setInterval(function () {
+        total--
+        var day = parseInt(total / (24 * 60 * 60)) // 计算整数天数
+        var afterDay = total - day * 24 * 60 * 60 // 取得算出天数后剩余的秒数
+        var hour = parseInt(afterDay / (60 * 60)) // 计算整数小时数
+        var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60 // 取得算出小时数后剩余的秒数
+        var min = parseInt(afterHour / 60) // 计算整数分
+        var afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60 // 取得算出分后剩余的秒数
+        self.countDown.day = day
+        self.countDown.hour = hour < 10 ? '0' + hour : hour
+        self.countDown.minute = min < 10 ? '0' + min : min
+        self.countDown.second = afterMin < 10 ? '0' + afterMin : afterMin
+        if (total < 0 || total === 0) {
+          self.clearInterval()
+          self.countDown = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+      }, 1000)
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsFlashSale/getGoodsFlashSaleListByFlashSaleId', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    clearInterval () {
+      if (this.interval !== null) { // 判断计时器是否为空
+        clearInterval(this.interval)
+        this.interval = null
+      }
+    },
     test () {
       Toast.loading({
         mask: true,
         message: '加载中...'
       })
+    },
+    init () {
+      let self = this
+      let promise1 = new Promise(function (resolve, reject) {
+        self.getTimeList()
+        resolve(true)
+      })
+      let promise2 = new Promise(function (resolve, reject) {
+        self.getGoodsList()
+        resolve(true)
+      })
+      Promise.all([
+        promise1, promise2
+      ]).then(res => {
+      })
     }
   },
   mounted () {
     // this.test()
+    this.getTimeList()
+    // this.getGoodsList()
+    // this.init()
+  },
+  distroyed () {
+    this.clearInterval()
   },
   watch: {
   }

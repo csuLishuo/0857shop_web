@@ -431,26 +431,26 @@
           </div>
           <div class="price-wrapper">
             <div class="price-box">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
               <div class="info">
-                <div class="price-origin">￥699.00</div>
-                <span>已售1389/剩2000</span>
+                <div class="price-origin">￥{{detailData.marketPrice}}</div>
+                <span>已售{{detailData.totalSales}}/库存{{JSON.parse(detailData.attrs)[0].stock}}</span>
               </div>
             </div>
             <div class="right-box">
               <div class="time-box">
-                <div class="time">开始：12: 00: 00</div>
+                <div class="time">开始：{{detailData.startTime}}</div>
               </div>
               <div class="time-box">
-                <div class="time">开始：12: 00: 00</div>
+                <div class="time">开始：{{detailData.endTime}}</div>
               </div>
             </div>
           </div>
           <div class="title">
             <div class="text ellipsis-2">
-              【同价618】旗舰店 卡西欧（CASIO）樱花色新 款女表时尚防水运动学生表BGD-560
+              【{{detailData.title}}】{{detailData.subTitle}}
             </div>
-            <div class="share">分享</div>
+            <!--<div class="share">分享</div>-->
           </div>
           <div class="area-1">
             <div class="line">
@@ -461,12 +461,12 @@
                 <div class="text">快递：免运费</div>
               </div>
             </div>
-            <div class="line">
+            <!--<div class="line">
               <div class="name">优惠</div>
               <div class="right-box">
                 <div class="text-1">满2000元减200元</div>
               </div>
-            </div>
+            </div>-->
             <div class="line">
               <div class="name">保障</div>
               <div class="right-box">
@@ -493,7 +493,7 @@
               <div class="border"></div>
             </div>
             <div class="img-box">
-              <img src="../images/img1.png" alt="">
+              <img v-for="(item, index) in detailData.details.split(';')" :key="index" :src="filePath + item" alt="">
             </div>
           </div>
         </van-tab>
@@ -564,11 +564,11 @@
         <div class="text">收藏</div>
       </div>
       <div class="btn btn-1">
-        <div class="price">￥100000</div>
+        <div class="price">￥{{detailData.nowPrice}}</div>
         <div class="text">单独购买</div>
       </div>
       <div class="btn btn-2">
-        <div class="price">￥10000</div>
+        <div class="price">￥{{detailData.groupPrice}}</div>
         <div class="text">发起拼团</div>
       </div>
     </div>
@@ -596,13 +596,15 @@ export default {
       value: '',
       detailData: {},
       filePath: '',
-      bannerData: []
+      bannerData: [],
+      groupTime: ''
     }
   },
   methods: {
     getDetailData () {
       this.$post('/api/goodsGroupRules/getGoodsGroupRulesByGoodsId', {
-        goodsId: this.detailData
+        // goodsId: this.detailData
+        goodsId: 1
       }).then(res => {
         if (res.result === 0) {
           this.detailData = res.data
@@ -613,11 +615,17 @@ export default {
         Toast.fail('系统内部错误')
       })
     },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
+    timeConfirm (value) {
+      console.log(value)
+      var month = value.getMonth() + 1
+      var strDate = value.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      this.time = value.getFullYear() + '-' + month + '-' + strDate
     },
     preview (i) {
       ImagePreview({
@@ -633,9 +641,11 @@ export default {
     this.detailData = JSON.parse(this.$route.params.detailData)
     this.filePath = sessionStorage.getItem('filePath')
     this.bannerData = this.detailData.pics.split(';')
+    this.groupTime = new Date(Number(this.detailData.groupTime))
     console.log('111', this.detailData)
     console.log('222', this.bannerData)
     console.log('333', this.filePath)
+    console.log('444', this.groupTime)
     // this.getDetailData()
   },
   watch: {
