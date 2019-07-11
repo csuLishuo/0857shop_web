@@ -432,33 +432,33 @@
         <van-tab title="商品详情">
           <div class="banner">
             <van-swipe :autoplay="3000">
-              <van-swipe-item v-for="(image, index) in images" :key="index">
-                <img :src="image" />
+              <van-swipe-item v-for="(item, index) in bannerData" :key="index">
+                <img :src="filePath + item" alt="">
               </van-swipe-item>
             </van-swipe>
           </div>
           <div class="price-wrapper">
             <div class="price-box">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
               <div class="info">
-                <div class="price-origin">￥699.00</div>
-                <span>已售1389/剩2000</span>
+                <div class="price-origin">￥{{detailData.marketPrice}}</div>
+                <span>已售{{detailData.totalSales}}/库存{{detailDataAttrs.stock}}</span>
               </div>
             </div>
             <div class="right-box">
               <div class="text">距结束</div>
               <div class="time-box">
-                <div class="time">05</div>
+                <div class="time">{{countDown.hour}}</div>
                 <div class="time-text">:</div>
-                <div class="time">05</div>
+                <div class="time">{{countDown.minute}}</div>
                 <div class="time-text">:</div>
-                <div class="time">05</div>
+                <div class="time">{{countDown.second}}</div>
               </div>
             </div>
           </div>
           <div class="title">
             <div class="text ellipsis-2">
-              【同价618】旗舰店 卡西欧（CASIO）樱花色新 款女表时尚防水运动学生表BGD-560
+              【{{detailData.title}}】{{detailData.subTitle}}
             </div>
             <div class="share">分享</div>
           </div>
@@ -471,12 +471,12 @@
                 <div class="text">快递：免运费</div>
               </div>
             </div>
-            <div class="line">
+            <!--<div class="line">
               <div class="name">优惠</div>
               <div class="right-box">
                 <div class="text-1">满2000元减200元</div>
               </div>
-            </div>
+            </div>-->
             <div class="line">
               <div class="name">保障</div>
               <div class="right-box">
@@ -503,7 +503,7 @@
               <div class="border"></div>
             </div>
             <div class="img-box">
-              <img src="../images/img1.png" alt="">
+              <img v-for="(item, index) in detailPics" :key="index" :src="filePath + item" alt="">
             </div>
           </div>
         </van-tab>
@@ -595,15 +595,76 @@ export default {
         require('../images/icon3.png')
       ],
       detailId: '',
-      showPop_select: false
+      showPop_select: false,
+      value: '',
+      detailData: {},
+      filePath: '',
+      bannerData: [],
+      detailPics: [],
+      detailDataAttrs: {},
+      groupTime: '',
+      interval: null,
+      countDown: {
+        day: '00',
+        hour: '00',
+        minute: '00',
+        second: '00'
+      }
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    getDetailData () {
+      this.$post('/api/goodsFlashSale/getGoodsFlashSaleById', {
+        id: this.detailId
+        // goodsId: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.detailData = res.data
+          this.bannerData = this.detailData.pics.split(';')
+          this.detailPics = this.detailData.details.split(';')
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+          let currentTime = new Date().getTime()
+          console.log('now', new Date())
+          let endTime = new Date(this.detailData.endTime).getTime()
+          this.getCountDown(currentTime, endTime)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
       })
+    },
+    getCountDown (currentTime, endTime) {
+      var self = this
+      var total = (endTime - currentTime) / 1000
+      this.interval = setInterval(function () {
+        total--
+        var day = parseInt(total / (24 * 60 * 60)) // 计算整数天数
+        var afterDay = total - day * 24 * 60 * 60 // 取得算出天数后剩余的秒数
+        var hour = parseInt(afterDay / (60 * 60)) // 计算整数小时数
+        var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60 // 取得算出小时数后剩余的秒数
+        var min = parseInt(afterHour / 60) // 计算整数分
+        var afterMin = parseInt(total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60) // 取得算出分后剩余的秒数
+        self.countDown.day = day
+        self.countDown.hour = hour < 10 ? '0' + hour : hour
+        self.countDown.minute = min < 10 ? '0' + min : min
+        self.countDown.second = afterMin < 10 ? '0' + afterMin : afterMin
+        if (total < 0 || total === 0) {
+          self.clearInterval()
+          self.countDown = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+      }, 1000)
+    },
+    clearInterval () {
+      if (this.interval !== null) { // 判断计时器是否为空
+        clearInterval(this.interval)
+        this.interval = null
+      }
     },
     preview (i) {
       ImagePreview({
@@ -615,9 +676,13 @@ export default {
   mounted () {
     // this.test()
   },
+  distroyed () {
+    this.clearInterval()
+  },
   created () {
-    this.detailId = this.$route.params.id
-    console.log('detailId', this.detailId)
+    this.filePath = sessionStorage.getItem('filePath')
+    this.detailId = this.$route.query.detailId
+    this.getDetailData()
   },
   watch: {
   }

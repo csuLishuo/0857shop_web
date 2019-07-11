@@ -207,7 +207,7 @@
               <div class="price">￥<span>{{item.nowPrice}}</span></div>
               <!--<div class="info">已售1389/剩2000</div>-->
             </div>
-            <div class="btn" @click="goDetail(item)">去开团</div>
+            <div class="btn" @click="goDetail(item.id)">去开团</div>
           </div>
         </div>
       </van-list>
@@ -301,11 +301,11 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
-    goDetail (item) {
+    goDetail (id) {
       this.$router.push({
-        name: 'detail_groupBuy',
-        params: {
-          detailData: JSON.stringify(item)
+        path: 'detail_groupBuy',
+        query: {
+          detailId: id
         }
       })
     },

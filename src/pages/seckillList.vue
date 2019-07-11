@@ -272,7 +272,7 @@
               <div class="price-origin">￥{{item.marketPrice}}</div>
               <div class="price">￥<span>{{item.nowPrice}}</span></div>
             </div>
-            <div class="btn" @click="goDetail">马上抢购</div>
+            <div class="btn" @click="goDetail(item.id)">马上抢购</div>
           </div>
         </div>
       </van-list>
@@ -320,9 +320,12 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
+    goDetail (id) {
       this.$router.push({
-        path: '/detail_seckill'
+        path: '/detail_seckill',
+        query: {
+          detailId: id
+        }
       })
     },
     getTimeList () {
@@ -332,8 +335,8 @@ export default {
           this.timeList.forEach((v, i) => {
             let startTime = new Date(v.startTime).getTime()
             let currentTime = new Date(v.currentTime).getTime()
-            // let endTime = new Date(v.endTime).getTime()
-            let endTime = new Date('2019-07-10 22:00:00').getTime()
+            let endTime = new Date(v.endTime).getTime()
+            // let endTime = new Date('2019-07-11 22:00:00').getTime()
             let statusText
             if (currentTime < startTime) {
               statusText = '未开始'

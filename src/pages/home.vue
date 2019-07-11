@@ -564,7 +564,7 @@
           finished-text="没有更多了"
           @load="getOneMorePage"
         >
-          <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item)">
+          <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
             <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
             <div class="right-box">
               <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
@@ -652,6 +652,14 @@ export default {
           path: '/stepCount'
         })
       }
+    },
+    goDetail (id) {
+      this.$router.push({
+        path: 'detailPage',
+        query: {
+          detailId: id
+        }
+      })
     },
     changeCate (id) {
       this.sendData.pageNumber = 1

@@ -179,10 +179,10 @@
         finished-text="没有更多了"
         @load="getOneMorePage"
       >
-        <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail">
+        <div class="wrapper" v-for="item in goodsList" :key="item.id">
           <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
           <div class="right-box">
-            <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+            <div class="title ellipsis-2"  @click="goDetail(item.id)">【{{item.title}}】{{item.subTitle}}</div>
             <!--<div class="people">
               <div class="img-box"><img src="../images/img2.png" alt=""></div>
               <div class="img-box"><img src="../images/img1.png" alt=""></div>
@@ -271,9 +271,12 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
+    goDetail (id) {
       this.$router.push({
-        name: 'detail_bargin'
+        path: 'detail_bargin',
+        query: {
+          detailId: id
+        }
       })
     }
   },

@@ -403,20 +403,20 @@
         <van-tab title="商品详情">
           <div class="banner">
             <van-swipe :autoplay="3000">
-              <van-swipe-item v-for="(image, index) in images" :key="index">
-                <img :src="image" />
+              <van-swipe-item v-for="(item, index) in bannerData" :key="index">
+                <img :src="filePath + item" alt="">
               </van-swipe-item>
             </van-swipe>
           </div>
           <div class="price-box">
-            <div class="price">￥<span>599.00</span></div>
-            <div class="info">已售1389/剩2000</div>
+            <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
+            <div class="info">已售{{detailData.totalSales}}/库存{{detailDataAttrs.stock}}</div>
           </div>
           <div class="title">
             <div class="text ellipsis-2">
-              【同价618】旗舰店 卡西欧（CASIO）樱花色新 款女表时尚防水运动学生表BGD-560
+              【{{detailData.title}}】{{detailData.subTitle}}
             </div>
-            <div class="share">分享</div>
+            <!--<div class="share">分享</div>-->
           </div>
           <div class="area-1">
             <div class="line">
@@ -427,12 +427,12 @@
                 <div class="text">快递：免运费</div>
               </div>
             </div>
-            <div class="line">
+            <!--<div class="line">
               <div class="name">优惠</div>
               <div class="right-box">
                 <div class="text-1">满2000元减200元</div>
               </div>
-            </div>
+            </div>-->
             <div class="line">
               <div class="name">保障</div>
               <div class="right-box">
@@ -446,7 +446,7 @@
           <div class="area-1">
             <div class="line">
               <div class="name">选择</div>
-              <div class="right-box right-box-2">
+              <div class="right-box right-box-2" @click="showPop">
                 <div class="text">规格</div>
                 <div class="icon-box"><img src="../images/icon21.png" alt=""></div>
               </div>
@@ -459,7 +459,7 @@
               <div class="border"></div>
             </div>
             <div class="img-box">
-              <img src="../images/img1.png" alt="">
+              <img v-for="(item, index) in detailPics" :key="index" :src="filePath + item" alt="">
             </div>
           </div>
         </van-tab>
@@ -544,7 +544,7 @@ export default {
   },
   data () {
     return {
-      active: 1,
+      active: 0,
       images: [
         require('../images/icon1.png'),
         require('../images/icon1_on.png'),
@@ -552,14 +552,77 @@ export default {
         require('../images/icon3.png')
       ],
       detailId: '',
-      showPop_select: true
+      showPop_select: false,
+      value: '',
+      detailData: {},
+      filePath: '',
+      bannerData: [],
+      detailPics: [],
+      detailDataAttrs: {},
+      select: [{
+        title: '颜色',
+        children: [{
+          id: 1,
+          name: '红色'
+        }, {
+          id: 2,
+          name: '蓝色'
+        }]
+      }, {
+        title: '尺码',
+        children: [{
+          id: 1,
+          name: 'XL'
+        }, {
+          id: 2,
+          name: 'L'
+        }]
+      }]
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    showPop () {
+      this.showPop_select = true
+    },
+    getDetailData () {
+      this.$post('/api/goodsIssue/getGoodsIssueById', {
+        id: this.detailId
+        // goodsId: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.detailData = res.data
+          this.bannerData = this.detailData.pics.split(';')
+          this.detailPics = this.detailData.details.split(';')
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getSelectArray () {
+      let attrs = [{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/20kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "白色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13}]
+      // title数组
+      let arr1 = attrs[0].attrType.split('/')
+      let arr2 = []
+      for (let i = 0; i < arr1.length; i++) {
+        let n = []
+        attrs.forEach(v => {
+          n.push(v.attrTitle.split('/')[i])
+        })
+        arr2.push(n)
+      }
+      // 规格数组
+      let arr3 = []
+      arr2.forEach((v, i) => {
+        let n = []
+        for (let i = 0; i < v.length; i++) {
+          if (n.indexOf(v[i]) === -1) {
+            n.push(v[i])
+          }
+        }
+        arr3.push(n)
       })
     },
     preview (i) {
@@ -573,8 +636,11 @@ export default {
     // this.test()
   },
   created () {
-    this.detailId = this.$route.params.id
+    this.detailId = this.$route.query.detailId
     console.log('detailId', this.detailId)
+    this.filePath = sessionStorage.getItem('filePath')
+    this.getDetailData()
+    this.getSelectArray()
   },
   watch: {
   }

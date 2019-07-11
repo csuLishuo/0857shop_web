@@ -434,7 +434,7 @@
               <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
               <div class="info">
                 <div class="price-origin">￥{{detailData.marketPrice}}</div>
-                <span>已售{{detailData.totalSales}}/库存{{JSON.parse(detailData.attrs)[0].stock}}</span>
+                <span>已售{{detailData.totalSales}}/库存{{detailDataAttrs.stock}}</span>
               </div>
             </div>
             <div class="right-box">
@@ -493,7 +493,7 @@
               <div class="border"></div>
             </div>
             <div class="img-box">
-              <img v-for="(item, index) in detailData.details.split(';')" :key="index" :src="filePath + item" alt="">
+              <img v-for="(item, index) in detailPics" :key="index" :src="filePath + item" alt="">
             </div>
           </div>
         </van-tab>
@@ -597,17 +597,22 @@ export default {
       detailData: {},
       filePath: '',
       bannerData: [],
+      detailPics: [],
+      detailDataAttrs: {},
       groupTime: ''
     }
   },
   methods: {
     getDetailData () {
-      this.$post('/api/goodsGroupRules/getGoodsGroupRulesByGoodsId', {
-        // goodsId: this.detailData
-        goodsId: 1
+      this.$post('/api/goodsGroupRules/getGoodsGroupRulesById', {
+        id: this.detailId
+        // goodsId: 1
       }).then(res => {
         if (res.result === 0) {
           this.detailData = res.data
+          this.bannerData = this.detailData.pics.split(';')
+          this.detailPics = this.detailData.details.split(';')
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
         } else {
           Toast.fail(res.message)
         }
@@ -635,18 +640,11 @@ export default {
     }
   },
   mounted () {
-    // this.test()
   },
   created () {
-    this.detailData = JSON.parse(this.$route.params.detailData)
     this.filePath = sessionStorage.getItem('filePath')
-    this.bannerData = this.detailData.pics.split(';')
-    this.groupTime = new Date(Number(this.detailData.groupTime))
-    console.log('111', this.detailData)
-    console.log('222', this.bannerData)
-    console.log('333', this.filePath)
-    console.log('444', this.groupTime)
-    // this.getDetailData()
+    this.detailId = this.$route.query.detailId
+    this.getDetailData()
   },
   watch: {
   }
