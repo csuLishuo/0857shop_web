@@ -125,6 +125,11 @@
         text-align: center;
         margin: px2rem(24) auto;
       }
+      .area-1-del{
+        img{
+          width: 100%;
+        }
+      }
       .area-1-container{
         padding: 0 px2rem(24) px2rem(17);
         display: flex;
@@ -208,6 +213,12 @@
       margin: px2rem(17) px2rem(22);
       border-radius: px2rem(5);
       overflow: hidden;
+      .area-2-del{
+        width: 100%;
+        img{
+          width: 100%;
+        }
+      }
       .area-2-container{
         display: flex;
         flex-direction: row;
@@ -469,12 +480,15 @@
         <div class="text">更多</div>
       </div>
     </div>
-    <div class="ad-box">
-      <img src="../images/icon1.png" alt="">
+    <div class="ad-box" @click="goActiveList">
+      <img :src="filePath + adData[0].bannerPic" alt="">
     </div>
     <div class="area-1 clearfix">
       <div class="title">热卖商品</div>
-      <div class="area-1-container">
+      <div class="area-1-del" @click="goHotSaleList">
+        <img src="../images/imgDel6.jpg" alt="">
+      </div>
+      <!--<div class="area-1-container">
         <div class="left-box">
           <img src="../images/icon1.png" alt="">
         </div>
@@ -495,10 +509,13 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="area-2 clearfix">
-      <div class="area-2-container">
+      <div class="area-2-del" @click="go(3)">
+        <img src="../images/imgDel7.jpg" alt="">
+      </div>
+      <!--<div class="area-2-container">
         <div class="left-box">
           <div class="title-box">
             <div class="title">限量秒杀</div>
@@ -545,7 +562,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="area-3">
       <div class="scroll-box">
@@ -603,6 +620,7 @@ export default {
         require('../images/icon3.png')
       ],
       bannerData: [],
+      adData: [],
       filePath: '',
       categoryList: [],
       goodsList: [],
@@ -621,6 +639,16 @@ export default {
   methods: {
     more () {
       Toast('敬请期待')
+    },
+    goHotSaleList () {
+      this.$router.push({
+        path: '/hotSaleList'
+      })
+    },
+    goActiveList () {
+      this.$router.push({
+        path: '/activeList'
+      })
     },
     go (status) {
       if (status === 1) {
@@ -680,7 +708,19 @@ export default {
       }).then(res => {
         if (res.result === 0) {
           this.bannerData = res.data
-          this.filePath = res.filePath
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getAdImg () {
+      this.$post('/api/banner/getBannerListByBannerType', {
+        bannerType: 2
+      }).then(res => {
+        if (res.result === 0) {
+          this.adData = res.data
         } else {
           Toast.fail(res.message)
         }
@@ -738,6 +778,7 @@ export default {
   mounted () {
     // this.test()
     this.getBannerList()
+    this.getAdImg()
     this.getGoodsCategory()
     this.getGoodsList()
   },
