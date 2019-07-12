@@ -51,6 +51,7 @@ import HotSaleList from '@/pages/hotSaleList'
 import detailHotSale from '@/pages/detail_hotSale'
 import ActiveList from '@/pages/activeList'
 import DetailActive from '@/pages/detail_active'
+import DetailScore from '@/pages/detail_score'
 
 Vue.use(Router)
 
@@ -435,6 +436,14 @@ export default new Router({
     path: '/detail_active',
     name: 'detail_active',
     component: DetailActive,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 积分商品详情
+    path: '/detail_score',
+    name: 'detail_score',
+    component: DetailScore,
     meta: {
       keepAlive: true,
       isBack: false

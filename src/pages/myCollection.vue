@@ -154,9 +154,9 @@
             <div class="wrapper" @click="goDetail">
               <div class="img-box"><img src="../images/icon3.png" alt=""></div>
               <div class="right-box">
-                <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
+                <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
                 <div class="price-box">
-                  <div class="price">￥<span>599.00</span></div>
+                  <div class="price">￥<span>{{item.nowPrice}}</span></div>
                 </div>
               </div>
             </div>

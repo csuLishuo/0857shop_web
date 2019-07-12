@@ -202,18 +202,20 @@
         当前积分5000积分，可以兑换以下产品
       </div>
       <div class="recommend-list">
-        <div class="wrapper">
-          <div class="img-box"><img src="../images/img2.png" alt=""></div>
-          <div class="name ellipsis-1">PZAAO 中空缎面款色休..PZAAO 中空缎面款色休..</div>
-          <div class="des ellipsis-1">已售1389/剩2000</div>
-          <div class="price">￥<span>599.00</span></div>
-        </div>
-        <div class="wrapper">
-          <div class="img-box"><img src="../images/img2.png" alt=""></div>
-          <div class="name ellipsis-1">PZAAO 中空缎面款色休..PZAAO 中空缎面款色休..</div>
-          <div class="des ellipsis-1">已售1389/剩2000</div>
-          <div class="price">￥<span>599.00</span></div>
-        </div>
+        <van-list
+          v-model="loadingList"
+          :finished="finished"
+          :immediate-check="false"
+          finished-text="没有更多了"
+          @load="getOneMorePage"
+        >
+          <div class="wrapper" v-for="item in goodsList" :key="item.id">
+            <div class="img-box"><img src="../images/img2.png" alt=""></div>
+            <div class="name ellipsis-1">PZAAO 中空缎面款色休..PZAAO 中空缎面款色休..</div>
+            <div class="des ellipsis-1">已售1389/剩2000</div>
+            <div class="price">￥<span>599.00</span></div>
+          </div>
+        </van-list>
       </div>
     </div>
   </div>
@@ -234,10 +236,52 @@ export default {
         '2019/7/8',
         '2019/7/10'
       ],
-      signInData: {}
+      signInData: {},
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 5
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsScore/getGoodsScoreList', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     changeDate (data) {
       console.log(data) // 左右点击切换月份
     },
@@ -270,6 +314,7 @@ export default {
   },
   mounted () {
     this.getSignInData()
+    this.getGoodsList()
   },
   watch: {
   }

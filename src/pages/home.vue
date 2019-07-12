@@ -613,12 +613,6 @@ export default {
   },
   data () {
     return {
-      images: [
-        require('../images/icon1.png'),
-        require('../images/icon1_on.png'),
-        require('../images/icon2.png'),
-        require('../images/icon3.png')
-      ],
       bannerData: [],
       adData: [],
       filePath: '',

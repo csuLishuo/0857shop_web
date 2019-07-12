@@ -35,6 +35,58 @@
         width: 100%;
       }
     }
+    .area-1{
+      img{
+        width: 100%;
+        height: auto;
+      }
+    }
+    .area-2{
+      width: px2rem(668);
+      background: #fff;
+      border-radius: px2rem(20);
+      margin: px2rem(4) auto;
+      padding: px2rem(20) px2rem(40) px2rem(80);
+      .title{
+        font-size: px2rem(36);
+        color: #f24d49;
+        text-align: center;
+      }
+      .line{
+        padding: px2rem(40) 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: px2rem(3) dashed #ffbab8;
+        &.noborder{
+          border-bottom: none;
+        }
+        .left-box{
+          .name{
+            font-weight: bold;
+            font-size: px2rem(28);
+            span{
+              color: #ff7524;
+            }
+          }
+          .des{
+            color: #838383;
+            font-size: px2rem(24);
+            margin-top: px2rem(10);
+          }
+        }
+        .right-box{
+          width: px2rem(146);
+          height: px2rem(64);
+          line-height: px2rem(64);
+          background: #fc431f;
+          text-align: center;
+          border-radius: px2rem(32);
+          font-size: px2rem(30);
+          color: #fff;
+        }
+      }
+    }
   }
 </style>
 <template>
@@ -42,7 +94,31 @@
     <div class="topBar">
       <div class="left-box" @click="goBack"><img src="../images/icon38.png" alt=""></div>
     </div>
-    <div class="imgDel-box"><img src="../images/imgDel3.png" alt=""></div>
+    <!-- <div class="imgDel-box"><img src="../images/imgDel3.png" alt=""></div> -->
+    <div class="area-1">
+      <img src="../images/img13.png" alt="">
+    </div>
+    <div class="area-2">
+      <div class="title">做任务赚积分</div>
+      <div class="line">
+        <div class="left-box">
+          <div class="name">邀请好友下载 <span>奖励500积分</span></div>
+          <div class="des">奖励500积分</div>
+        </div>
+        <div class="right-box">
+          去参加
+        </div>
+      </div>
+      <div class="line noborder">
+        <div class="left-box">
+          <div class="name">邀请好友下载 <span>奖励500积分</span></div>
+          <div class="des">奖励500积分</div>
+        </div>
+        <div class="right-box">
+          去参加
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

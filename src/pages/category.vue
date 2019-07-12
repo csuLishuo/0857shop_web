@@ -144,72 +144,38 @@
         <input type="text">
       </div>
     </div>
-    <div class="banner clearfix">
-      <div class="img-box"><img src="../images/img2.png" alt=""></div>
+    <div class="banner">
+      <van-swipe :autoplay="3000">
+        <van-swipe-item v-for="(item, index) in bannerData" :key="index">
+          <img :src="filePath + item.bannerPic" alt="">
+        </van-swipe-item>
+      </van-swipe>
     </div>
     <div class="scroll-box">
-      <div class="item on">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-      <div class="item">
-        热门
-        <span></span>
-      </div>
-    </div>
-    <div class="goodsList">
-      <div class="wrapper">
-        <div class="img-box"><img src="../images/img2.png" alt=""></div>
-        <div class="price">
-          <div>￥<span>599.00</span></div>
-          <div class="label">满38减10</div>
+        <div class="item" :class="{'on':sendData.categoryId == 0}" @click="changeCate(0)">
+          热门
         </div>
-        <div class="name ellipsis-2">PZAAO 中空缎面款色休中空缎面款色休中空缎面款色休中空缎面款色休..PZAAO 中空缎面款色休..</div>
+        <div class="item" :class="{'on':sendData.categoryId == item.id}" v-for="item in categoryList" :key="item.id" @click="changeCate(item.id)">
+          {{item.chname}}
+        </div>
       </div>
+    <div class="goodsList">
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
+          <div class="img-box"><img src="../images/img2.png" alt=""></div>
+          <div class="price">
+            <div>￥<span>{{item.nowPrice}}</span></div>
+            <!-- <div class="label">满38减10</div> -->
+          </div>
+          <div class="name ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+        </div>
+      </van-list>
     </div>
     <tabbar :activeIndex="1"></tabbar>
   </div>
@@ -226,18 +192,103 @@ export default {
   },
   data () {
     return {
+      bannerData: [],
+      adData: [],
+      filePath: '',
+      categoryList: [],
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        categoryId: 0,
+        title: '',
+        pageNumber: 1,
+        pageSize: 5
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    goDetail (id) {
+      this.$router.push({
+        path: 'detailPage',
+        query: {
+          detailId: id
+        }
+      })
+    },
+    getBannerList () {
+      this.$post('/api/banner/getBannerListByBannerType', {
+        bannerType: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.bannerData = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    changeCate (id) {
+      this.sendData.pageNumber = 1
+      this.finished = false
+      this.goodsList = []
+      this.sendData.categoryId = id
+      this.getGoodsList()
+    },
+    getGoodsCategory () {
+      this.$post('/api/goodsIssue/getGoodsCategoryByLevel', {
+        level: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.categoryList = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsIssue/getGoodsIssueListByCategoryId', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
       })
     }
   },
   mounted () {
-    // this.test()
+    this.getBannerList()
+    this.getGoodsCategory()
+    this.getGoodsList()
   },
   watch: {
   }
