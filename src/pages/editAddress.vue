@@ -63,6 +63,20 @@
         }
       }
     }
+    .btn-bottom {
+      width: px2rem(690);
+      height: px2rem(80);
+      line-height: px2rem(80);
+      background-color: rgba(240,0,0,1);
+      border-radius: px2rem(80);
+      position: fixed;
+      bottom: px2rem(40);
+      left: px2rem(30);
+      right: px2rem(30);
+      font-size: px2rem(30);
+      color: #fff;
+      text-align: center;
+    }
   }
 </style>
 <template>
@@ -76,34 +90,47 @@
       <div class="line">
         <div class="label">用户名</div>
         <div class="input-box">
-          <van-field placeholder="请填写收货人姓名" />
+          <van-field v-model="sendData.reciever" placeholder="请填写收货人姓名" />
         </div>
       </div>
       <div class="line">
         <div class="label">联系电话</div>
         <div class="input-box">
-          <van-field placeholder="请填写收货人联系电话" />
+          <van-field v-model="sendData.phone" placeholder="请填写收货人联系电话" />
+        </div>
+      </div>
+      <div class="line">
+        <div class="label">邮政编码</div>
+        <div class="input-box">
+          <van-field v-model="sendData.zipCode" placeholder="请填写邮政编码" />
         </div>
       </div>
       <div class="line line-1">
         <div class="label">所在地区</div>
-        <div class="right-box">
-          <span>请选择</span>
+        <div class="right-box" @click="showPop">
+          <span>{{sendData.province==''&&sendData.city==''&&sendData.county==''?'请选择':sendData.province+'/'+sendData.city+'/'+sendData.county}}</span>
           <img src="../images/icon21.png" alt="">
         </div>
       </div>
       <div class="line">
         <div class="label">详细地址</div>
         <div class="input-box">
-          <van-field placeholder="街道、楼牌号等" />
+          <van-field v-model="sendData.address" placeholder="街道、楼牌号等" />
         </div>
       </div>
+    </div>
+    <van-popup v-model="showArea" position="bottom">
+      <van-area :area-list="areaList" :columns-num="3" @confirm="handleConfirmCity" @cancel="handleCancel"/>
+    </van-popup>
+    <div class="btn-bottom" @click="handleConfirmData">
+      保存
     </div>
   </div>
 </template>
 
 <script>
 import { Toast } from 'vant'
+import areaList from '../js/framework/areaList'
 
 export default {
   name: 'editAddress',
@@ -111,10 +138,52 @@ export default {
   },
   data () {
     return {
-      checked: false
+      sendData: {
+        reciever: '',
+        phone: '',
+        province: '',
+        city: '',
+        county: '',
+        address: '',
+        zipCode: '',
+        isDefault: 1
+      },
+      areaList: areaList,
+      showArea: false
     }
   },
   methods: {
+    handleConfirmData () {
+      for (let item in this.sendData) {
+        if (this.sendData[item] === '') {
+          Toast.fail('请完善地址信息')
+          return
+        }
+      }
+      this.$post('/api/userAddress/saveUserAddress', this.sendData).then(res => {
+        if (res.result === 0) {
+          Toast.fail(res.message)
+          this.$router.back(-1)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    showPop () {
+      this.showArea = true
+    },
+    handleConfirmCity (value) {
+      console.log('handleConfirm', value)
+      this.sendData.province = value[0].name
+      this.sendData.city = value[1].name
+      this.sendData.county = value[2].name
+      this.showArea = false
+    },
+    handleCancel () {
+      this.showArea = false
+    },
     goBack () {
       this.$router.back(-1)
     },

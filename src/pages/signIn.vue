@@ -4,6 +4,11 @@
     @return $px * 1 / 100 * 1rem;
   }
   .signIn-container{
+    background-image: url("../images/img12.png");
+    background-position: top;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-color: #D1302D;
     .topBar{
       background: #edaf12;
       height: px2rem(100);
@@ -228,7 +233,8 @@ export default {
       markDateArr: [
         '2019/7/8',
         '2019/7/10'
-      ]
+      ],
+      signInData: {}
     }
   },
   methods: {
@@ -241,6 +247,18 @@ export default {
     goBack () {
       this.$router.back(-1)
     },
+    getSignInData () {
+      this.$post('/api/goodsScore/getUserSignTotal', {
+      }).then(res => {
+        if (res.result === 0) {
+          this.signInData = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goDetail () {
       this.$router.push({
         name: 'detail_bargin'
@@ -248,16 +266,10 @@ export default {
     },
     openPop () {
       this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
     }
   },
   mounted () {
-    // this.test()
+    this.getSignInData()
   },
   watch: {
   }

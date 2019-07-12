@@ -481,7 +481,7 @@
       </div>
     </div>
     <div class="ad-box" @click="goActiveList">
-      <img :src="filePath + adData[0].bannerPic" alt="">
+      <img :src="filePath + adData.bannerPic" alt="">
     </div>
     <div class="area-1 clearfix">
       <div class="title">热卖商品</div>
@@ -720,7 +720,7 @@ export default {
         bannerType: 2
       }).then(res => {
         if (res.result === 0) {
-          this.adData = res.data
+          this.adData = res.data[0]
         } else {
           Toast.fail(res.message)
         }

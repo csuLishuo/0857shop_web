@@ -526,11 +526,12 @@
         <img src="../images/icon36.png" alt="">
         <div class="text">首页</div>
       </div>
-      <div class="icon-box icon-box-1">
-        <img src="../images/icon37.png" alt="">
+      <div class="icon-box icon-box-1" @click="handleCollect">
+        <img v-if="!collectionStatus" src="../images/icon37.png" alt="">
+        <img v-if="collectionStatus" src="../images/icon37_on.png" alt="">
         <div class="text">收藏</div>
       </div>
-      <div class="btn btn-1">加入购物车</div>
+      <div class="btn btn-1" @click="addToCart">加入购物车</div>
       <div class="btn btn-2">立即购买</div>
     </div>
   </div>
@@ -559,28 +560,70 @@ export default {
       bannerData: [],
       detailPics: [],
       detailDataAttrs: {},
-      select: [{
-        title: '颜色',
-        children: [{
-          id: 1,
-          name: '红色'
-        }, {
-          id: 2,
-          name: '蓝色'
-        }]
-      }, {
-        title: '尺码',
-        children: [{
-          id: 1,
-          name: 'XL'
-        }, {
-          id: 2,
-          name: 'L'
-        }]
-      }]
+      collectionStatus: false
     }
   },
   methods: {
+    handleCollect () {
+      if (this.collectionStatus === false) {
+        this.$post('/api/goodsCollection/insertGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = true
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          Toast.fail('系统内部错误')
+        })
+      } else {
+        this.$post('/api/goodsCollection/updateGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = false
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          Toast.fail('系统内部错误')
+        })
+      }
+    },
+    getCollectionStatus () {
+      this.$post('/api/goodsCollection/isCollection', {
+        goodsIssueId: this.detailId
+      }).then(res => {
+        if (res.result === 0) {
+          if (res.data.count !== 0) {
+            this.collectionStatus = true
+          } else {
+            this.collectionStatus = false
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    addToCart () {
+      this.$post('/api/goodsCar/insertGoodsCar', {
+        goodsId: this.detailData.goodsId,
+        goodsIssueId: this.detailId
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     showPop () {
       this.showPop_select = true
     },
@@ -641,6 +684,7 @@ export default {
     this.filePath = sessionStorage.getItem('filePath')
     this.getDetailData()
     this.getSelectArray()
+    this.getCollectionStatus()
   },
   watch: {
   }

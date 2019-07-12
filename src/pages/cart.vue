@@ -122,57 +122,66 @@
 <template>
   <div class="cart-container">
     <div class="goodsList">
-      <van-checkbox-group v-model="result">
-        <div class="wrapper" v-for="(item, index) in list" :key="index">
-          <van-swipe-cell
-            :right-width="70"
-          >
-            <div class="item">
-              <div class="c" catchtap="loop">
-                <van-checkbox
-                  checked-color="#ff0000"
-                  :name="item"
-                >
-                </van-checkbox>
-              </div>
-              <div class="good-image">
-                <img src="../images/icon16.png">
-              </div>
-              <div class="content">
-                <div class="a">
-                  <div class="name ellipsis-2">蒙古包特产马奶酒互动式疏堵是地负海涵烧烤活动啊蒙古包特产马奶酒互动式疏堵是地负海涵烧烤活动啊</div>
-                  <div class="desc ellipsis-1">2瓶1000ml【送小瓶品尝酒】</div>
+      <van-checkbox-group v-model="checkboxResult" @change="selectGood">
+        <van-list
+          v-model="loadingList"
+          :finished="finished"
+          :immediate-check="false"
+          finished-text="没有更多了"
+          @load="getOneMorePage"
+        >
+          <div class="wrapper" v-for="(item, index) in goodsList" :key="index">
+            <van-swipe-cell
+              :right-width="70"
+            >
+              <div class="item">
+                <div class="c" catchtap="loop">
+                  <van-checkbox
+                    checked-color="#ff0000"
+                    :name="item.id"
+                  >
+                  </van-checkbox>
                 </div>
-                <div class="b">
-                  <div class="price">￥2222</div>
-                  <div class="good-step-view">
-                    <van-stepper v-model="value" min="1" max="99" />
+                <div class="good-image">
+                  <img :src="filePath + item.pics.split(';')[0]">
+                </div>
+                <div class="content">
+                  <div class="a">
+                    <div class="name ellipsis-2">{{item.title}}</div>
+                    <div class="desc ellipsis-1">{{item.subTitle}}</div>
+                  </div>
+                  <div class="b">
+                    <div class="price">￥{{item.nowPrice}}</div>
+                    <div class="good-step-view">
+                      <van-stepper v-model="item.number" @change="handleNumChange" min="1" max="99" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div slot="right" class="del-good">
-              <span>删除</span>
-              <img src="../images/icon01.png">
-            </div>
-          </van-swipe-cell>
-        </div>
+              <div slot="right" class="del-good" @click="delGood(item.id, index)">
+                <span>删除</span>
+                <img src="../images/icon01.png">
+              </div>
+            </van-swipe-cell>
+          </div>
+        </van-list>
       </van-checkbox-group>
     </div>
     <van-submit-bar
       custom-class="submitBar"
       checked-color="#ff0000"
-      :price="3050"
+      :price="totlePrice"
       button-text="结算"
     >
-      <div class="all">
-        <van-checkbox
-          checked-color="#ff0000"
-          v-model="allChecked"
-        >
-          全选
-        </van-checkbox>
-      </div>
+      <!--<div class="all">-->
+        <!--<van-checkbox-->
+          <!--checked-color="#ff0000"-->
+          <!--v-model="allChecked"-->
+          <!--@change="selectAll"-->
+        <!--&gt;-->
+          <!--全选-->
+        <!--</van-checkbox>-->
+      <!--</div>-->
     </van-submit-bar>
     <tabbar :activeIndex="2"></tabbar>
   </div>
@@ -189,22 +198,94 @@ export default {
   },
   data () {
     return {
-      list: ['a', 'b', 'c'],
-      result: ['a', 'b'],
+      checkboxResult: [],
       value: 10,
-      allChecked: false
+      allChecked: false,
+      goodsList: [],
+      totlePrice: 0,
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 20
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    handleNumChange (e) {
+      console.log('eeeeeeee', e)
+      this.totlePrice = 0
+      this.goodsList.forEach(v => {
+        if (this.checkboxResult.indexOf(v.id) !== -1) {
+          this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+        }
+      })
+    },
+    selectGood (value) {
+      console.log(value)
+      this.totlePrice = 0
+      this.goodsList.forEach(v => {
+        if (value.indexOf(v.id) !== -1) {
+          this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+        }
+      })
+    },
+    delGood (id, index) {
+      this.$post('/api/goodsCar/delGoodsCar', {
+        id: id
+      }).then(res => {
+        if (res.result === 0) {
+          this.goodsList.forEach(v => {
+            if (v.id === id) {
+              this.goodsList.splice(index, 1)
+            }
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsCar/getGoodsCarList', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
       })
     }
   },
   mounted () {
-    // this.test()
+    this.filePath = sessionStorage.getItem('filePath')
+    this.getGoodsList()
   },
   watch: {
   }

@@ -30,9 +30,12 @@
     }
     .area-1{
       margin-top: px2rem(20);
-      background: #fff;
-      padding-left: px2rem(30);
+      /*background: #fff;*/
+      /*padding-left: px2rem(30);*/
       .wrapper{
+        background: #fff;
+        margin-top: px2rem(20);
+        padding-left: px2rem(30);
         .area-1-1{
           height: px2rem(144);
           border-bottom: 1px solid #eff0f4;
@@ -99,39 +102,49 @@
       <div class="title">收货地址</div>
     </div>
     <div class="area-1">
-      <div class="wrapper">
-        <div class="area-1-1 clearfix">
-          <div class="line-1">
-            <span class="name">虞维文</span>
-            <span class="phone">15100002222</span>
-          </div>
-          <div class="line-2 ellipsis-1">湖南省长沙市岳麓区桐梓坡路湖南商学院出枫桥下</div>
-        </div>
-        <div class="area-1-2">
-          <div class="checkbox">
-            <van-checkbox v-model="checked">设为默认地址</van-checkbox>
-          </div>
-          <div class="btn-box">
-            <div class="btn btn-1" @click="goEdit">
-              <img src="../images/icon1.png" alt="">
-              编辑
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <van-radio-group v-model="defaultResult" @change="setDefault">
+          <div class="wrapper" v-for="item in addressList" :key="item.id">
+            <div class="area-1-1 clearfix">
+              <div class="line-1">
+                <span class="name">{{item.reciever}}</span>
+                <span class="phone">{{item.phone}}</span>
+              </div>
+              <div class="line-2 ellipsis-1">{{item.province + item.city + item.county + item.address}}</div>
             </div>
-            <div class="btn btn-1">
-              <img src="../images/icon1.png" alt="">
-              删除
+            <div class="area-1-2">
+              <div class="checkbox">
+                <van-radio :name="item.id">设为默认地址</van-radio>
+              </div>
+              <div class="btn-box">
+                <!--<div class="btn btn-1" @click="goEdit">
+                  <img src="../images/icon59.png" alt="">
+                  编辑
+                </div>-->
+                <div class="btn btn-1" @click="showPopDel(item.id)">
+                  <img src="../images/icon60.png" alt="">
+                  删除
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </van-radio-group>
+      </van-list>
     </div>
-    <div class="btn-bottom">
+    <div class="btn-bottom" @click="goEdit()">
       新建收货地址
     </div>
   </div>
 </template>
 
 <script>
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 
 export default {
   name: 'myAddress',
@@ -139,10 +152,95 @@ export default {
   },
   data () {
     return {
-      checked: false
+      checked: false,
+      addressList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 20
+      },
+      defaultResult: '',
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    setDefault (id) {
+      console.log('setDefault', id)
+      this.$post('/api/userAddress/updateDefaultUserAddress', {
+        id: id
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.fail(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    showPopDel (id) {
+      Dialog.confirm({
+        title: '标题',
+        message: '确定删除？'
+      }).then(() => {
+        this.$post('/api/userAddress/deleteUserAddress', {
+          id: id
+        }).then(res => {
+          if (res.result === 0) {
+            Toast.fail(res.message)
+            this.sendData = {
+              pageNumber: 1,
+              pageSize: 20
+            }
+            this.getAddressList()
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          Toast.fail('系统内部错误')
+        })
+      }).catch(() => {
+        // on cancel
+      })
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getAddressList()
+        }
+      }, 500)
+    },
+    getAddressList () {
+      this.$post('/api/userAddress/index', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.addressList = res.data.list
+          } else {
+            this.addressList = this.addressList.concat(res.data.list)
+          }
+          this.addressList.forEach(v => {
+            if (v.isDefault === 1) {
+              this.defaultResult = v.id
+            }
+          })
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.addressList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goBack () {
       this.$router.back(-1)
     },
@@ -163,6 +261,7 @@ export default {
   },
   mounted () {
     // this.test()
+    this.getAddressList()
   },
   watch: {
   }
