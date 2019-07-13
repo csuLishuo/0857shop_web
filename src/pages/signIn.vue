@@ -9,6 +9,7 @@
     background-size: 100% auto;
     background-repeat: no-repeat;
     background-color: #D1302D;
+    padding-bottom: px2rem(20);
     .topBar{
       background: #edaf12;
       height: px2rem(100);
@@ -122,11 +123,20 @@
         text-align: center;
       }
       .recommend-list{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-around;
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // align-items: center;
+        // justify-content: space-around;
+        padding: 0 px2rem(10);
+        .van-list{
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
         .wrapper{
           width: px2rem(324);
           height: px2rem(498);
@@ -170,6 +180,9 @@
         }
       }
     }
+    .wh_content_item>.wh_isMark {
+      background: #d1302d;
+    }
   }
 </style>
 <template>
@@ -189,7 +202,7 @@
       </div>
       <Calendar
         v-on:changeMonth="changeDate"
-        :markDate=markDateArr
+        :markDate="markDateArr"
       ></Calendar>
     </div>
     <div class="area-2">
@@ -206,14 +219,13 @@
           v-model="loadingList"
           :finished="finished"
           :immediate-check="false"
-          finished-text="没有更多了"
           @load="getOneMorePage"
         >
           <div class="wrapper" v-for="item in goodsList" :key="item.id">
             <div class="img-box"><img src="../images/img2.png" alt=""></div>
-            <div class="name ellipsis-1">PZAAO 中空缎面款色休..PZAAO 中空缎面款色休..</div>
-            <div class="des ellipsis-1">已售1389/剩2000</div>
-            <div class="price">￥<span>599.00</span></div>
+            <div class="name ellipsis-1">【{{item.title}}】{{item.subTitle}}</div>
+            <!-- <div class="des ellipsis-1">已售1389/剩2000</div> -->
+            <div class="price">￥<span>{{item.nowPrice}}</span></div>
           </div>
         </van-list>
       </div>
@@ -232,10 +244,7 @@ export default {
   },
   data () {
     return {
-      markDateArr: [
-        '2019/7/8',
-        '2019/7/10'
-      ],
+      markDateArr: [], // bug显示当天的显示不出来
       signInData: {},
       goodsList: [],
       total: '',
@@ -245,7 +254,9 @@ export default {
         pageSize: 5
       },
       loadingList: false,
-      finished: false
+      finished: false,
+      sendYearMonth: '',
+      signRecord: {}
     }
   },
   methods: {
@@ -266,7 +277,6 @@ export default {
             this.goodsList = this.goodsList.concat(res.data.list)
           }
           this.filePath = res.filePath
-          sessionStorage.setItem('filePath', this.filePath)
           this.total = res.data.totalCount
           this.totalPage = res.data.totalPage
           // 加载状态结束
@@ -284,6 +294,9 @@ export default {
     },
     changeDate (data) {
       console.log(data) // 左右点击切换月份
+      this.markDateArr = []
+      this.sendYearMonth = data.split('/')[0] + '-' + (data.split('/')[1].length == 1 ? '0' + data.split('/')[1] : data.split('/')[1])
+      this.getSignInRecord()
     },
     clickToday (data) {
       console.log(data) // 跳到了本月
@@ -303,6 +316,54 @@ export default {
         Toast.fail('系统内部错误')
       })
     },
+    // 构造日历用时间数组
+    getMarkDateArr () {
+      this.markDateArr = []
+      // console.log('11111111111111')
+      this.signRecord.forEach(v => {
+        // console.log('vvvv', v)
+        let arr = v.signInTime.split('-')
+        let arr1 = []
+        // console.log('vvvv', arr)
+        // console.log(arr[1].slice(1))
+        arr.forEach (m => {
+          if (m[0] === '0') {
+            arr1.push(m.slice(1))
+          } else {
+            arr1.push(m)
+          }
+        })
+        // console.log('1111111111111111111', arr1)
+        this.markDateArr.push(arr1.join('/'))
+      })
+    },
+    // 根据年月获取用户签到记录
+    getSignInRecord () {
+      this.$post('/api/goodsScore/getUserSignListByDate', {
+        date: this.sendYearMonth
+      }).then(res => {
+        if (res.result === 0) {
+          this.signRecord = res.data
+          this.getMarkDateArr()
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getNowTime () {
+      let now = new Date()
+      var month = now.getMonth() + 1
+      var strDate = now.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      return now.getFullYear() + '-' + month
+    },
     goDetail () {
       this.$router.push({
         name: 'detail_bargin'
@@ -315,6 +376,10 @@ export default {
   mounted () {
     this.getSignInData()
     this.getGoodsList()
+    this.getSignInRecord()
+  },
+  created () {
+    this.sendYearMonth = this.getNowTime()
   },
   watch: {
   }

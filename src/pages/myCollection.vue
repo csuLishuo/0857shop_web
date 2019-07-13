@@ -151,7 +151,7 @@
           <van-swipe-cell
             :right-width="70"
           >
-            <div class="wrapper" @click="goDetail">
+            <div class="wrapper">
               <div class="img-box"><img src="../images/icon3.png" alt=""></div>
               <div class="right-box">
                 <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
@@ -232,15 +232,6 @@ export default {
     goDetail () {
       this.$router.push({
         name: 'detail_bargin'
-      })
-    },
-    openPop () {
-      this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
       })
     }
   },

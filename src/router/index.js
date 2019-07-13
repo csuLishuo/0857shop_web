@@ -52,6 +52,7 @@ import detailHotSale from '@/pages/detail_hotSale'
 import ActiveList from '@/pages/activeList'
 import DetailActive from '@/pages/detail_active'
 import DetailScore from '@/pages/detail_score'
+import SelectAddress from '@/pages/selectAddress'
 
 Vue.use(Router)
 
@@ -444,6 +445,14 @@ export default new Router({
     path: '/detail_score',
     name: 'detail_score',
     component: DetailScore,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 选择地址
+    path: '/selectAddress',
+    name: 'selectAddress',
+    component: SelectAddress,
     meta: {
       keepAlive: true,
       isBack: false

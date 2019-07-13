@@ -141,25 +141,33 @@
       <div class="title">我的砍价</div>
     </div>
     <div class="goodsList">
-      <div>
-        <van-swipe-cell
-              :right-width="70"
-            >
-            <div class="wrapper" @click="goDetail">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="deadline">19：38：43  后结束</div>
-          <dir class="des">离0元还差￥168.66</dir>
-          <div class="btn">继续砍价</div>
-        </div>
-      </div>
-              <div slot="right" class="del-good">
-                <span>删除</span>
-                <img src="../images/icon01.png">
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <div v-for="item in goodsList" :key="item.id">
+          <!-- <van-swipe-cell
+            :right-width="70"
+          > -->
+            <div class="wrapper">
+              <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+              <div class="right-box">
+                <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+                <div class="deadline">{{item.endTime}} 结束</div>
+                <dir class="des">离0元还差￥{{item.money}}</dir>
+                <!-- <div class="btn">继续砍价</div> -->
               </div>
-            </van-swipe-cell>
-      </div>
+            </div>
+            <!-- <div slot="right" class="del-good">
+              <span>删除</span>
+              <img src="../images/icon01.png">
+            </div>
+          </van-swipe-cell> -->
+        </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -173,9 +181,52 @@ export default {
   },
   data () {
     return {
+      filePath: '',
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 10
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList()
+        }
+      }, 500)
+    },
+    getGoodsList () {
+      this.$post('/api/goodsFree/getGoodsFreeUsersListByUserId', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goBack () {
       this.$router.back(-1)
     },
@@ -183,19 +234,11 @@ export default {
       this.$router.push({
         name: 'detail_bargin'
       })
-    },
-    openPop () {
-      this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
     }
   },
   mounted () {
-    // this.test()
+    this.filePath = sessionStorage.getItem('filePath')
+    this.getGoodsList()
   },
   watch: {
   }

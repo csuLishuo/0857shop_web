@@ -400,6 +400,17 @@
           display: flex;
         }
       }
+      .btn{
+        background-image: linear-gradient(-90deg, #ff3657 0%, 	#ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
+        width: px2rem(704);
+        height: px2rem(78);
+        text-align: center;
+        border-radius: px2rem(39);
+        margin: px2rem(100) auto 0;
+        font-size: px2rem(32);
+        color: #fff;
+        line-height: px2rem(78);
+      }
     }
   }
 </style>
@@ -420,7 +431,7 @@
               <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
               <div class="info">
                 <div class="price-origin">￥{{detailData.marketPrice}}</div>
-                <span>已售{{detailData.totalSales}}/库存{{detailDataAttrs.stock}}</span>
+                <span>已售{{detailData.totalSales}}/库存{{detailDataAttrs[0].stock}}</span>
               </div>
             </div>
             <div class="right-box">
@@ -466,7 +477,7 @@
           <div class="area-1">
             <div class="line">
               <div class="name">选择</div>
-              <div class="right-box right-box-2">
+              <div class="right-box right-box-2" @click="showPop">
                 <div class="text">规格</div>
                 <div class="icon-box"><img src="../images/icon21.png" alt=""></div>
               </div>
@@ -484,24 +495,7 @@
           </div>
         </van-tab>
         <van-tab title="用户评价">
-          <div class="area-3">
-            <div class="wrapper on">全部 <span>407</span></div>
-            <div class="wrapper">好评 <span>407</span></div>
-            <div class="wrapper">中评 <span>407</span></div>
-            <div class="wrapper">差评 <span>407</span></div>
-          </div>
-          <div class="area-4">
-            <div class="wrapper">
-              <div class="name-box">
-                <div class="img-box"><img src="../images/img2.png" alt=""></div>
-                <div class="name">斯嘉丽</div>
-              </div>
-              <div class="comment-content">很好用，买的是2.0的，除了传输速度有点慢，是款到即发的毛宁，考试、鲜红色的，三角函数，很简单。的法律规范是合管就的服，对接焊缝思。</div>
-              <div class="img-list">
-                <div class="img-box" v-for="(image, index) in images" :key="index" @click="preview(index)"><img :src="image" alt=""></div>
-              </div>
-            </div>
-          </div>
+          <commentPage :goodsId="detailData.goodsId"></commentPage>                    
         </van-tab>
       </van-tabs>
     </div>
@@ -509,35 +503,28 @@
       <van-popup v-model="showPop_select" position="bottom">
         <div class="goodDetail">
           <div class="img-box">
-            <img src="../images/icon3.png" alt="">
+            <img :src="filePath + orderSendData.pic" alt="">            
           </div>
           <div class="right-box">
             <div class="price-box-pop">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{orderSendData.price}}</span></div>
               <div class="info">包邮 · 七天退换货</div>
             </div>
           </div>
         </div>
         <div class="label-list">
-          <div class="name">颜色</div>
+          <div class="name">{{detailDataAttrs[0].attrType}}</div>
           <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
+            <div class="wrap" @click="selectAttrSn(index)" :class="{'on':index==showIndex}" v-for="(item, index) in detailDataAttrs" :key="index">{{item.attrTitle}}</div>
           </div>
         </div>
-        <div class="label-list">
-          <div class="name">尺码</div>
-          <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
-          </div>
-        </div>
-        <div class="num-box">
+        <!-- <div class="num-box">
           <div class="name">购买数量</div>
           <div class="step-view">
             <van-stepper v-model="value" min="1" max="99" />
           </div>
-        </div>
+        </div> -->
+        <div class="btn" @click="closePop">确定</div>
       </van-popup>
     </div>
     <div class="bottom-box">
@@ -549,7 +536,7 @@
         <img src="../images/icon37.png" alt="">
         <div class="text">收藏</div>
       </div>
-      <div class="btn">
+      <div class="btn" @click="handleConfirm">
         砍价免费拿
       </div>
     </div>
@@ -557,10 +544,12 @@
 </template>
 <script>
 import { Toast, ImagePreview } from 'vant'
+import commentPage from '../components/commentPage'
 
 export default {
   name: 'detail_bargin',
   components: {
+    commentPage
   },
   data () {
     return {
@@ -578,11 +567,56 @@ export default {
       filePath: '',
       bannerData: [],
       detailPics: [],
-      detailDataAttrs: {},
-      groupTime: ''
+      detailDataAttrs: [],
+      groupTime: '',
+      collectionStatus: false,
+      orderSendData: {},
+      showIndex: 0,
+      userAddressId: ''
     }
   },
   methods: {
+    handleConfirm () {
+      console.log('orderSendData', this.orderSendData)
+      console.log('detailData', this.detailData)
+      this.$post('/api/goodsFree/insertGoodsFreeUsers', {
+        goodsId: this.orderSendData.goodsId,
+        goodsIssueId: this.detailData.goodsIssueId,
+        goodsFreeId: this.detailData.id,
+        attrSn: this.orderSendData.attrSn,
+        userAddressId: this.userAddressId
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success('砍价成功')
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    selectAttrSn (index) {
+      this.showIndex = index
+      this.orderSendData = this.detailDataAttrs[index]
+    },
+    closePop () {
+      this.showPop_select = false
+    },
+    showPop () {
+      this.showPop_select = true
+    },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.userAddressId = res.data.id
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     getDetailData () {
       this.$post('/api/goodsFree/getGoodsFreeById', {
         id: this.detailId
@@ -592,7 +626,8 @@ export default {
           this.detailData = res.data
           this.bannerData = this.detailData.pics.split(';')
           this.detailPics = this.detailData.details.split(';')
-          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)
+          this.orderSendData = this.detailDataAttrs[0]
         } else {
           Toast.fail(res.message)
         }
@@ -613,6 +648,7 @@ export default {
     this.filePath = sessionStorage.getItem('filePath')
     this.detailId = this.$route.query.detailId
     this.getDetailData()
+    this.getDefaultAddress()
   },
   watch: {
   }

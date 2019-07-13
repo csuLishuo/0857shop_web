@@ -498,24 +498,7 @@
           </div>
         </van-tab>
         <van-tab title="用户评价">
-          <div class="area-3">
-            <div class="wrapper on">全部 <span>407</span></div>
-            <div class="wrapper">好评 <span>407</span></div>
-            <div class="wrapper">中评 <span>407</span></div>
-            <div class="wrapper">差评 <span>407</span></div>
-          </div>
-          <div class="area-4">
-            <div class="wrapper">
-              <div class="name-box">
-                <div class="img-box"><img src="../images/img2.png" alt=""></div>
-                <div class="name">斯嘉丽</div>
-              </div>
-              <div class="comment-content">很好用，买的是2.0的，除了传输速度有点慢，是款到即发的毛宁，考试、鲜红色的，三角函数，很简单。的法律规范是合管就的服，对接焊缝思。</div>
-              <div class="img-list">
-                <div class="img-box" v-for="(image, index) in images" :key="index" @click="preview(index)"><img :src="image" alt=""></div>
-              </div>
-            </div>
-          </div>
+          <commentPage :goodsId="detailData.goodsId"></commentPage>          
         </van-tab>
       </van-tabs>
     </div>
@@ -577,10 +560,12 @@
 <script>
 import { Toast, ImagePreview } from 'vant'
 import lf from 'lf'
+import commentPage from '../components/commentPage'
 
 export default {
   name: 'detail_groupBuy',
   components: {
+    commentPage
   },
   data () {
     return {

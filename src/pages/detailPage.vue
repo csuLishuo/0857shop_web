@@ -410,7 +410,7 @@
           </div>
           <div class="price-box">
             <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
-            <div class="info">已售{{detailData.totalSales}}/库存{{detailDataAttrs.stock}}</div>
+            <div class="info">已售{{detailData.totalSales}}/库存{{detailDataAttrs[0].stock}}</div>
           </div>
           <div class="title">
             <div class="text ellipsis-2">
@@ -464,24 +464,7 @@
           </div>
         </van-tab>
         <van-tab title="用户评价">
-          <div class="area-3">
-            <div class="wrapper on">全部 <span>407</span></div>
-            <div class="wrapper">好评 <span>407</span></div>
-            <div class="wrapper">中评 <span>407</span></div>
-            <div class="wrapper">差评 <span>407</span></div>
-          </div>
-          <div class="area-4">
-            <div class="wrapper">
-              <div class="name-box">
-                <div class="img-box"><img src="../images/img2.png" alt=""></div>
-                <div class="name">斯嘉丽</div>
-              </div>
-              <div class="comment-content">很好用，买的是2.0的，除了传输速度有点慢，是款到即发的毛宁，考试、鲜红色的，三角函数，很简单。的法律规范是合管就的服，对接焊缝思。</div>
-              <div class="img-list">
-                <div class="img-box" v-for="(image, index) in images" :key="index" @click="preview(index)"><img :src="image" alt=""></div>
-              </div>
-            </div>
-          </div>
+          <commentPage :goodsId="detailData.goodsId"></commentPage>    
         </van-tab>
       </van-tabs>
     </div>
@@ -489,27 +472,19 @@
       <van-popup v-model="showPop_select" position="bottom">
         <div class="goodDetail">
           <div class="img-box">
-            <img src="../images/icon3.png" alt="">
+            <img :src="filePath + orderSendData.pic" alt="">
           </div>
           <div class="right-box">
             <div class="price-box-pop">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{orderSendData.price}}</span></div>
               <div class="info">包邮 · 七天退换货</div>
             </div>
           </div>
         </div>
         <div class="label-list">
-          <div class="name">颜色</div>
+          <div class="name">{{detailDataAttrs[0].attrType}}</div>
           <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
-          </div>
-        </div>
-        <div class="label-list">
-          <div class="name">尺码</div>
-          <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
+            <div class="wrap" @click="selectAttrSn(index)" :class="{'on':index==showIndex}" v-for="(item, index) in detailDataAttrs" :key="index">{{item.attrTitle}}</div>
           </div>
         </div>
         <div class="num-box">
@@ -538,10 +513,12 @@
 </template>
 <script>
 import { Toast, ImagePreview } from 'vant'
+import commentPage from '../components/commentPage'
 
 export default {
   name: 'detailPage',
   components: {
+    commentPage
   },
   data () {
     return {
@@ -559,11 +536,18 @@ export default {
       filePath: '',
       bannerData: [],
       detailPics: [],
-      detailDataAttrs: {},
-      collectionStatus: false
+      detailDataAttrs: [],
+      collectionStatus: false,
+      orderSendData: {},
+      showIndex: 0,
+      userAddressId: ''
     }
   },
   methods: {
+    selectAttrSn (index) {
+      this.showIndex = index
+      this.orderSendData = this.detailDataAttrs[index]
+    },
     handleCollect () {
       if (this.collectionStatus === false) {
         this.$post('/api/goodsCollection/insertGoodsCollection', {
@@ -627,6 +611,18 @@ export default {
     showPop () {
       this.showPop_select = true
     },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.userAddressId = res.data.id
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     getDetailData () {
       this.$post('/api/goodsIssue/getGoodsIssueById', {
         id: this.detailId
@@ -636,7 +632,8 @@ export default {
           this.detailData = res.data
           this.bannerData = this.detailData.pics.split(';')
           this.detailPics = this.detailData.details.split(';')
-          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)
+          this.orderSendData = this.detailDataAttrs[0]
         } else {
           Toast.fail(res.message)
         }
@@ -683,8 +680,9 @@ export default {
     console.log('detailId', this.detailId)
     this.filePath = sessionStorage.getItem('filePath')
     this.getDetailData()
-    this.getSelectArray()
+    // this.getSelectArray()
     this.getCollectionStatus()
+    this.getDefaultAddress()
   },
   watch: {
   }

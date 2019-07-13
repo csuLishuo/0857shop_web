@@ -627,7 +627,9 @@ export default {
         pageSize: 5
       },
       loadingList: false,
-      finished: false
+      finished: false,
+      signInData: {},
+      signScore: ''
     }
   },
   methods: {
@@ -644,11 +646,31 @@ export default {
         path: '/activeList'
       })
     },
+    handleSignIn () {
+      this.$post('/api/goodsScore/userSignIn', {
+        score: this.signScore
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success('签到成功')
+          this.$router.push({
+            path: '/signIn'
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     go (status) {
       if (status === 1) {
-        this.$router.push({
-          path: '/signIn'
-        })
+        if (this.signInData.status === 1) {
+          this.handleSignIn()
+        } else {
+          this.$router.push({
+            path: '/signIn'
+          })
+        }
       } else if (status === 2) {
         this.$router.push({
           path: '/groupBuyList'
@@ -767,6 +789,33 @@ export default {
       }).catch(res => {
         Toast.fail('系统内部错误')
       })
+    },
+    // 获取签到信息
+    getSignInData () {
+      this.$post('/api/goodsScore/getUserSignTotal', {
+      }).then(res => {
+        if (res.result === 0) {
+          this.signInData = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    // 获取签到积分
+    getSignScore () {
+      this.$post('/api/systemSet/getSystemSetByStatus', {
+        status: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.signScore = res.data.value
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
     }
   },
   mounted () {
@@ -775,6 +824,8 @@ export default {
     this.getAdImg()
     this.getGoodsCategory()
     this.getGoodsList()
+    this.getSignInData()
+    this.getSignScore()
   },
   watch: {
   }

@@ -106,44 +106,24 @@
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
       <div class="title">我的奖品</div>
     </div>
-    <van-tabs v-model="active">
+    <van-tabs v-model="active" @change="handleTabChange">
       <van-tab title="未领取"></van-tab>
       <van-tab title="已领取"></van-tab>
     </van-tabs>
     <div class="goodsList">
       <div>
         <van-swipe-cell
-              :right-width="70"
-            >
-            <div class="wrapper" @click="goDetail">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="btn">马上领取</div>
-        </div>
-      </div>
-              <div slot="right" class="del-good">
-                <span>删除</span>
-                <img src="../images/icon01.png">
-              </div>
-            </van-swipe-cell>
-      </div>
-      <div>
-        <van-swipe-cell
-              :right-width="70"
-            >
-            <div class="wrapper" @click="goDetail">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-        <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="label">已领取</div>
-        </div>
-      </div>
-              <div slot="right" class="del-good">
-                <span>删除</span>
-                <img src="../images/icon01.png">
-              </div>
-            </van-swipe-cell>
+          :right-width="70"
+        >
+          <div class="wrapper" v-for="item in rewardsList" :key="item.id">
+            <div class="img-box"><img :src="filePath + item.pic" alt=""></div>
+            <div class="right-box">
+              <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+              <div v-if="rewardsSendData.status==1" class="btn" @click="goSelectAddress(item.id)">马上领取</div>
+              <div v-if="rewardsSendData.status==2" class="label">已领取</div>
+            </div>
+          </div>
+        </van-swipe-cell>
       </div>
     </div>
   </div>
@@ -158,30 +138,80 @@ export default {
   },
   data () {
     return {
-      active: 0
+      active: 0,
+      rewardsSendData: {
+        pageNumber: 1,
+        pageSize: 50,
+        status: 1
+      },
+      rewardsList: [],
+      filePath: ''
     }
   },
   methods: {
+    handleTabChange (e) {
+      console.log('eeeeeeeeee', e)
+      this.rewardsSendData.status = e + 1
+      this.init()
+    },
+    // 奖品记录
+    getRewardsList () {
+      this.$post('/api/goodsLotteryDraw/getGoodsLottetyUsersListByStatus', this.rewardsSendData).then(res => {
+        if (res.result === 0) {
+          this.rewardsList = res.data.list
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
+    // 选择地址
+    goSelectAddress (id) {
+      sessionStorage.setItem('rewardId', id)
       this.$router.push({
-        name: 'detail_bargin'
+        name: 'selectAddress'
       })
     },
-    openPop () {
-      this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    // 领取奖品
+    fetchReward () {
+      this.$post('/api/goodsLotteryDraw/updateGoodsLotteryUsers', {
+        userAddressId: sessionStorage.getItem('addressId'),
+        id: sessionStorage.getItem('rewardId')
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success('领取成功')
+          sessionStorage.removeItem('addressId')
+          sessionStorage.removeItem('rewardId')
+          this.getRewardsList()
+        } else {
+          Toast.fail(res.message)
+          sessionStorage.removeItem('addressId')
+          sessionStorage.removeItem('rewardId')
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+        sessionStorage.removeItem('addressId')
+        sessionStorage.removeItem('id')
       })
+    },
+    init () {
+      if (sessionStorage.getItem('addressId')) {
+        this.fetchReward()
+      } else {
+        this.getRewardsList()
+      }
     }
   },
   mounted () {
     // this.test()
+    this.init()
+  },
+  created () {
+    this.filePath = sessionStorage.getItem('filePath')
   },
   watch: {
   }
