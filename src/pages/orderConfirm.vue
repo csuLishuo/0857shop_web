@@ -424,7 +424,6 @@
           </div>
         </div>
       </van-checkbox-group>
-
     </div>
     <div class="area-bottom">
       <div class="left-box">
@@ -451,15 +450,13 @@ export default {
       tabStatus: 0,
       checked: true,
       value: 1,
-      checkboxResult: [1]
+      checkboxResult: [1],
+      initData: {}
     }
   },
   methods: {
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
+    handleSubmit () {
+
     },
     changeTab (status) {
       this.tabStatus = status
@@ -467,6 +464,9 @@ export default {
   },
   mounted () {
     // this.test()
+  },
+  created () {
+    this.initData = JSON.parse(this.$route.param.initData)
   },
   watch: {
   }

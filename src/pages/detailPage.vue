@@ -464,7 +464,7 @@
           </div>
         </van-tab>
         <van-tab title="用户评价">
-          <commentPage :goodsId="detailData.goodsId"></commentPage>    
+          <commentPage :goodsId="detailData.goodsId"></commentPage>
         </van-tab>
       </van-tabs>
     </div>
@@ -507,7 +507,7 @@
         <div class="text">收藏</div>
       </div>
       <div class="btn btn-1" @click="addToCart">加入购物车</div>
-      <div class="btn btn-2">立即购买</div>
+      <div class="btn btn-2" @click="handleConfirmBuy">立即购买</div>
     </div>
   </div>
 </template>
@@ -531,7 +531,7 @@ export default {
       ],
       detailId: '',
       showPop_select: false,
-      value: '',
+      value: 1,
       detailData: {},
       filePath: '',
       bannerData: [],
@@ -540,10 +540,36 @@ export default {
       collectionStatus: false,
       orderSendData: {},
       showIndex: 0,
-      userAddressId: ''
+      userAddressId: '',
     }
   },
   methods: {
+    handleConfirmBuy () {
+      let sendData = {
+        list: [{
+				  shareId: 0,
+				  goodsIssueId: this.detailData.id,
+				  goodsId: this.detailData.goodsId,
+				  attrSn: this.orderSendData.attrSn,
+				  number: this.value,
+				  shareType: 0,
+			  }]
+      }
+      this.$post('/api/orders/orderBuy', sendData).then(res => {
+        if (res.result === 0) {
+          this.$router.push({
+            name: 'orderConfirm',
+            param: {
+              initData: JSON.stringify(res.data)
+            }
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     selectAttrSn (index) {
       this.showIndex = index
       this.orderSendData = this.detailDataAttrs[index]
