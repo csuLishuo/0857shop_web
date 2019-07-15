@@ -821,7 +821,8 @@ export default {
   mounted () {
     // this.test()
     if (!sessionStorage.getItem('authStatus')) {
-      location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=' + encodeURI('http://huoyuancheng.wurenyulecang.com/#/home') + '&type=1'
+      // location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=' + encodeURI('http://huoyuancheng.wurenyulecang.com/#/home') + '&type=1'
+      location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=1'
     }
     this.getBannerList()
     this.getAdImg()
