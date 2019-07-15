@@ -820,6 +820,9 @@ export default {
   },
   mounted () {
     // this.test()
+    if (!sessionStorage.getItem('authStatus')) {
+      location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=' + encodeURI('http://huoyuancheng.wurenyulecang.com/#/home') + '&type=1'
+    }
     this.getBannerList()
     this.getAdImg()
     this.getGoodsCategory()

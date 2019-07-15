@@ -335,34 +335,34 @@
         </div>
       </div>
     </div>
-    <div class="area-2 clearfix" @click="go(4)">
+    <div class="area-2 clearfix">
       <div class="title-box">
         <div class="name">我的订单</div>
         <div class="icon-box"><img src="../images/icon21.png" alt=""></div>
       </div>
       <div class="area-2-1">
-        <div class="wrap">
+        <div class="wrap" @click="goMyOrder(1)">
           <div class="img-box">
             <img src="../images/icon22.png" alt="">
             <span>99</span>
           </div>
           <div class="name">待付款</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="goMyOrder(2)">
           <div class="img-box">
             <img src="../images/icon23.png" alt="">
             <span>1</span>
           </div>
           <div class="name">待发货</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="goMyOrder(3)">
           <div class="img-box">
             <img src="../images/icon24.png" alt="">
             <span>1</span>
           </div>
           <div class="name">待收货</div>
         </div>
-        <div class="wrap">
+        <div class="wrap" @click="goMyOrder(5)">
           <div class="img-box"><img src="../images/icon25.png" alt=""></div>
           <div class="name">已完成</div>
         </div>
@@ -440,6 +440,14 @@ export default {
         path: 'detail_hotSale',
         query: {
           detailId: id
+        }
+      })
+    },
+    goMyOrder (status) {
+      this.$router.push({
+        name: 'myOrder',
+        params: {
+          status: status
         }
       })
     },

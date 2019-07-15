@@ -77,7 +77,7 @@
       }
       .info{
         width: px2rem(730);
-        margin: 0 auto;
+        margin: px2rem(20) auto 0;
         height: px2rem(233);
         background: #fff;
         padding: px2rem(20) px2rem(32);
@@ -343,31 +343,31 @@
   <div class="orderConfirm-container">
     <div class="area-1">
       <div class="title-box">
-        <div class="icon-box"><img src="../images/icon39.png" alt=""></div>
+        <div class="icon-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
         <div class="text">确认订单</div>
       </div>
-      <div class="tabs">
+      <!--<div class="tabs">
         <div class="item item-left" :class="{'on':tabStatus==0}" @click="changeTab(0)">
           <div class="wrap">上门取货</div>
         </div>
         <div class="item item-right" :class="{'on':tabStatus==1}" @click="changeTab(1)">
           <div class="wrap">快递配送</div>
         </div>
-      </div>
+      </div>-->
       <div class="info">
         <div class="title-box ellipsis-2">
           <div class="name-box">
-            <span>商家</span>湖南省长沙市岳麓区望城坡街道望岳南路咸嘉湖西路
+            <span>地址</span>{{defaultAddressData.province}}{{defaultAddressData.city}}{{defaultAddressData.county}}{{defaultAddressData.address}}
           </div>
           <div class="icon-right"><img src="../images/icon21.png" alt=""></div>
         </div>
         <div class="des">
-          <span>XXXXXXXX集团公司</span>
-          <span>18600002222</span>
+          <span>{{defaultAddressData.reciever}}</span>
+          <span>{{defaultAddressData.phone}}</span>
         </div>
       </div>
     </div>
-    <div class="area-2">
+    <!--<div class="area-2">
       <div class="name">是否赠送好友商品</div>
       <div class="switch">
         <van-switch
@@ -376,18 +376,18 @@
           inactive-color="#f44"
         />
       </div>
-    </div>
-    <div class="area-3">
+    </div>-->
+    <!--<div class="area-3">
       *开关开启状态商品生成二维码赠送好友，关闭状态，商品属于自己
-    </div>
+    </div>-->
     <div class="area-4">
       <div class="wrapper">
-        <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+        <div class="img-box"><img :src="filePath + detailData.pics.split(';')[0]" alt=""></div>
         <div class="right-box">
-          <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-          <div class="des">已售2008件/库存10000件</div>
+          <div class="title ellipsis-2">【{{detailData.title}}】{{detailData.subTitle}}</div>
+          <!--<div class="des">已售2008件/库存10000件</div>-->
           <div class="price-box">
-            <div class="price">￥<span>599.00</span></div>
+            <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
           </div>
         </div>
       </div>
@@ -403,7 +403,7 @@
       </div>
     </div>
     <!-- 选择支付方式 -->
-    <div class="area-5">
+    <!--<div class="area-5">
       <van-checkbox-group v-model="checkboxResult" :max="1">
         <div class="wrapper">
           <div class="name-box">
@@ -424,16 +424,16 @@
           </div>
         </div>
       </van-checkbox-group>
-    </div>
+    </div>-->
     <div class="area-bottom">
       <div class="left-box">
-        <div class="total">共1件</div>
+        <div class="total">共{{value}}件</div>
         <div class="price-box">
           合计：
           <span class="price">￥0.00</span>
         </div>
       </div>
-      <div class="right-box">提交订单</div>
+      <div class="right-box" @click="handleSubmit">提交订单</div>
     </div>
   </div>
 </template>
@@ -442,7 +442,7 @@
 import { Toast } from 'vant'
 
 export default {
-  name: 'category',
+  name: 'orderConfirm',
   components: {
   },
   data () {
@@ -451,12 +451,65 @@ export default {
       checked: true,
       value: 1,
       checkboxResult: [1],
-      initData: {}
+      initData: {},
+      detailData: {},
+      filePath: '',
+      defaultAddressData: {}
     }
   },
   methods: {
     handleSubmit () {
-
+      let sendData = {
+        list: [
+          {
+            goodsFlashSaleId: this.initData.list[0].goodsFlashSaleId,
+            goodsIssueId: this.initData.list[0].goodsIssueId,
+            goodsId: this.initData.list[0].goodsId,
+            attrSn: this.initData.list[0].attrSn,
+            number: this.value,
+            shareType: this.initData.list[0].shareType
+          }],
+        platform: 1,
+        province: this.defaultAddressData.province,
+        city: this.defaultAddressData.city,
+        county: this.defaultAddressData.county,
+        reciever: this.defaultAddressData.reciever,
+        phone: this.defaultAddressData.phone,
+        address: this.defaultAddressData.address,
+        zipCode: this.defaultAddressData.zipCode,
+        userAddressId: this.defaultAddressData.userAddressId,
+        expressType: 2, // 快递状态 1上门取货 2快递配送
+        isFriend: 2, // 是否好友商品 1好友 2自己
+        number: this.value, // 商品数量(总数量)
+        payType: 1, // 支付方式
+        cardNumber: this.initData.cardNumber, // 购物卡金额
+        couponNumber: this.initData.cardNumber, // 购物券金额
+        remark: ''// 订单备注
+      }
+      this.$post('/api/orders/confirmOrders', sendData).then(res => {
+        if (res.result === 0) {
+          Toast.success(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.defaultAddressData = res.data
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    goBack () {
+      this.$router.back(-1)
     },
     changeTab (status) {
       this.tabStatus = status
@@ -466,7 +519,11 @@ export default {
     // this.test()
   },
   created () {
-    this.initData = JSON.parse(this.$route.param.initData)
+    this.initData = JSON.parse(this.$route.params.initData)
+    this.detailData = JSON.parse(this.$route.params.detailData)
+    this.filePath = sessionStorage.getItem('filePath')
+    this.value = this.initData.list[0].value
+    this.getDefaultAddress()
   },
   watch: {
   }

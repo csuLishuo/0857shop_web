@@ -540,27 +540,28 @@ export default {
       collectionStatus: false,
       orderSendData: {},
       showIndex: 0,
-      userAddressId: '',
+      userAddressId: ''
     }
   },
   methods: {
     handleConfirmBuy () {
       let sendData = {
         list: [{
-				  shareId: 0,
-				  goodsIssueId: this.detailData.id,
-				  goodsId: this.detailData.goodsId,
-				  attrSn: this.orderSendData.attrSn,
-				  number: this.value,
-				  shareType: 0,
-			  }]
+          shareId: 0,
+          goodsIssueId: this.detailData.id,
+          goodsId: this.detailData.goodsId,
+          attrSn: this.orderSendData.attrSn,
+          number: this.value,
+          shareType: 0
+        }]
       }
       this.$post('/api/orders/orderBuy', sendData).then(res => {
         if (res.result === 0) {
           this.$router.push({
             name: 'orderConfirm',
-            param: {
-              initData: JSON.stringify(res.data)
+            params: {
+              initData: JSON.stringify(res.data),
+              detailData: JSON.stringify(this.detailData)
             }
           })
         } else {

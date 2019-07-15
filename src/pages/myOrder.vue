@@ -171,8 +171,8 @@
         }
       }
       .van-tab{
-        width: 20% !important;
-        flex-basis: 20% !important;
+        width: 16.3% !important;
+        flex-basis: 16.3% !important;
       }
   }
 </style>
@@ -182,30 +182,39 @@
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
       <div class="title">我的订单</div>
     </div>
-    <van-tabs v-model="active">
-      <van-tab title="全部"></van-tab>
+    <van-tabs v-model="active" @change="handleTabChange">
+      <van-tab title="已取消"></van-tab>
       <van-tab title="待付款"></van-tab>
       <van-tab title="待发货"></van-tab>
       <van-tab title="待收货"></van-tab>
+      <van-tab title="待评价"></van-tab>
       <van-tab title="已完成"></van-tab>
     </van-tabs>
     <div class="goodsList">
-      <div class="wrapper">
-            <div class="wrap-1">
-              <div class="img-box"><img src="../images/icon3.png" alt=""></div>
-              <div class="right-box">
-                <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-                <div class="des">红色；175；女款</div>
-                <div class="label">共1件商品 合计：￥1267.00</div>
-              </div>
-            </div>
-            <div class="wrap-2">
-              <div class="text">等待付款</div>
-              <div class="btn-box">
-                <div class="btn">取消订单</div>
-              </div>
+      <van-list
+        v-model="loadingList"
+        :finished="finished"
+        :immediate-check="false"
+        finished-text="没有更多了"
+        @load="getOneMorePage"
+      >
+        <div class="wrapper">
+          <div class="wrap-1">
+            <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+            <div class="right-box">
+              <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
+              <div class="des">红色；175；女款</div>
+              <div class="label">共1件商品 合计：￥1267.00</div>
             </div>
           </div>
+          <div class="wrap-2">
+            <div class="text">等待付款</div>
+            <div class="btn-box">
+              <div class="btn">取消订单</div>
+            </div>
+          </div>
+        </div>
+      </van-list>
       <div class="wrapper">
         <div class="wrap-1">
           <div class="img-box"><img src="../images/icon3.png" alt=""></div>
@@ -235,10 +244,50 @@ export default {
   },
   data () {
     return {
-      active: 0
+      active: 0,
+      sendData: {
+        status: 1,
+        pageNumber: 1,
+        pageSize: 10
+      },
+      orderList: [],
+      filePath: '',
+      total: '',
+      totalPage: '',
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    handleTabChange (e) {
+      this.sendData.pageNumber = 1
+      this.getOrderList(e)
+    },
+    getOrderList (status) {
+      this.sendData.status = status
+      this.$post('/api/orders/getOrdersListByStatusAndUserId', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.orderList = res.data.list
+          } else {
+            this.orderList = this.orderList.concat(res.data.list)
+          }
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
     goBack () {
       this.$router.back(-1)
     },
@@ -264,6 +313,10 @@ export default {
   },
   mounted () {
     // this.test()
+  },
+  created () {
+    this.active = this.$route.params.status
+    this.getOrderList(this.active)
   },
   watch: {
   }

@@ -6,6 +6,7 @@
   .lottery-container{
     min-height: 100%;
     background: #FF464C;
+    padding-bottom: px2rem(40);
     .topBar{
       background: #FF464C;
       height: px2rem(100);
@@ -35,12 +36,23 @@
         width: 100%;
       }
     }
+    .area-1 {
+      img{
+        width: 100%;
+        height: auto;
+      }
+    }
     .area-2{
       width: px2rem(692);
       height: px2rem(584);
       margin: 0 auto;
       padding: px2rem(36);
       background-color: #FFD905;
+      background-image: url("../images/img16.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-position: center;
+      border-radius: px2rem(6);
       display: flex;
       justify-content: space-around;
       flex-direction: column;
@@ -77,6 +89,25 @@
             background: #ff4f40;
           }
         }
+        .wrapper-start{
+          width: 32%;
+          height: px2rem(164);
+          border-radius: px2rem(26);
+          background-image: url("../images/img15.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 100% 100%;
+          padding-top: px2rem(130);
+          text-align: center;
+          font-size: px2rem(26);
+          color: #ffeeee;
+        }
+      }
+    }
+    .area-3{
+      img{
+        width: 100%;
+        height: auto;
       }
     }
     .area-4{
@@ -143,7 +174,7 @@
     </div> -->
     <!-- <div class="imgDel-box"><img src="../images/imgDel5.png" alt=""></div> -->
     <div class="area-1">
-      <!-- <img src="../images/img1.png" alt=""> -->
+       <img src="../images/img14.png" alt="">
     </div>
     <div class="area-2">
       <div class="line-1">
@@ -173,7 +204,7 @@
           </div>
           <div class="text ellipsis-1">{{goodsList[7].title}}</div>
         </div>
-        <div class="wrapper" @click="initLottery">开始</div>
+        <div class="wrapper-start" @click="initLottery">需{{lotteryScore}}积分</div>
         <div class="wrapper" :class="index === 3 ? 'on': ''">
           <div class="img-box">
             <img :src="filePath + goodsList[3].pic" alt="">
@@ -202,7 +233,9 @@
         </div>
       </div>
     </div>
-    <div class="area-3"></div>
+    <div class="area-3">
+      <img src="../images/img17.png" alt="">
+    </div>
     <div class="area-4">
       <div class="title">恭喜你获得</div>
       <div class="line" v-for="item in rewardsList" :key="item.id">
@@ -227,13 +260,13 @@ export default {
   },
   data () {
     return {
-      index: -1,    // 当前转动到哪个位置，起点位置
-      count: 8,    // 总共有多少个位置
-      timer: 0,    // 每次转动定时器
-      speed: 200,   // 初始转动速度
-      times: 0,    // 转动次数
-      cycle: 50,   // 转动基本次数：即至少需要转动多少次再进入抽奖环节
-      prize: -1,   // 中奖位置
+      index: -1, // 当前转动到哪个位置，起点位置
+      count: 8, // 总共有多少个位置
+      timer: 0, // 每次转动定时器
+      speed: 200, // 初始转动速度
+      times: 0, // 转动次数
+      cycle: 50, // 转动基本次数：即至少需要转动多少次再进入抽奖环节
+      prize: -1, // 中奖位置
       click: true,
       showToast: false,
       goodsList: [],

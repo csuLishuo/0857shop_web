@@ -134,6 +134,11 @@
         }
       }
     }
+    .van-list{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
   }
 </style>
 <template>
@@ -164,7 +169,6 @@
         v-model="loadingList"
         :finished="finished"
         :immediate-check="false"
-        finished-text="没有更多了"
         @load="getOneMorePage"
       >
         <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">

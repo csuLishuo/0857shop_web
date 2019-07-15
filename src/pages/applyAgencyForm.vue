@@ -99,10 +99,12 @@
     <div class="area-1 clearfix">
       <div class="title">请上传身份证</div>
       <div class="wrapper">
-        <div class="wrap">
-          <div class="img-box"><img src="../images/img8.png" alt=""></div>
-          <div class="text">上传身份证正面</div>
-        </div>
+        <van-uploader :before-read="beforeReadFirst">
+          <div class="wrap">
+            <div class="img-box"><img src="../images/img8.png" alt=""></div>
+            <div class="text">上传身份证正面</div>
+          </div>
+        </van-uploader>
         <div class="wrap">
           <div class="img-box"><img src="../images/img9.png" alt=""></div>
           <div class="text">上传身份证反面</div>
@@ -118,6 +120,7 @@
             required
             clearable
             placeholder="请输入姓名"
+            v-model="sendData.userName"
           >
             <div class="icon-box" slot="left-icon">姓名</div>
           </van-field>
@@ -128,6 +131,7 @@
             required
             clearable
             placeholder="请输入身份证号"
+            v-model="sendData.idCard"
           >
             <div class="icon-box" slot="left-icon">身份证号</div>
           </van-field>
@@ -138,28 +142,42 @@
             required
             clearable
             placeholder="请输入正确的手机号"
+            v-model="sendData.phone"
           >
             <div class="icon-box" slot="left-icon">手机号</div>
           </van-field>
+          <div class="line line-2">
+            <van-field
+              v-model="sendData.verifyCode"
+              type="num"
+              placeholder="请输入验证码"
+              required
+            >
+              <div class="icon-box" slot="left-icon">验证码</div>
+              <van-button slot="button" size="small" type="primary" @click="getCaptcha">发送验证码</van-button>
+            </van-field>
+          </div>
         </div>
       </div>
     </div>
     <div class="area-2">
       <div class="form-box">
         <div class="line">
-          <van-field
+          <!--<van-field
             type="text"
             required
             clearable
             placeholder="请选择地址"
+            v-model="sendData.address"
           >
             <div class="icon-box" slot="left-icon">所在地址</div>
-          </van-field>
+          </van-field>-->
           <van-field
             type="text"
             required
             clearable
             placeholder="请填写身份证详细地址"
+            v-model="sendData.address"
           >
             <div class="icon-box" slot="left-icon">详细地址</div>
           </van-field>
@@ -174,13 +192,14 @@
             required
             clearable
             placeholder="请输入推荐人的手机号"
+            v-model="sendData.recommend"
           >
             <div class="icon-box" slot="left-icon">推荐人号码</div>
           </van-field>
         </div>
       </div>
     </div>
-    <div class="btn-bottom" @click="go">
+    <div class="btn-bottom" @click="handleSubmit">
       提交
     </div>
   </div>
@@ -195,10 +214,82 @@ export default {
   },
   data () {
     return {
-      active: 0
+      sendData: {
+        phone: '',
+        verifyCode: '',
+        address: '',
+        idCard: '',
+        idCardOppose: '',
+        idCardTue: '',
+        recommend: '',
+        userName: ''
+      },
+      orderSn: '',
+      timeStatus: 60
     }
   },
   methods: {
+    beforeReadFirst (file) {
+      console.log(file)
+      const headers = { headers: { 'Content-Type': 'multipart/form-data' } }
+      this.$post('/api/file/uploadImage', {
+        file: file
+      }, headers).then(res => {
+        if (res.result === 0) {
+          Toast.success(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    handleSubmit () {
+      let sendData = this.sendData
+      for (let i in sendData) {
+        if (sendData[i] === '') {
+          Toast.fail('请填写完整信息')
+          return false
+        }
+      }
+      sendData.orderSn = this.orderSn
+      this.$post('/api/proxy/insertProxy', sendData).then(res => {
+        if (res.result === 0) {
+          Toast.success(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        Toast.fail('系统内部错误')
+      })
+    },
+    getCaptcha () {
+      let reg = /^1\d{10}$/
+      if (this.timeStatus < 60 && this.timeStatus > 0) {
+        Toast.fail('请勿频繁点击')
+      } else if (!reg.test(this.sendData.phone)) {
+        Toast.fail('请按规范格式填写手机号码')
+      } else {
+        const interval = window.setInterval(() => {
+          if (this.timeStatus-- <= 0) {
+            this.timeStatus = 60
+            window.clearInterval(interval)
+          }
+        }, 1000)
+        this.$post('/api/proxy/sendPhoneMessage', {
+          mobilePhone: this.sendData.phone
+        }).then(res => {
+          if (res.result === 0) {
+            Toast.success('获取验证码成功')
+            this.orderSn = res.data.orderSn
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          Toast.fail('系统内部错误')
+        })
+      }
+    },
     goBack () {
       this.$router.back(-1)
     },
