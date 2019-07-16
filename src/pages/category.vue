@@ -177,7 +177,7 @@
             <div>￥<span>{{item.nowPrice}}</span></div>
             <!-- <div class="label">满38减10</div> -->
           </div>
-          <div class="name ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+          <div class="name ellipsis-2">{{item.title}}{{item.subTitle}}</div>
         </div>
       </van-list>
     </div>

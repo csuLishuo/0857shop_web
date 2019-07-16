@@ -198,7 +198,7 @@
         <div class="wrapper" v-for="item in goodsList" :key="item.id">
           <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
           <div class="right-box">
-            <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+            <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
             <div class="des">已售{{item.totalSales}}/库存{{JSON.parse(item.attrs)[0].stock}}</div>
             <!--<div class="tag-box">
               <div class="tag">满38减10</div>

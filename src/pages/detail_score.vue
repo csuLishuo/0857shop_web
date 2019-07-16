@@ -65,7 +65,7 @@
       }
     }
     .title{
-      padding: px2rem(20) 0 px2rem(10) px2rem(32);
+      padding: px2rem(20) px2rem(32) px2rem(10) px2rem(32);
       font-size: px2rem(32);
       line-height: px2rem(50);
       font-weight: bold;
@@ -76,7 +76,7 @@
       align-items: center;
       justify-content: space-between;
       .text{
-        width: px2rem(575);
+        /*width: px2rem(575);*/
       }
       .share{
         width: px2rem(112);
@@ -434,7 +434,7 @@
           </div>
           <div class="title">
             <div class="text ellipsis-2">
-              【{{detailData.title}}】{{detailData.subTitle}}
+              {{detailData.title}}{{detailData.subTitle}}
             </div>
             <!--<div class="share">分享</div>-->
           </div>
@@ -484,7 +484,7 @@
           </div>
         </van-tab>
         <van-tab title="用户评价">
-          <commentPage :goodsId="detailData.goodsId"></commentPage>          
+          <commentPage :goodsId="detailData.goodsId"></commentPage>
         </van-tab>
       </van-tabs>
     </div>

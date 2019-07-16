@@ -265,7 +265,7 @@
         <div class="wrapper" v-for="item in goodsList" :key="item.id">
           <div class="img-box"><img src="../images/icon3.png" alt=""></div>
           <div class="right-box">
-            <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+            <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
             <div class="des">已购{{item.totalSales}}<span>/剩余{{JSON.parse(item.attrs)[0].stock}}件</span></div>
             <div class="bar"><span></span></div>
             <div class="price-box">

@@ -118,7 +118,7 @@
           <div class="wrapper" v-for="item in rewardsList" :key="item.id">
             <div class="img-box"><img :src="filePath + item.pic" alt=""></div>
             <div class="right-box">
-              <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+              <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
               <div v-if="rewardsSendData.status==1" class="btn" @click="goSelectAddress(item.id)">马上领取</div>
               <div v-if="rewardsSendData.status==2" class="label">已领取</div>
             </div>

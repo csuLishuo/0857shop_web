@@ -155,7 +155,7 @@
             <div class="wrapper">
               <div class="img-box"><img src="../images/icon3.png" alt=""></div>
               <div class="right-box">
-                <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+                <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
                 <div class="deadline">{{item.endTime}} 结束</div>
                 <dir class="des">离0元还差￥{{item.money}}</dir>
                 <!-- <div class="btn">继续砍价</div> -->

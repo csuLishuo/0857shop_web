@@ -384,7 +384,7 @@
       <div class="wrapper">
         <div class="img-box"><img :src="filePath + detailData.pics.split(';')[0]" alt=""></div>
         <div class="right-box">
-          <div class="title ellipsis-2">【{{detailData.title}}】{{detailData.subTitle}}</div>
+          <div class="title ellipsis-2">{{detailData.title}}{{detailData.subTitle}}</div>
           <!--<div class="des">已售2008件/库存10000件</div>-->
           <div class="price-box">
             <div class="price">￥<span>{{detailData.nowPrice}}</span></div>

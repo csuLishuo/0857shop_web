@@ -154,7 +154,7 @@
             <div class="wrapper">
               <div class="img-box"><img src="../images/icon3.png" alt=""></div>
               <div class="right-box">
-                <div class="title ellipsis-2">【{{item.title}}】{{item.subTitle}}</div>
+                <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
                 <div class="price-box">
                   <div class="price">￥<span>{{item.nowPrice}}</span></div>
                 </div>

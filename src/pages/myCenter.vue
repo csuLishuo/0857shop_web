@@ -405,7 +405,7 @@
       <div class="recommend-list">
         <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
           <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
-          <div class="name ellipsis-1">【{{item.title}}】{{item.subTitle}}</div>
+          <div class="name ellipsis-1">{{item.title}}{{item.subTitle}}</div>
           <!-- <div class="des ellipsis-1">已售1389/剩2000</div> -->
           <div class="price">￥<span>{{item.nowPrice}}</span></div>
         </div>
