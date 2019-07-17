@@ -4,8 +4,14 @@
     @return $px * 1 / 100 * 1rem;
   }
   .activeList-container{
+    min-height: 100%;
+    background-image: url("../images/img21.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% px2rem(436);
+    background-position: top;
+    background-color: #c40215;
     .topBar{
-      background-image: linear-gradient(-90deg, #ff2736 0%, #ff2b71 100%), linear-gradient(#ff3e31, #ff3e31);
+      // background-image: linear-gradient(-90deg, #ff2736 0%, #ff2b71 100%), linear-gradient(#ff3e31, #ff3e31);
       height: px2rem(100);
       padding: 0 px2rem(36);
       position: relative;
@@ -36,123 +42,65 @@
         }
       }
     }
-    .banner{
-      .van-swipe-item{
-        height: px2rem(354) !important;
-        img{
-          width: 100%;
-          height: 100%;
+    .goodsList{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      /*padding: 0 px2rem(20);*/
+      margin-top: px2rem(346);
+      padding-left: px2rem(10);
+      .wrapper{
+        width: px2rem(234);
+        height: px2rem(396);
+        background: #fff;
+        border-radius: px2rem(10);
+        margin-right: px2rem(10);
+        margin-top: px2rem(20);
+        .img-box{
+          height: px2rem(246);
+          border-bottom: 1px solid #eff0f4;
+          padding: px2rem(20);
+          display: flex;
+          align-items: center;
+          img{
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+        .name{
+          font-size: px2rem(26);
+          line-height: px2rem(46);
+          margin-top: px2rem(16);
+          color: #45484f;
+          padding: 0 px2rem(26);
+        }
+        .des{
+          font-size: px2rem(20);
+          line-height: px2rem(36);
+          color: #9c9c9c;
+          padding: 0 px2rem(26);
+        }
+        .price{
+          color: #ff6c00;
+          font-size: px2rem(20);
+          font-weight: bold;
+          padding: 0 px2rem(26);
+          margin-top: px2rem(16);
+          span{
+            font-size: px2rem(29);
+            vertical-align: bottom;
+          }
         }
       }
     }
-    .goodsList{
-      background: #fff;
-      padding-left: px2rem(24);
-      .wrapper{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        background: #fff;
-        padding: px2rem(22) px2rem(24) px2rem(22) 0;
-        border-bottom: px2rem(1) solid #f0f0f0;
-        .img-box{
-          width: px2rem(225);
-          height: px2rem(225);
-          border-radius: px2rem(6);
-          overflow: hidden;
-          img{
-            width: 100%;
-            height: 100%;
-          }
-        }
-        .right-box{
-          width: px2rem(450);
-          position: relative;
-          .title{
-            font-size: px2rem(28);
-            width: px2rem(390);
-            line-height: px2rem(38);
-            margin-top: px2rem(16);
-            font-weight: bold;
-            color: #393939;
-          }
-          .des{
-            line-height: px2rem(40);
-            font-size: px2rem(22);
-            color: #7c7c7c;
-          }
-          .tag-box{
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-start;
-            .tag{
-              height: px2rem(30);
-              line-height: px2rem(30);
-              padding: 0 px2rem(10);
-              border: px2rem(1) solid #ff3e31;
-              border-radius: px2rem(10);
-              color: #ff3e31;
-              font-size: px2rem(20);
-            }
-          }
-          .people{
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-start;
-            .img-box{
-              width: px2rem(52);
-              height: px2rem(52);
-              border-radius: 50%;
-              overflow: hidden;
-              margin-right: px2rem(12);
-              img{
-                width: 100%;
-                height: 100%;
-              }
-            }
-            .text{
-              font-size: px2rem(22);
-              color: #7e7e7e;
-            }
-          }
-          .price-box{
-            margin-top: px2rem(60);
-            .price{
-              color: #ff3e31;
-              font-size: px2rem(24);
-              font-weight: bold;
-              span{
-                font-size: px2rem(34);
-                vertical-align: bottom;
-              }
-            }
-            .info{
-              color: #bababa;
-              font-size: px2rem(18);
-            }
-          }
-          .btn{
-            width: px2rem(153);
-            height: px2rem(58);
-            line-height: px2rem(58);
-            background-color: #ff3f31;
-            background-blend-mode: normal, normal;
-            border-radius: px2rem(29);
-            text-align: center;
-            font-size: px2rem(28);
-            color: #fff;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-          }
-        }
-      }
+    .van-list{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      width: 100%;
     }
   }
 </style>
@@ -160,40 +108,22 @@
   <div class="activeList-container">
     <div class="topBar">
       <div class="left-box" @click="goBack"><img src="../images/icon38.png" alt=""></div>
-      <div class="title">活动商品列表</div>
+      <!--<div class="title">活动商品列表</div>-->
       <!--搜索-->
       <!--<div class="right-box"><img src="../images/icon45.png" alt=""></div>-->
     </div>
-    <!--<div class="banner">
-      <van-swipe :autoplay="3000">
-        <van-swipe-item v-for="(item, index) in images" :key="index">
-          <img :src="item" alt="">
-        </van-swipe-item>
-      </van-swipe>
-    </div>-->
     <div class="goodsList">
       <van-list
         v-model="loadingList"
         :finished="finished"
         :immediate-check="false"
-        finished-text="没有更多了"
         @load="getOneMorePage"
       >
-        <div class="wrapper" v-for="item in goodsList" :key="item.id">
+        <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
           <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
-          <div class="right-box">
-            <div class="title ellipsis-2"  @click="goDetail(item.id)">{{item.title}}{{item.subTitle}}</div>
-            <!--<div class="people">
-              <div class="img-box"><img src="../images/img2.png" alt=""></div>
-              <div class="img-box"><img src="../images/img1.png" alt=""></div>
-              <div class="img-box"><img src="../images/img1.png" alt=""></div>
-              <div class="text">135人正在砍价</div>
-            </div>-->
-            <div class="price-box">
-              <div class="price">￥<span>{{item.nowPrice}}</span></div>
-            </div>
-            <!--<div class="btn">砍价免费拿</div>-->
-          </div>
+          <div class="name ellipsis-1">{{item.title}}{{item.subTitle}}</div>
+          <!-- <div class="des ellipsis-1">已售1389/剩2000</div> -->
+          <div class="price">￥<span>{{item.nowPrice}}</span></div>
         </div>
       </van-list>
     </div>
