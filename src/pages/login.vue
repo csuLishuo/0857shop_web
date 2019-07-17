@@ -126,7 +126,8 @@ export default {
       if (this.username && this.password) {
         this.$post('/api/login/logins', {
           userName: this.username,
-          password: this.password
+          password: this.password,
+          openId: this.wxUserInfo.openId
         }).then(res => {
           if (res.result === 0) {
             Toast.success('登录成功')

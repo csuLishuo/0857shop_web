@@ -6,9 +6,9 @@
   .myCenter-container{
     padding-bottom: px2rem(120);
     .area-1{
-      background-image: url("../images/img14.png");
+      background-image: url("../images/img2.png");
       background-repeat: no-repeat;
-      background-size: 100% 100%;
+      background-size: 100% auto;
       position: relative;
       .setting-box{
         position: absolute;
@@ -25,7 +25,9 @@
         margin: px2rem(100) 0 0;
         padding-top: px2rem(30);
         padding-bottom: px2rem(20);
-        margin-bottom: px2rem(166);
+        margin: px2rem(120) px2rem(26) px2rem(20);
+        background: #fff;
+      border-radius: px2rem(18);
         .top-box{
           display: flex;
           flex-direction: row;
@@ -53,16 +55,16 @@
             .text-box{
               .name{
                 font-size: px2rem(32);
-                color: #fff;
+                color: #000;
               }
               .des{
                 font-size: px2rem(23);
                 margin-top: px2rem(25);
-                color: #fff;
+                color: #e83c16;
                 line-height: px2rem(40);
                 padding: 0 px2rem(10);
                 border-radius: px2rem(20);
-                background: rgba(0,0,0,0.2);
+                // background: rgba(0,0,0,0.2);
                 width: px2rem(120);
                 text-align: center;
               }
@@ -71,7 +73,17 @@
           .right-box{
             display: flex;
             align-items: center;
-            background: #ffc424;
+            // background: #ffc424;
+            background-image: linear-gradient(83deg, 
+		#ff4027 0%, 
+		#802014 0%, 
+		#000000 0%, 
+		#802014 0%, 
+		#ff4027 0%, 
+		#ff296f 100%), 
+	linear-gradient(
+		#ffe324, 
+		#ffe324);
             width: px2rem(136);
             height: px2rem(62);
             border-radius: px2rem(31) 0px 0px px2rem(31);
@@ -87,7 +99,7 @@
             }
             .name{
               font-size: px2rem(26);
-              color: #542d10;
+              color: #fff;
             }
           }
         }
@@ -97,13 +109,13 @@
           flex-wrap: nowrap;
           align-items: center;
           justify-content: space-around;
-          margin-top: px2rem(70);
+          margin-top: px2rem(60);
           width: px2rem(700);
-          position: absolute;
-          left: px2rem(25);
-          bottom: 0;
-          background: rgba(0,0,0,0.2);
-          border-radius: px2rem(18) px2rem(18) 0 0;
+          // position: absolute;
+          // left: px2rem(25);
+          // bottom: 0;
+          // background: rgba(0,0,0,0.2);
+          // border-radius: px2rem(18) px2rem(18) 0 0;
           height: px2rem(156);
           .wrap{
             display: flex;
@@ -121,7 +133,7 @@
             }
             .name{
               font-size: px2rem(23);
-              color: #fff;
+              color: #4c4c4c;
               margin-top: px2rem(20);
             }
           }
