@@ -77,7 +77,7 @@
       }
       .info{
         width: px2rem(730);
-        margin: px2rem(20) auto 0;
+        margin: 0 auto 0;
         height: px2rem(233);
         background: #fff;
         padding: px2rem(20) px2rem(32);
@@ -346,28 +346,31 @@
         <div class="icon-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
         <div class="text">确认订单</div>
       </div>
-      <!--<div class="tabs">
-        <div class="item item-left" :class="{'on':tabStatus==0}" @click="changeTab(0)">
+      <div class="tabs">
+        <div class="item item-left" :class="{'on':tabStatus==1}" @click="changeTab(1)">
           <div class="wrap">上门取货</div>
         </div>
-        <div class="item item-right" :class="{'on':tabStatus==1}" @click="changeTab(1)">
+        <div class="item item-right" :class="{'on':tabStatus==2}" @click="changeTab(2)">
           <div class="wrap">快递配送</div>
         </div>
-      </div>-->
+      </div>
       <div class="info">
         <div class="title-box ellipsis-2">
-          <div class="name-box">
+          <div class="name-box" v-if="tabStatus==2">
             <span>地址</span>{{defaultAddressData.province}}{{defaultAddressData.city}}{{defaultAddressData.county}}{{defaultAddressData.address}}
+          </div>
+          <div class="name-box" v-if="tabStatus==1">
+            <span>地址</span>{{storeAddressData.province}}{{storeAddressData.city}}{{storeAddressData.county}}{{storeAddressData.address}}
           </div>
           <div class="icon-right"><img src="../images/icon21.png" alt=""></div>
         </div>
-        <div class="des">
+        <div class="des" v-if="tabStatus==2">
           <span>{{defaultAddressData.reciever}}</span>
           <span>{{defaultAddressData.phone}}</span>
         </div>
       </div>
     </div>
-    <!--<div class="area-2">
+    <div class="area-2">
       <div class="name">是否赠送好友商品</div>
       <div class="switch">
         <van-switch
@@ -376,10 +379,10 @@
           inactive-color="#f44"
         />
       </div>
-    </div>-->
-    <!--<div class="area-3">
+    </div>
+    <div class="area-3">
       *开关开启状态商品生成二维码赠送好友，关闭状态，商品属于自己
-    </div>-->
+    </div>
     <div class="area-4">
       <div class="wrapper">
         <div class="img-box"><img :src="filePath + detailData.pics.split(';')[0]" alt=""></div>
@@ -430,7 +433,7 @@
         <div class="total">共{{value}}件</div>
         <div class="price-box">
           合计：
-          <span class="price">￥0.00</span>
+          <span class="price">￥{{(value * parseFloat(detailData.nowPrice)).toFixed(2)}}</span>
         </div>
       </div>
       <div class="right-box" @click="handleSubmit">提交订单</div>
@@ -447,14 +450,20 @@ export default {
   },
   data () {
     return {
-      tabStatus: 0,
-      checked: true,
+      tabStatus: 1,
+      checked: false,
       value: 1,
       checkboxResult: [1],
       initData: {},
       detailData: {},
       filePath: '',
-      defaultAddressData: {}
+      defaultAddressData: {},
+      storeAddressData: {
+        province: '湖南省',
+        city: '长沙市',
+        county: '高新区',
+        address: '麓谷大道627号麓谷新长海B-1栋208'
+      }
     }
   },
   methods: {
@@ -469,26 +478,26 @@ export default {
             number: this.value,
             shareType: this.initData.list[0].shareType
           }],
-        platform: 1,
-        province: this.defaultAddressData.province,
-        city: this.defaultAddressData.city,
-        county: this.defaultAddressData.county,
-        reciever: this.defaultAddressData.reciever,
-        phone: this.defaultAddressData.phone,
-        address: this.defaultAddressData.address,
-        zipCode: this.defaultAddressData.zipCode,
-        userAddressId: this.defaultAddressData.userAddressId,
-        expressType: 2, // 快递状态 1上门取货 2快递配送
-        isFriend: 2, // 是否好友商品 1好友 2自己
+        platform: 2,
+        province: this.tabStatus === 1 ? this.storeAddressData.province : this.defaultAddressData.province,
+        city: this.tabStatus === 1 ? this.storeAddressData.city : this.defaultAddressData.city,
+        county: this.tabStatus === 1 ? this.storeAddressData.county : this.defaultAddressData.county,
+        reciever: this.tabStatus === 1 ? '' : this.defaultAddressData.reciever,
+        phone: this.tabStatus === 1 ? '' : this.defaultAddressData.phone,
+        address: this.tabStatus === 1 ? this.storeAddressData.address : this.defaultAddressData.address,
+        zipCode: this.tabStatus === 1 ? '' : this.defaultAddressData.zipCode,
+        userAddressId: this.tabStatus === 1 ? '' : this.defaultAddressData.userAddressId,
+        expressType: this.tabStatus, // 快递状态 1上门取货 2快递配送
+        isFriend: this.checked ? 1 : 2, // 是否好友商品 1好友 2自己
         number: this.value, // 商品数量(总数量)
         payType: 1, // 支付方式
-        cardNumber: this.initData.cardNumber, // 购物卡金额
-        couponNumber: this.initData.cardNumber, // 购物券金额
+        // cardNumber: this.initData.cardNumber, // 购物卡金额
+        // couponNumber: this.initData.cardNumber, // 购物券金额
         remark: ''// 订单备注
       }
       this.$post('/api/orders/confirmOrders', sendData).then(res => {
         if (res.result === 0) {
-          Toast.success(res.message)
+          location.href = res.data
         } else {
           Toast.fail(res.message)
         }

@@ -493,7 +493,7 @@
             <van-stepper v-model="value" min="1" max="99" />
           </div>
         </div>
-        <div class="btn">确定</div>
+        <div class="btn" @click="closePop">确定</div>
       </van-popup>
     </div>
     <div class="bottom-box">
@@ -639,6 +639,9 @@ export default {
       }).catch(res => {
         console.error(res)
       })
+    },
+    closePop () {
+      this.showPop_select = false
     },
     showPop () {
       this.showPop_select = true
