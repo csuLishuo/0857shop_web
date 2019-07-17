@@ -27,7 +27,7 @@
         padding-bottom: px2rem(20);
         margin: px2rem(120) px2rem(26) px2rem(20);
         background: #fff;
-      border-radius: px2rem(18);
+        border-radius: px2rem(18);
         .top-box{
           display: flex;
           flex-direction: row;
@@ -110,12 +110,6 @@
           align-items: center;
           justify-content: space-around;
           margin-top: px2rem(60);
-          width: px2rem(700);
-          // position: absolute;
-          // left: px2rem(25);
-          // bottom: 0;
-          // background: rgba(0,0,0,0.2);
-          // border-radius: px2rem(18) px2rem(18) 0 0;
           height: px2rem(156);
           .wrap{
             display: flex;

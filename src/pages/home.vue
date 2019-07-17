@@ -844,7 +844,6 @@ export default {
     }
   },
   mounted () {
-    // this.test()
     if (!sessionStorage.getItem('authStatus')) {
       location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=1'
     } else {
