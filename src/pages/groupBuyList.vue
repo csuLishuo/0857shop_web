@@ -263,7 +263,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getOneMorePage () {
@@ -295,7 +295,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     goBack () {

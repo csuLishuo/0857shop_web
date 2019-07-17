@@ -659,7 +659,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     go (status) {
@@ -728,7 +728,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getAdImg () {
@@ -741,7 +741,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getGoodsCategory () {
@@ -754,7 +754,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getOneMorePage () {
@@ -787,7 +787,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     // 获取签到信息
@@ -800,7 +800,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     // 获取签到积分
@@ -814,7 +814,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     }
   },

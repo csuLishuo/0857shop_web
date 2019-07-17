@@ -592,7 +592,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     selectAttrSn (index) {
@@ -614,7 +614,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getDetailData () {
@@ -632,7 +632,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     preview (i) {

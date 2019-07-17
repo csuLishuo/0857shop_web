@@ -568,7 +568,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     selectAttrSn (index) {
@@ -587,7 +587,7 @@ export default {
             Toast.fail(res.message)
           }
         }).catch(res => {
-          Toast.fail('系统内部错误')
+          console.error(res)
         })
       } else {
         this.$post('/api/goodsCollection/updateGoodsCollection', {
@@ -600,7 +600,7 @@ export default {
             Toast.fail(res.message)
           }
         }).catch(res => {
-          Toast.fail('系统内部错误')
+          console.error(res)
         })
       }
     },
@@ -618,7 +618,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     addToCart () {
@@ -632,7 +632,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     showPop () {
@@ -647,7 +647,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getDetailData () {
@@ -665,7 +665,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getSelectArray () {

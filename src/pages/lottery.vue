@@ -315,7 +315,7 @@ export default {
             Toast.fail(res.message)
           }
         }).catch(res => {
-          Toast.fail('系统内部错误')
+          console.error(res)
         })
       } else {
         Toast.fail('积分不足')
@@ -330,7 +330,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     // 获取抽奖所需积分
@@ -344,7 +344,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     // 奖品记录
@@ -356,7 +356,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getGoodsList () {
@@ -371,7 +371,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     // 开始转动
@@ -442,7 +442,7 @@ export default {
             Toast.fail(res.message)
           }
         }).catch(res => {
-          Toast.fail('系统内部错误')
+          console.error(res)
         })
       } else {
         Toast('再接再厉')
@@ -473,7 +473,7 @@ export default {
           sessionStorage.removeItem('rewardId')
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
         sessionStorage.removeItem('addressId')
         sessionStorage.removeItem('id')
       })

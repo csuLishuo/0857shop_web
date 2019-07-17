@@ -4,6 +4,7 @@
     @return $px * 1 / 100 * 1rem;
   }
   .category-container{
+    padding-bottom: px2rem(100);
     .topBar{
       background: #ff3e31;
       height: px2rem(94);
@@ -135,9 +136,11 @@
       }
     }
     .van-list{
-      width: 100%;
       display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
       justify-content: space-between;
+      width: 100%;
     }
   }
 </style>
@@ -232,7 +235,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     changeCate (id) {
@@ -252,7 +255,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     },
     getOneMorePage () {
@@ -285,7 +288,7 @@ export default {
           Toast.fail(res.message)
         }
       }).catch(res => {
-        Toast.fail('系统内部错误')
+        console.error(res)
       })
     }
   },
