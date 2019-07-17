@@ -548,7 +548,7 @@
       </van-popup>
     </div>
     <div class="bottom-box">
-      <div class="icon-box">
+      <div class="icon-box" @click="goHome">
         <img src="../images/icon36.png" alt="">
         <div class="text">首页</div>
       </div>
@@ -598,6 +598,11 @@ export default {
     }
   },
   methods: {
+    goHome () {
+      this.$router.push({
+        name: 'home'
+      })
+    },
     getDetailData () {
       this.$post('/api/goodsFlashSale/getGoodsFlashSaleById', {
         id: this.detailId

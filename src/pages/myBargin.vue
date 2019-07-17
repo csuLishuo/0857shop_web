@@ -153,7 +153,7 @@
             :right-width="70"
           > -->
             <div class="wrapper">
-              <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+              <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
               <div class="right-box">
                 <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
                 <div class="deadline">{{item.endTime}} 结束</div>
@@ -211,7 +211,6 @@ export default {
             this.goodsList = this.goodsList.concat(res.data.list)
           }
           this.filePath = res.filePath
-          sessionStorage.setItem('filePath', this.filePath)
           this.total = res.data.totalCount
           this.totalPage = res.data.totalPage
           // 加载状态结束
