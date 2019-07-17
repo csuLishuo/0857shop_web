@@ -478,7 +478,7 @@ export default {
             number: this.value,
             shareType: this.initData.list[0].shareType
           }],
-        platform: 2,
+        platform: 1,
         province: this.tabStatus === 1 ? this.storeAddressData.province : this.defaultAddressData.province,
         city: this.tabStatus === 1 ? this.storeAddressData.city : this.defaultAddressData.city,
         county: this.tabStatus === 1 ? this.storeAddressData.county : this.defaultAddressData.county,
