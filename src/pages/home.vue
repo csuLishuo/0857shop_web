@@ -485,31 +485,31 @@
     </div>
     <div class="area-1 clearfix">
       <div class="title">热卖商品</div>
-      <div class="area-1-del" @click="goHotSaleList">
+      <!--<div class="area-1-del" @click="goHotSaleList">
         <img src="../images/imgDel6.jpg" alt="">
-      </div>
-      <!--<div class="area-1-container">
-        <div class="left-box">
-          <img src="../images/icon1.png" alt="">
+      </div>-->
+      <div class="area-1-container">
+        <div class="left-box" @click="goHotSaleDetail(hotSaleGoodsList[0].id)">
+          <img v-if="hotSaleGoodsList[0]" :src="filePath + hotSaleGoodsList[0].pics.split(';')[0]" alt="">
         </div>
         <div class="right-box">
-          <div class="right-box-1">
-            <img src="../images/icon1.png" alt="">
+          <div class="right-box-1" @click="goHotSaleDetail(hotSaleGoodsList[1].id)">
+            <img v-if="hotSaleGoodsList[1]" :src="filePath + hotSaleGoodsList[1].pics.split(';')[0]" alt="">
           </div>
           <div class="right-box-2">
-            <div class="inner">
-              <img src="../images/icon1.png" alt="">
+            <div class="inner" @click="goHotSaleDetail(hotSaleGoodsList[2].id)">
+              <img v-if="hotSaleGoodsList[2]" :src="filePath + hotSaleGoodsList[2].pics.split(';')[0]" alt="">
             </div>
             <div class="inner">
-              <img src="../images/icon1.png" alt="">
-              <div class="mask">
+              <img v-if="hotSaleGoodsList[3]" :src="filePath + hotSaleGoodsList[3].pics.split(';')[0]" alt="">
+              <div class="mask" @click="goHotSaleList">
                 <div class="text">查看更多</div>
                 <div class="icon-box"><img src="../images/icon16.png" alt=""></div>
               </div>
             </div>
           </div>
         </div>
-      </div>-->
+      </div>
     </div>
     <div class="area-2 clearfix">
       <div class="area-2-del" @click="go(3)">
@@ -629,10 +629,35 @@ export default {
       loadingList: false,
       finished: false,
       signInData: {},
-      signScore: ''
+      signScore: '',
+      sendDataHotSale: {
+        categoryId: 0,
+        pageNumber: 1,
+        pageSize: 4
+      },
+      hotSaleGoodsList: []
     }
   },
   methods: {
+    goHotSaleDetail (id) {
+      this.$router.push({
+        path: 'detail_hotSale',
+        query: {
+          detailId: id
+        }
+      })
+    },
+    getHotSaleGoodsList () {
+      this.$post('/api/goodsHotSale/getGoodsHotSaleListByCategoryId', this.sendDataHotSale).then(res => {
+        if (res.result === 0) {
+          this.hotSaleGoodsList = res.data.list
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     more () {
       Toast('敬请期待')
     },
@@ -820,15 +845,17 @@ export default {
   },
   mounted () {
     // this.test()
-    // if (!sessionStorage.getItem('authStatus')) {
-    //   location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=1'
-    // }
-    this.getBannerList()
-    this.getAdImg()
-    this.getGoodsCategory()
-    this.getGoodsList()
-    this.getSignInData()
-    this.getSignScore()
+    if (!sessionStorage.getItem('authStatus')) {
+      location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=1'
+    } else {
+      this.getBannerList()
+      this.getAdImg()
+      this.getGoodsCategory()
+      this.getGoodsList()
+      this.getSignInData()
+      this.getSignScore()
+      this.getHotSaleGoodsList()
+    }
   },
   watch: {
   }

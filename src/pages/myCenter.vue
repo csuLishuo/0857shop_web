@@ -6,9 +6,9 @@
   .myCenter-container{
     padding-bottom: px2rem(120);
     .area-1{
-      background-image: url("../images/img2.png");
+      background-image: url("../images/img14.png");
       background-repeat: no-repeat;
-      background-size: 100% auto;
+      background-size: 100% 100%;
       position: relative;
       .setting-box{
         position: absolute;
@@ -22,19 +22,17 @@
         }
       }
       .wrapper{
-        width: px2rem(698);
-        margin: px2rem(100) auto 0;
-        background: #fff;
-        border-radius: px2rem(18);
+        margin: px2rem(100) 0 0;
         padding-top: px2rem(30);
         padding-bottom: px2rem(20);
+        margin-bottom: px2rem(166);
         .top-box{
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
           align-items: center;
           justify-content: space-between;
-          padding-left: px2rem(30);
+          padding-left: px2rem(60);
           .left-box{
             display: flex;
             flex-direction: row;
@@ -54,29 +52,26 @@
             }
             .text-box{
               .name{
-                font-size: px2rem(28);
-                color: #000;
+                font-size: px2rem(32);
+                color: #fff;
               }
               .des{
                 font-size: px2rem(23);
                 margin-top: px2rem(25);
-                color: #e83c16;
+                color: #fff;
+                line-height: px2rem(40);
+                padding: 0 px2rem(10);
+                border-radius: px2rem(20);
+                background: rgba(0,0,0,0.2);
+                width: px2rem(120);
+                text-align: center;
               }
             }
           }
           .right-box{
             display: flex;
             align-items: center;
-            background-image: linear-gradient(83deg,
-              #ff4027 0%,
-              #802014 0%,
-              #000000 0%,
-              #802014 0%,
-              #ff4027 0%,
-              #ff296f 100%),
-            linear-gradient(
-                #ffe324,
-                #ffe324);
+            background: #ffc424;
             width: px2rem(136);
             height: px2rem(62);
             border-radius: px2rem(31) 0px 0px px2rem(31);
@@ -92,7 +87,7 @@
             }
             .name{
               font-size: px2rem(26);
-              color: #fffefe;
+              color: #542d10;
             }
           }
         }
@@ -103,6 +98,13 @@
           align-items: center;
           justify-content: space-around;
           margin-top: px2rem(70);
+          width: px2rem(700);
+          position: absolute;
+          left: px2rem(25);
+          bottom: 0;
+          background: rgba(0,0,0,0.2);
+          border-radius: px2rem(18) px2rem(18) 0 0;
+          height: px2rem(156);
           .wrap{
             display: flex;
             flex-direction: column;
@@ -119,7 +121,7 @@
             }
             .name{
               font-size: px2rem(23);
-              color: #4c4c4c;
+              color: #fff;
               margin-top: px2rem(20);
             }
           }
@@ -169,8 +171,8 @@
           justify-content: flex-start;
           .img-box{
             /*background: rgba(255,0,0,0.1);*/
-            width: px2rem(56);
-            height: px2rem(56);
+            width: px2rem(60);
+            height: px2rem(54);
             position: relative;
             span{
               position: absolute;
@@ -308,9 +310,9 @@
       <div class="wrapper">
         <div class="top-box">
           <div class="left-box">
-            <div class="portrait-box"><img src="../images/icon13.png" alt=""></div>
+            <div class="portrait-box"><img :src="wxUserInfo.headerImg" alt=""></div>
             <div class="text-box">
-              <div class="name">斯嘉丽·约翰逊</div>
+              <div class="name">{{wxUserInfo.nickName}}</div>
               <div class="des">代理用户</div>
             </div>
           </div>
@@ -344,21 +346,21 @@
         <div class="wrap" @click="goMyOrder(1)">
           <div class="img-box">
             <img src="../images/icon22.png" alt="">
-            <span>99</span>
+            <!--<span>99</span>-->
           </div>
           <div class="name">待付款</div>
         </div>
         <div class="wrap" @click="goMyOrder(2)">
           <div class="img-box">
             <img src="../images/icon23.png" alt="">
-            <span>1</span>
+            <!--<span>1</span>-->
           </div>
           <div class="name">待发货</div>
         </div>
         <div class="wrap" @click="goMyOrder(3)">
           <div class="img-box">
             <img src="../images/icon24.png" alt="">
-            <span>1</span>
+            <!--<span>1</span>-->
           </div>
           <div class="name">待收货</div>
         </div>
@@ -431,7 +433,8 @@ export default {
         categoryId: 0,
         pageNumber: 1,
         pageSize: 4
-      }
+      },
+      wxUserInfo: {}
     }
   },
   methods: {
