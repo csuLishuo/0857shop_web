@@ -196,7 +196,7 @@
     <div class="calendar-box">
       <div class="area-1">
         <div class="wrapper">
-          <div class="score">5000</div>
+          <div class="score">{{userScore}}</div>
           <div class="text">积分</div>
         </div>
       </div>
@@ -212,7 +212,7 @@
         <div class="border"></div>
       </div>
       <div class="title-info">
-        当前积分5000积分，可以兑换以下产品
+        当前积分{{userScore}}积分，可以兑换以下产品
       </div>
       <div class="recommend-list">
         <van-list
@@ -257,7 +257,8 @@ export default {
       finished: false,
       sendYearMonth: '',
       signRecord: {},
-      filePath: ''
+      filePath: '',
+      userScore: ''
     }
   },
   methods: {
@@ -293,6 +294,17 @@ export default {
         console.error(res)
       })
     },
+    getUserScore () {
+      this.$post('/api/goodsLotteryDraw/getUserScore', this.sendData).then(res => {
+        if (res.result === 0) {
+          this.userScore = res.data.score
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     changeDate (data) {
       console.log(data) // 左右点击切换月份
       this.markDateArr = []
@@ -318,26 +330,26 @@ export default {
       })
     },
     // 构造日历用时间数组
-    getMarkDateArr () {
-      this.markDateArr = []
-      // console.log('11111111111111')
-      this.signRecord.forEach(v => {
-        // console.log('vvvv', v)
-        let arr = v.signInTime.split('-')
-        let arr1 = []
-        // console.log('vvvv', arr)
-        // console.log(arr[1].slice(1))
-        arr.forEach (m => {
-          if (m[0] === '0') {
-            arr1.push(m.slice(1))
-          } else {
-            arr1.push(m)
-          }
-        })
-        // console.log('1111111111111111111', arr1)
-        this.markDateArr.push(arr1.join('/'))
-      })
-    },
+    // getMarkDateArr () {
+    //   this.markDateArr = []
+    //   // console.log('11111111111111')
+    //   this.signRecord.forEach(v => {
+    //     // console.log('vvvv', v)
+    //     let arr = v.signInTime.split('-')
+    //     let arr1 = []
+    //     // console.log('vvvv', arr)
+    //     // console.log(arr[1].slice(1))
+    //     arr.forEach (m => {
+    //       if (m[0] === '0') {
+    //         arr1.push(m.slice(1))
+    //       } else {
+    //         arr1.push(m)
+    //       }
+    //     })
+    //     // console.log('1111111111111111111', arr1)
+    //     this.markDateArr.push(arr1.join('/'))
+    //   })
+    // },
     // 根据年月获取用户签到记录
     getSignInRecord () {
       this.$post('/api/goodsScore/getUserSignListByDate', {
@@ -378,6 +390,7 @@ export default {
     this.getSignInData()
     this.getGoodsList()
     this.getSignInRecord()
+    this.getUserScore()
   },
   created () {
     this.sendYearMonth = this.getNowTime()

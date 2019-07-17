@@ -180,56 +180,56 @@
       <div class="line-1">
         <div class="wrapper" :class="index === 0 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[0].pic" alt="">
+            <img v-if="goodsList[0]" :src="filePath + goodsList[0].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[0].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[0]">{{goodsList[0].title}}</div>
         </div>
         <div class="wrapper" :class="index === 1 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[1].pic" alt="">
+            <img v-if="goodsList[1]" :src="filePath + goodsList[1].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[1].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[1]">{{goodsList[1].title}}</div>
         </div>
         <div class="wrapper" :class="index === 2 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[2].pic" alt="">
+            <img v-if="goodsList[2]" :src="filePath + goodsList[2].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[2].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[2]">{{goodsList[2].title}}</div>
         </div>
       </div>
       <div class="line-1">
         <div class="wrapper" :class="index === 7 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[7].pic" alt="">
+            <img v-if="goodsList[7]" :src="filePath + goodsList[7].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[7].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[7]">{{goodsList[7].title}}</div>
         </div>
         <div class="wrapper-start" @click="initLottery">需{{lotteryScore}}积分</div>
         <div class="wrapper" :class="index === 3 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[3].pic" alt="">
+            <img v-if="goodsList[3]" :src="filePath + goodsList[3].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[3].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[3]">{{goodsList[3].title}}</div>
         </div>
       </div>
       <div class="line-1">
         <div class="wrapper" :class="index === 6 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[6].pic" alt="">
+            <img v-if="goodsList[6]" :src="filePath + goodsList[6].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[6].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[6]">{{goodsList[6].title}}</div>
         </div>
         <div class="wrapper" :class="index === 5 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[5].pic" alt="">
+            <img v-if="goodsList[5]" :src="filePath + goodsList[5].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[5].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[5]">{{goodsList[5].title}}</div>
         </div>
         <div class="wrapper" :class="index === 4 ? 'on': ''">
           <div class="img-box">
-            <img :src="filePath + goodsList[4].pic" alt="">
+            <img v-if="goodsList[4]" :src="filePath + goodsList[4].pic" alt="">
           </div>
-          <div class="text ellipsis-1">{{goodsList[4].title}}</div>
+          <div class="text ellipsis-1" v-if="goodsList[4]">{{goodsList[4].title}}</div>
         </div>
       </div>
     </div>
