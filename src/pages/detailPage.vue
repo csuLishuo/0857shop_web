@@ -461,6 +461,7 @@
             <div class="img-box">
               <img v-for="(item, index) in detailPics" :key="index" :src="filePath + item" alt="">
             </div>
+            <div id="qrcode"></div>
           </div>
         </van-tab>
         <van-tab title="用户评价">
@@ -514,6 +515,7 @@
 <script>
 import { Toast, ImagePreview } from 'vant'
 import commentPage from '../components/commentPage'
+// import QRCode from 'qrcode'
 
 export default {
   name: 'detailPage',
@@ -544,6 +546,17 @@ export default {
     }
   },
   methods: {
+    qrcode () {
+      let qrcode = new QRCode('qrcode', {
+        width: 100,
+        height: 100, // 高度  [图片上传失败...(image-9ad77b-1525851843730)]
+        text: '588888888' // 二维码内容
+        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        // background: '#f0f'
+        // foreground: '#ff0'
+      })
+      console.log(qrcode)
+    },
     goHome () {
       this.$router.push({
         name: 'home'
@@ -718,6 +731,7 @@ export default {
     // this.getSelectArray()
     this.getCollectionStatus()
     this.getDefaultAddress()
+    // this.qrcode()
   },
   watch: {
   }
