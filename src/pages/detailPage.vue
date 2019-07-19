@@ -517,14 +517,6 @@
               </div>
             </div>
           </div>
-          <!-- <canvas id="qrcode"></canvas> -->
-          <!-- <canvas width="750" height="1334" id="myCanvas"></canvas> -->
-          <!-- <div class="pop-canvas">
-            <van-popup v-model="showPop_select" position="bottom">
-              <canvas id="qrcode"></canvas>
-              <div class="wrapper"></div>
-            </van-popup>
-          </div> -->
           <div class="area-2">
             <div class="area-2-title">
               <div class="border"></div>
@@ -544,21 +536,6 @@
     <van-popup v-model="showPop_share">
       <div class="share_wrapper">
         <div class="wrapper">
-          <!--<div class="downloadImg" v-if="!finalImage" ref="downloadImg">
-            <div class="img-box">
-              <img src="../images/img3.png" alt="">
-            </div>
-            <div class="wrap">
-              <div class="left-box">
-                <div class="name ellipsis-2">{{detailData.title}}{{detailData.subTitle}}</div>
-                <div class="price">￥<span>{{detailData.nowPrice}}</span></div>
-              </div>
-              <div class="right-box">
-                &lt;!&ndash;<canvas id="qrcode"></canvas>&ndash;&gt;
-                <img :src="qrcode" alt="">
-              </div>
-            </div>
-          </div>-->
           <div class="finalImage" v-if="finalImage"><img :src="finalImage" alt=""></div>
           <div class="btn">长按保存到系统相册</div>
         </div>

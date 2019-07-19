@@ -845,7 +845,7 @@ export default {
   },
   mounted () {
     if (!sessionStorage.getItem('authStatus')) {
-      location.href = 'http://huoyuancheng.wurenyulecang.com/api/user/authorize?returnUrl=1'
+      location.href = 'http://zhusc.wurenyulecang.com/api/user/authorize?returnUrl=1'
     } else {
       this.getBannerList()
       this.getAdImg()

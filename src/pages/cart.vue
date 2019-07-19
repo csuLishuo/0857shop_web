@@ -4,6 +4,7 @@
     @return $px * 1 / 100 * 1rem;
   }
   .cart-container{
+    min-height: 100%;
     .goodsList{
       .wrapper{
         border-bottom: 1px solid #f0f0f0;
@@ -172,6 +173,7 @@
       checked-color="#ff0000"
       :price="totlePrice"
       button-text="结算"
+      @submit="onSubmit"
     >
       <!--<div class="all">-->
         <!--<van-checkbox-->
@@ -210,10 +212,79 @@ export default {
         pageSize: 20
       },
       loadingList: false,
-      finished: false
+      finished: false,
+      userAddressId: '',
+      selectGoodsList: []
     }
   },
   methods: {
+    creatSendList () {
+      let list = []
+      for (let i = 0; i < this.checkboxResult.length; i++) {
+        for (let j = 0; j < this.goodsList.length; j++) {
+          this.selectGoodsList.push(this.goodsList[j])
+          let obj = {}
+          if (this.checkboxResult[i] === this.goodsList[j].id) {
+            obj.shareId = 0
+            obj.goodsIssueId = this.goodsList[j].id
+            obj.goodsId = this.goodsList[j].goodsId
+            obj.attrSn = JSON.parse(this.goodsList[j].attrs)[0].attrSn
+            obj.number = this.goodsList[j].number
+            obj.shareType = 0
+            list.push(obj)
+            console.log(list)
+          }
+        }
+      }
+      let sendData = {
+        list: list
+      }
+      return new Promise((resolve, reject) => {
+        resolve(sendData)
+      })
+    },
+    onSubmit () {
+      console.log(this.totlePrice)
+      console.log('JSON.parse(this.goodsList[j].attrs)[0]', JSON.parse(this.goodsList[0].attrs)[0].attrSn)
+      if (this.checkboxResult.length === 0) {
+        Toast.fail('请选择商品')
+      } else if (!this.userAddressId) {
+        this.$router.push({
+          name: 'editAddress'
+        })
+      } else {
+        Promise.all([this.creatSendList()]).then(res => {
+          console.log('resresres', res[0])
+          this.$post('/api/orders/orderBuy', res[0]).then(res => {
+            if (res.result === 0) {
+              this.$router.push({
+                name: 'orderConfirm',
+                params: {
+                  initData: JSON.stringify(res.data),
+                  selectGoodsList: JSON.stringify(this.selectGoodsList)
+                }
+              })
+            } else {
+              Toast.fail(res.message)
+            }
+          }).catch(res => {
+            console.error(res)
+          })
+        })
+      }
+    },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.userAddressId = res.data.id
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     handleNumChange (e) {
       console.log('eeeeeeee', e)
       this.totlePrice = 0
@@ -286,6 +357,7 @@ export default {
   mounted () {
     this.filePath = sessionStorage.getItem('filePath')
     this.getGoodsList()
+    this.getDefaultAddress()
   },
   watch: {
   }

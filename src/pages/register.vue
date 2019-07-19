@@ -220,7 +220,7 @@ export default {
             window.clearInterval(interval)
           }
         }, 1000)
-        this.$post('/api/user/sendMessage', {
+        this.$post('/api/user/sendPhoneMessage', {
           mobilePhone: this.sendData.username
         }).then(res => {
           if (res.result === 0) {

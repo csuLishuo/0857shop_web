@@ -124,7 +124,7 @@ export default {
     },
     login () {
       if (this.username && this.password) {
-        this.$post('/api/login/logins', {
+        this.$post('/api/login/login', {
           userName: this.username,
           password: this.password,
           openId: this.wxUserInfo.openId
