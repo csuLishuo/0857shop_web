@@ -162,7 +162,7 @@ export default {
       }
       this.$post('/api/userAddress/saveUserAddress', this.sendData).then(res => {
         if (res.result === 0) {
-          Toast.fail(res.message)
+          Toast.success(res.message)
           this.$router.back(-1)
         } else {
           Toast.fail(res.message)

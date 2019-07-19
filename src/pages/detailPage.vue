@@ -611,7 +611,6 @@
 import { Toast, ImagePreview } from 'vant'
 import commentPage from '../components/commentPage'
 import QRCode from 'qrcode'
-// import html2canvas from 'html2canvas'
 
 export default {
   name: 'detailPage',
@@ -753,7 +752,6 @@ export default {
           name: 'editAddress'
         })
       }
-
     },
     selectAttrSn (index) {
       this.showIndex = index
@@ -899,7 +897,7 @@ export default {
     this.getDefaultAddress()
     // this.qrcode()
   },
-  watch:{
+  watch: {
   }
 }
 </script>
