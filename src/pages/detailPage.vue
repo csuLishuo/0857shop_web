@@ -38,7 +38,7 @@
       }
     }
     .title{
-      padding: px2rem(20) px2rem(32) px2rem(10) px2rem(32);
+      padding: px2rem(20) 0 px2rem(10) px2rem(32);
       font-size: px2rem(32);
       line-height: px2rem(50);
       font-weight: bold;
@@ -49,7 +49,7 @@
       align-items: center;
       justify-content: space-between;
       .text{
-        /*width: px2rem(575);*/
+        width: px2rem(575);
       }
       .share{
         width: px2rem(112);
@@ -416,7 +416,7 @@
             <div class="text ellipsis-2">
               {{detailData.title}}{{detailData.subTitle}}
             </div>
-            <!--<div class="share">分享</div>-->
+            <div class="share">分享</div>
           </div>
           <div class="area-1">
             <div class="line">
@@ -452,6 +452,14 @@
               </div>
             </div>
           </div>
+          <!-- <canvas id="qrcode"></canvas> -->
+          <!-- <canvas width="750" height="1334" id="myCanvas"></canvas> -->
+          <!-- <div class="pop-canvas">
+            <van-popup v-model="showPop_select" position="bottom">
+              <canvas id="qrcode"></canvas>
+              <div class="wrapper"></div>
+            </van-popup>
+          </div> -->
           <div class="area-2">
             <div class="area-2-title">
               <div class="border"></div>
@@ -461,7 +469,6 @@
             <div class="img-box">
               <img v-for="(item, index) in detailPics" :key="index" :src="filePath + item" alt="">
             </div>
-            <div id="qrcode"></div>
           </div>
         </van-tab>
         <van-tab title="用户评价">
@@ -515,7 +522,7 @@
 <script>
 import { Toast, ImagePreview } from 'vant'
 import commentPage from '../components/commentPage'
-// import QRCode from 'qrcode'
+import QRCode from 'qrcode'
 
 export default {
   name: 'detailPage',
@@ -542,20 +549,45 @@ export default {
       collectionStatus: false,
       orderSendData: {},
       showIndex: 0,
-      userAddressId: ''
+      userAddressId: '',
+      message: '',
+      testImg: require('../images/img1.png')
     }
   },
   methods: {
-    qrcode () {
-      let qrcode = new QRCode('qrcode', {
-        width: 100,
-        height: 100, // 高度  [图片上传失败...(image-9ad77b-1525851843730)]
-        text: '588888888' // 二维码内容
-        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-        // background: '#f0f'
-        // foreground: '#ff0'
+    share () {
+      let self = this
+      let text = window.location.href
+      // 获取页面的canvas
+      // var msg= document.getElementById('qrcode')
+      // 将获取到的数据（val）画到msg（canvas）上
+      // QRCode.toCanvas(msg, text, function (error) {
+            // console.log(error)
+      // })
+      let image = new Image();
+      image.src = '../images/icon1.png'
+      // var canvas = document.createElement('canvas')
+      var canvas= document.getElementById('qrcode')
+      canvas.width = 600
+      canvas.height = 800
+      var context = canvas.getContext('2d')
+      Promise.all([
+        self.loadimage(self.testImg),
+      ]).then(res => {
+        console.log(res)
+        context.drawImage(res[0], 0, 0)
+        let finalResult = canvas.toDataURL('image/png')
+        console.log('finalResult', canvas.toDataURL('image/png'))
       })
-      console.log(qrcode)
+    },
+    loadimage (src) {
+      var image = new Image()
+      image.src = src
+      return new Promise((resolve, reject) => {
+        image.onload = () => {
+          resolve(image)
+        }
+      })
     },
     goHome () {
       this.$router.push({
@@ -563,31 +595,38 @@ export default {
       })
     },
     handleConfirmBuy () {
-      let sendData = {
-        list: [{
-          shareId: 0,
-          goodsIssueId: this.detailData.id,
-          goodsId: this.detailData.goodsId,
-          attrSn: this.orderSendData.attrSn,
-          number: this.value,
-          shareType: 0
-        }]
-      }
-      this.$post('/api/orders/orderBuy', sendData).then(res => {
-        if (res.result === 0) {
-          this.$router.push({
-            name: 'orderConfirm',
-            params: {
-              initData: JSON.stringify(res.data),
-              detailData: JSON.stringify(this.detailData)
-            }
-          })
-        } else {
-          Toast.fail(res.message)
+      if (this.userAddressId) {
+        let sendData = {
+          list: [{
+            shareId: 0,
+            goodsIssueId: this.detailData.id,
+            goodsId: this.detailData.goodsId,
+            attrSn: this.orderSendData.attrSn,
+            number: this.value,
+            shareType: 0
+          }]
         }
-      }).catch(res => {
-        console.error(res)
-      })
+        this.$post('/api/orders/orderBuy', sendData).then(res => {
+          if (res.result === 0) {
+            this.$router.push({
+              name: 'orderConfirm',
+              params: {
+                initData: JSON.stringify(res.data),
+                detailData: JSON.stringify(this.detailData)
+              }
+            })
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      } else {
+        this.$router.push({
+          name: 'editAddress'
+        })
+      }
+      
     },
     selectAttrSn (index) {
       this.showIndex = index
@@ -733,7 +772,7 @@ export default {
     this.getDefaultAddress()
     // this.qrcode()
   },
-  watch: {
+  watch:{
   }
 }
 </script>
