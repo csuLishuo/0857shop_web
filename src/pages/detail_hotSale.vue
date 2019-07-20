@@ -38,7 +38,7 @@
       }
     }
     .title{
-      padding: px2rem(20) px2rem(32) px2rem(10) px2rem(32);
+      padding: px2rem(20) 0 px2rem(10) px2rem(32);
       font-size: px2rem(32);
       line-height: px2rem(50);
       font-weight: bold;
@@ -49,7 +49,7 @@
       align-items: center;
       justify-content: space-between;
       .text{
-        /*width: px2rem(575);*/
+        width: px2rem(575);
       }
       .share{
         width: px2rem(112);
@@ -394,6 +394,71 @@
         line-height: px2rem(78);
       }
     }
+    .share_wrapper{
+      width: px2rem(610);
+      background: #f3f3f3;
+      padding: px2rem(30);
+      .wrapper{
+        background: #fff;
+        border-radius: px2rem(20);
+        overflow: hidden;
+        .downloadImg{
+          background: #fff;
+          padding: px2rem(10);
+          .img-box{
+            width: 100%;
+            height: px2rem(512);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            img{
+              max-width: 100%;
+              max-height: 100%;
+            }
+          }
+          .wrap{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .left-box{
+              .name{
+                font-size: px2rem(26);
+                line-height: px2rem(30);
+                height: px2rem(60);
+                width: px2rem(300);
+              }
+              .price{
+                font-size: px2rem(30);
+                margin-top: px2rem(10);
+                color: #ff3f31;
+              }
+            }
+            .right-box{
+              width: px2rem(140);
+              height: px2rem(140);
+              img{
+                width: 100%;
+                height: 100%;
+              }
+            }
+          }
+        }
+        .finalImage{
+          width: px2rem(550);
+          height: px2rem(704);
+          margin: px2rem(30) auto 0;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .btn{
+          text-align: center;
+          font-size: px2rem(30);
+          margin: px2rem(30) 0;
+        }
+      }
+    }
   }
 </style>
 <template>
@@ -416,7 +481,7 @@
             <div class="text ellipsis-2">
               {{detailData.title}}{{detailData.subTitle}}
             </div>
-            <!--<div class="share">分享</div>-->
+            <div class="share" @click="share">分享</div>
           </div>
           <div class="area-1">
             <div class="line">
@@ -468,31 +533,31 @@
         </van-tab>
       </van-tabs>
     </div>
+    <van-popup v-model="showPop_share">
+      <div class="share_wrapper">
+        <div class="wrapper">
+          <div class="finalImage" v-if="finalImage"><img :src="finalImage" alt=""></div>
+          <div class="btn">长按保存到系统相册</div>
+        </div>
+      </div>
+    </van-popup>
     <div class="pop-select">
       <van-popup v-model="showPop_select" position="bottom">
         <div class="goodDetail">
           <div class="img-box">
-            <img src="../images/icon3.png" alt="">
+            <img :src="filePath + orderSendData.pic" alt="">
           </div>
           <div class="right-box">
             <div class="price-box-pop">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{orderSendData.price}}</span></div>
               <div class="info">包邮 · 七天退换货</div>
             </div>
           </div>
         </div>
         <div class="label-list">
-          <div class="name">颜色</div>
+          <div class="name">{{detailDataAttrs[0].attrType}}</div>
           <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
-          </div>
-        </div>
-        <div class="label-list">
-          <div class="name">尺码</div>
-          <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
+            <div class="wrap" @click="selectAttrSn(index)" :class="{'on':index==showIndex}" v-for="(item, index) in detailDataAttrs" :key="index">{{item.attrTitle}}</div>
           </div>
         </div>
         <div class="num-box">
@@ -509,18 +574,20 @@
         <img src="../images/icon36.png" alt="">
         <div class="text">首页</div>
       </div>
-      <div class="icon-box icon-box-1">
-        <img src="../images/icon37.png" alt="">
+      <div class="icon-box icon-box-1" @click="handleCollect">
+        <img v-if="!collectionStatus" src="../images/icon37.png" alt="">
+        <img v-if="collectionStatus" src="../images/icon37_on.png" alt="">
         <div class="text">收藏</div>
       </div>
-      <div class="btn btn-1">加入购物车</div>
-      <div class="btn btn-2">立即购买</div>
+      <div class="btn btn-1" @click="addToCart">加入购物车</div>
+      <div class="btn btn-2" @click="handleConfirmBuy">立即购买</div>
     </div>
   </div>
 </template>
 <script>
 import { Toast, ImagePreview } from 'vant'
 import commentPage from '../components/commentPage'
+import QRCode from 'qrcode'
 
 export default {
   name: 'detail_hotSale',
@@ -538,18 +605,197 @@ export default {
       ],
       detailId: '',
       showPop_select: false,
-      value: '',
+      value: 1,
       detailData: {},
       filePath: '',
       bannerData: [],
       detailPics: [],
-      detailDataAttrs: {}
+      detailDataAttrs: [],
+      collectionStatus: false,
+      orderSendData: {},
+      showIndex: 0,
+      userAddressId: '',
+      message: '',
+      testImg: require('../images/img1.png'),
+      showPop_share: false,
+      qrcode: '',
+      finalImage: ''
     }
   },
   methods: {
+    share () {
+      this.showPop_share = true
+      let self = this
+      let text = window.location.href
+      // 获取页面的canvas
+      var msg = document.createElement('canvas')
+      // 将获取到的数据（val）画到msg（canvas）上
+      QRCode.toCanvas(msg, text, error => {
+        self.qrcode = msg.toDataURL('image/png')
+        console.log('msg', msg.toDataURL('image/png'))
+        let finalCanvas = document.createElement('canvas')
+        finalCanvas.width = 550
+        finalCanvas.height = 704
+        let context = finalCanvas.getContext('2d')
+        Promise.all([
+          // self.loadimage(self.testImg),
+          self.loadimage(self.filePath + self.bannerData[0]),
+          self.loadimage(self.qrcode)
+        ]).then(res => {
+          console.log(res)
+          context.fillStyle = '#fff'
+          context.fillRect(0, 0, 550, 704)
+          context.drawImage(res[0], 20, 20, 512, 512)
+          context.drawImage(res[1], 392, 550, 140, 140)
+          context.font = '26px 微软雅黑'
+          context.fillStyle = '#333'
+          if (self.detailData.title.length > 24) {
+            self.detailData.title = self.detailData.title.substring(0, 24) + '...'
+          }
+          self.canvasTextAutoLine(self.detailData.title, finalCanvas, 36, 590, 30)
+          // self.canvasTextAutoLine('【同价618】旗舰店 卡西欧（CASIO）樱花款女表时...', finalCanvas, 36, 590, 30)
+          context.font = '30px 微软雅黑'
+          context.fillStyle = '#ff3f31'
+          context.fillText('￥' + self.detailData.nowPrice, 36, 680)
+          self.finalImage = finalCanvas.toDataURL('image/png')
+        })
+      })
+    },
+    canvasTextAutoLine (str, canvas, initX, initY, lineHeight) {
+      var ctx = canvas.getContext('2d')
+      var lineWidth = 0
+      var canvasWidth = 300
+      var lastSubStrIndex = 0
+      for (let i = 0; i < str.length; i++) {
+        lineWidth += ctx.measureText(str[i]).width
+        if (lineWidth > canvasWidth - initX) { // 减去initX,防止边界出现的问题
+          if (str[i] === '，') {
+            ctx.fillText(str.substring(lastSubStrIndex, i + 1), initX, initY)
+            initY += lineHeight
+            lineWidth = 0
+            lastSubStrIndex = i + 1
+          } else {
+            ctx.fillText(str.substring(lastSubStrIndex, i), initX, initY)
+            initY += lineHeight
+            lineWidth = 0
+            lastSubStrIndex = i
+          }
+        }
+        if (i === str.length - 1) {
+          ctx.fillText(str.substring(lastSubStrIndex, i + 1), initX, initY)
+        }
+      }
+    },
+    loadimage (src) {
+      var image = new Image()
+      image.setAttribute("crossOrigin",'Anonymous')
+      image.src = src
+      return new Promise((resolve, reject) => {
+        image.onload = () => {
+          resolve(image)
+        }
+      })
+    },
     goHome () {
       this.$router.push({
         name: 'home'
+      })
+    },
+    handleConfirmBuy () {
+      if (this.userAddressId) {
+        let sendData = {
+          list: [{
+            shareId: 0,
+            goodsIssueId: this.detailData.id,
+            goodsId: this.detailData.goodsId,
+            attrSn: this.orderSendData.attrSn,
+            number: this.value,
+            shareType: 0
+          }]
+        }
+        this.$post('/api/orders/orderBuy', sendData).then(res => {
+          if (res.result === 0) {
+            this.$router.push({
+              name: 'orderConfirm',
+              params: {
+                initData: JSON.stringify(res.data),
+                detailData: JSON.stringify(this.detailData)
+              }
+            })
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      } else {
+        this.$router.push({
+          name: 'editAddress'
+        })
+      }
+    },
+    selectAttrSn (index) {
+      this.showIndex = index
+      this.orderSendData = this.detailDataAttrs[index]
+    },
+    handleCollect () {
+      if (this.collectionStatus === false) {
+        this.$post('/api/goodsCollection/insertGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = true
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      } else {
+        this.$post('/api/goodsCollection/updateGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = false
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      }
+    },
+    getCollectionStatus () {
+      this.$post('/api/goodsCollection/isCollection', {
+        goodsIssueId: this.detailId
+      }).then(res => {
+        if (res.result === 0) {
+          if (res.data.count !== 0) {
+            this.collectionStatus = true
+          } else {
+            this.collectionStatus = false
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
+    addToCart () {
+      this.$post('/api/goodsCar/insertGoodsCar', {
+        goodsId: this.detailData.goodsId,
+        goodsIssueId: this.detailId
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success(res.message)
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
       })
     },
     closePop () {
@@ -557,6 +803,18 @@ export default {
     },
     showPop () {
       this.showPop_select = true
+    },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.userAddressId = res.data.id
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
     },
     getDetailData () {
       this.$post('/api/goodsHotSale/getGoodsHotSaleById', {
@@ -567,7 +825,8 @@ export default {
           this.detailData = res.data
           this.bannerData = this.detailData.pics.split(';')
           this.detailPics = this.detailData.details.split(';')
-          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)
+          this.orderSendData = this.detailDataAttrs[0]
         } else {
           Toast.fail(res.message)
         }
@@ -590,6 +849,8 @@ export default {
     console.log('detailId', this.detailId)
     this.filePath = sessionStorage.getItem('filePath')
     this.getDetailData()
+    this.getCollectionStatus()
+    this.getDefaultAddress()
   },
   watch: {
   }

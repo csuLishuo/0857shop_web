@@ -700,13 +700,16 @@ export default {
           context.fillRect(0, 0, 550, 704)
           context.drawImage(res[0], 20, 20, 512, 512)
           context.drawImage(res[1], 392, 550, 140, 140)
-          // context.font = '26px 微软雅黑'
-          // context.fillStyle = '#333'
-          // self.canvasTextAutoLine(self.detailData.title, finalCanvas, 36, 590, 30)
+          context.font = '26px 微软雅黑'
+          context.fillStyle = '#333'
+          if (self.detailData.title.length > 24) {
+            self.detailData.title = self.detailData.title.substring(0, 24) + '...'
+          }
+          self.canvasTextAutoLine(self.detailData.title, finalCanvas, 36, 590, 30)
           // self.canvasTextAutoLine('【同价618】旗舰店 卡西欧（CASIO）樱花款女表时...', finalCanvas, 36, 590, 30)
           context.font = '30px 微软雅黑'
           context.fillStyle = '#ff3f31'
-          context.fillText('￥' + self.detailData.nowPrice, 36, 630)
+          context.fillText('￥' + self.detailData.nowPrice, 36, 680)
           self.finalImage = finalCanvas.toDataURL('image/png')
         })
       })
@@ -738,6 +741,7 @@ export default {
     },
     loadimage (src) {
       var image = new Image()
+      image.setAttribute("crossOrigin",'Anonymous')
       image.src = src
       return new Promise((resolve, reject) => {
         image.onload = () => {
