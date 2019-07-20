@@ -605,7 +605,7 @@ export default {
       ],
       detailId: '',
       showPop_select: false,
-      value: '',
+      value: 1,
       detailData: {},
       filePath: '',
       bannerData: [],
@@ -701,12 +701,12 @@ export default {
       if (this.userAddressId) {
         let sendData = {
           list: [{
-            shareId: 0,
+            shareId: this.detailData.id,
             goodsIssueId: this.detailData.id,
             goodsId: this.detailData.goodsId,
             attrSn: this.orderSendData.attrSn,
             number: this.value,
-            shareType: 0
+            shareType: 3
           }]
         }
         this.$post('/api/orders/orderBuy', sendData).then(res => {
