@@ -545,27 +545,19 @@
       <van-popup v-model="showPop_select" position="bottom">
         <div class="goodDetail">
           <div class="img-box">
-            <img src="../images/icon3.png" alt="">
+            <img :src="filePath + orderSendData.pic" alt="">
           </div>
           <div class="right-box">
             <div class="price-box-pop">
-              <div class="price">￥<span>599.00</span></div>
+              <div class="price">￥<span>{{orderSendData.price}}</span></div>
               <div class="info">包邮 · 七天退换货</div>
             </div>
           </div>
         </div>
         <div class="label-list">
-          <div class="name">颜色</div>
+          <div class="name">{{detailDataAttrs[0].attrType}}</div>
           <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
-          </div>
-        </div>
-        <div class="label-list">
-          <div class="name">尺码</div>
-          <div class="wrapper">
-            <div class="wrap on">红色</div>
-            <div class="wrap">红色</div>
+            <div class="wrap" @click="selectAttrSn(index)" :class="{'on':index==showIndex}" v-for="(item, index) in detailDataAttrs" :key="index">{{item.attrTitle}}</div>
           </div>
         </div>
         <div class="num-box">
@@ -582,12 +574,13 @@
         <img src="../images/icon36.png" alt="">
         <div class="text">首页</div>
       </div>
-      <div class="icon-box icon-box-1">
-        <img src="../images/icon37.png" alt="">
+      <div class="icon-box icon-box-1" @click="handleCollect">
+        <img v-if="!collectionStatus" src="../images/icon37.png" alt="">
+        <img v-if="collectionStatus" src="../images/icon37_on.png" alt="">
         <div class="text">收藏</div>
       </div>
       <div class="btn btn-1">加入购物车</div>
-      <div class="btn btn-2">立即购买</div>
+      <div class="btn btn-2" @click="handleConfirmBuy">立即购买</div>
     </div>
   </div>
 </template>
@@ -704,11 +697,106 @@ export default {
         name: 'home'
       })
     },
+    handleConfirmBuy () {
+      if (this.userAddressId) {
+        let sendData = {
+          list: [{
+            shareId: 0,
+            goodsIssueId: this.detailData.id,
+            goodsId: this.detailData.goodsId,
+            attrSn: this.orderSendData.attrSn,
+            number: this.value,
+            shareType: 0
+          }]
+        }
+        this.$post('/api/orders/orderBuy', sendData).then(res => {
+          if (res.result === 0) {
+            this.$router.push({
+              name: 'orderConfirm',
+              params: {
+                initData: JSON.stringify(res.data),
+                detailData: JSON.stringify(this.detailData)
+              }
+            })
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      } else {
+        this.$router.push({
+          name: 'editAddress'
+        })
+      }
+    },
+    selectAttrSn (index) {
+      this.showIndex = index
+      this.orderSendData = this.detailDataAttrs[index]
+    },
+    handleCollect () {
+      if (this.collectionStatus === false) {
+        this.$post('/api/goodsCollection/insertGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = true
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      } else {
+        this.$post('/api/goodsCollection/updateGoodsCollection', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            this.collectionStatus = false
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      }
+    },
+    getCollectionStatus () {
+      this.$post('/api/goodsCollection/isCollection', {
+        goodsIssueId: this.detailId
+      }).then(res => {
+        if (res.result === 0) {
+          if (res.data.count !== 0) {
+            this.collectionStatus = true
+          } else {
+            this.collectionStatus = false
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     closePop () {
       this.showPop_select = false
     },
     showPop () {
       this.showPop_select = true
+    },
+    // 查询默认地址
+    getDefaultAddress () {
+      this.$post('/api/userAddress/queryDefaultUserAddress').then(res => {
+        if (res.result === 0) {
+          this.userAddressId = res.data.id
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
     },
     getDetailData () {
       this.$post('/api/goodsParty/getGoodsPartyByGoodsId', {
@@ -719,7 +807,8 @@ export default {
           this.detailData = res.data
           this.bannerData = this.detailData.pics.split(';')
           this.detailPics = this.detailData.details.split(';')
-          this.detailDataAttrs = JSON.parse(this.detailData.attrs)[0]
+          this.detailDataAttrs = JSON.parse(this.detailData.attrs)
+          this.orderSendData = this.detailDataAttrs[0]
         } else {
           Toast.fail(res.message)
         }
@@ -742,6 +831,9 @@ export default {
     console.log('detailId', this.detailId)
     this.filePath = sessionStorage.getItem('filePath')
     this.getDetailData()
+    // this.getSelectArray()
+    this.getCollectionStatus()
+    this.getDefaultAddress()
   },
   watch: {
   }

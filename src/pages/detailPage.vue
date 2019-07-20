@@ -872,7 +872,6 @@ export default {
     // this.getSelectArray()
     this.getCollectionStatus()
     this.getDefaultAddress()
-    // this.qrcode()
   },
   watch: {
   }
