@@ -844,6 +844,9 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.userName) {
+      sessionStorage.setItem('userName', this.$route.query.userName)
+    }
     if (!sessionStorage.getItem('authStatus')) {
       location.href = 'http://zhusc.wurenyulecang.com/api/user/authorize?returnUrl=1'
     } else {

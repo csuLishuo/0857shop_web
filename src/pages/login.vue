@@ -131,6 +131,8 @@ export default {
         }).then(res => {
           if (res.result === 0) {
             Toast.success('登录成功')
+            // 存储个人登录信息
+            sessionStorage.setItem('userName', this.username)
             this.$router.push({
               name: 'home'
             })
@@ -148,6 +150,7 @@ export default {
   mounted () {
   },
   created () {
+    // sessionStorage.setItem('userName', '15133510931')
     if (this.$route.query.openId) {
       this.wxUserInfo = {
         openId: this.$route.query.openId,

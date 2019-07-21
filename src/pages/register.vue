@@ -129,7 +129,17 @@
         >
         </van-field>
       </div>
-      <div class="line line-2">
+      <div class="line line-2" v-if="sessionStorage.getItem('userName')">
+        <van-field
+          v-model="sendData.invitationCode"
+          type="password"
+          placeholder="请输入邀请码"
+          disabled
+          required
+        >
+        </van-field>
+      </div>
+      <div class="line line-2" v-if="!sessionStorage.getItem('userName')">
         <van-field
           v-model="sendData.invitationCode"
           type="password"
@@ -247,6 +257,7 @@ export default {
     console.log('this.wxUserInfo1', this.wxUserInfo)
     localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
     sessionStorage.setItem('authStatus', '1')
+    this.sendData.invitationCode = sessionStorage.getItem('userName')
   },
   watch: {
   }

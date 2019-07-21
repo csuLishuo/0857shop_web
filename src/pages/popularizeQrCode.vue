@@ -65,6 +65,10 @@
           height: px2rem(384);
           margin: px2rem(42) auto 0;
           background: #fff;
+          img{
+            width: 100%;
+            height: 100%;
+          }
         }
         .info{
           font-size: px2rem(30);
@@ -99,9 +103,11 @@
         <div class="title">推广二维码</div>
       </div>
       <div class="wrapper clearfix">
-        <div class="portrait-box"><img src="../images/img3.png" alt=""></div>
-        <div class="name">斯嘉丽</div>
-        <div class="qr-box"></div>
+        <div class="portrait-box"><img :src="wxUserInfo.headerImg" alt=""></div>
+        <div class="name">{{wxUserInfo.nickName}}</div>
+        <div class="qr-box">
+          <img :src="qrcode" alt="">
+        </div>
         <div class="info">分享自己的二维码，和朋友一起赚钱</div>
       </div>
     </div>
@@ -113,6 +119,7 @@
 
 <script>
 import { Toast } from 'vant'
+import QRCode from 'qrcode'
 
 export default {
   name: 'popularizeQrCode',
@@ -120,30 +127,27 @@ export default {
   },
   data () {
     return {
-      active: 0
+      wxUserInfo: {},
+      userName: '',
+      qrcode: ''
     }
   },
   methods: {
+    initQRcode () {
+      let text = 'http://zhusc.wurenyulecang.com/shop/index.html#/home?userName=' + this.userName
+      let msg = document.createElement('canvas')
+      QRCode.toCanvas(msg, text, error => {
+        this.qrcode = msg.toDataURL('image/png')
+      })
+    },
     goBack () {
       this.$router.back(-1)
-    },
-    goDetail () {
-      this.$router.push({
-        name: 'detail_bargin'
-      })
-    },
-    openPop () {
-      this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
-      })
     }
   },
   mounted () {
-    // this.test()
+    this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
+    this.userName = sessionStorage.getItem('userName')
+    this.initQRcode()
   },
   watch: {
   }

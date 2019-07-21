@@ -620,7 +620,8 @@ export default {
       showPop_share: false,
       qrcode: '',
       finalImage: '',
-      base64Obj: ''
+      base64Obj: '',
+      userName: ''
     }
   },
   methods: {
@@ -640,7 +641,7 @@ export default {
     share () {
       this.showPop_share = true
       let self = this
-      let text = window.location.href
+      let text = window.location.href + '&userName=' + this.userName
       // 获取页面的canvas
       var msg = document.createElement('canvas')
       // 将获取到的数据（val）画到msg（canvas）上
@@ -736,36 +737,42 @@ export default {
       })
     },
     handleConfirmBuy () {
-      if (this.userAddressId) {
-        let sendData = {
-          list: [{
-            shareId: 0,
-            goodsIssueId: this.detailData.id,
-            goodsId: this.detailData.goodsId,
-            attrSn: this.orderSendData.attrSn,
-            number: this.value,
-            shareType: 0
-          }]
-        }
-        this.$post('/api/orders/orderBuy', sendData).then(res => {
-          if (res.result === 0) {
-            this.$router.push({
-              name: 'orderConfirm',
-              params: {
-                initData: JSON.stringify(res.data),
-                detailData: JSON.stringify(this.detailData)
-              }
-            })
-          } else {
-            Toast.fail(res.message)
-          }
-        }).catch(res => {
-          console.error(res)
+      if (!sessionStorage.getItem('authStatus')) {
+        this.$router.push({
+          name: 'home'
         })
       } else {
-        this.$router.push({
-          name: 'editAddress'
-        })
+        if (this.userAddressId) {
+          let sendData = {
+            list: [{
+              shareId: 0,
+              goodsIssueId: this.detailData.id,
+              goodsId: this.detailData.goodsId,
+              attrSn: this.orderSendData.attrSn,
+              number: this.value,
+              shareType: 0
+            }]
+          }
+          this.$post('/api/orders/orderBuy', sendData).then(res => {
+            if (res.result === 0) {
+              this.$router.push({
+                name: 'orderConfirm',
+                params: {
+                  initData: JSON.stringify(res.data),
+                  detailData: JSON.stringify(this.detailData)
+                }
+              })
+            } else {
+              Toast.fail(res.message)
+            }
+          }).catch(res => {
+            console.error(res)
+          })
+        } else {
+          this.$router.push({
+            name: 'editAddress'
+          })
+        }
       }
     },
     selectAttrSn (index) {
@@ -773,32 +780,38 @@ export default {
       this.orderSendData = this.detailDataAttrs[index]
     },
     handleCollect () {
-      if (this.collectionStatus === false) {
-        this.$post('/api/goodsCollection/insertGoodsCollection', {
-          goodsId: this.detailData.goodsId,
-          goodsIssueId: this.detailId
-        }).then(res => {
-          if (res.result === 0) {
-            this.collectionStatus = true
-          } else {
-            Toast.fail(res.message)
-          }
-        }).catch(res => {
-          console.error(res)
+      if (!sessionStorage.getItem('authStatus')) {
+        this.$router.push({
+          name: 'home'
         })
       } else {
-        this.$post('/api/goodsCollection/updateGoodsCollection', {
-          goodsId: this.detailData.goodsId,
-          goodsIssueId: this.detailId
-        }).then(res => {
-          if (res.result === 0) {
-            this.collectionStatus = false
-          } else {
-            Toast.fail(res.message)
-          }
-        }).catch(res => {
-          console.error(res)
-        })
+        if (this.collectionStatus === false) {
+          this.$post('/api/goodsCollection/insertGoodsCollection', {
+            goodsId: this.detailData.goodsId,
+            goodsIssueId: this.detailId
+          }).then(res => {
+            if (res.result === 0) {
+              this.collectionStatus = true
+            } else {
+              Toast.fail(res.message)
+            }
+          }).catch(res => {
+            console.error(res)
+          })
+        } else {
+          this.$post('/api/goodsCollection/updateGoodsCollection', {
+            goodsId: this.detailData.goodsId,
+            goodsIssueId: this.detailId
+          }).then(res => {
+            if (res.result === 0) {
+              this.collectionStatus = false
+            } else {
+              Toast.fail(res.message)
+            }
+          }).catch(res => {
+            console.error(res)
+          })
+        }
       }
     },
     getCollectionStatus () {
@@ -819,18 +832,24 @@ export default {
       })
     },
     addToCart () {
-      this.$post('/api/goodsCar/insertGoodsCar', {
-        goodsId: this.detailData.goodsId,
-        goodsIssueId: this.detailId
-      }).then(res => {
-        if (res.result === 0) {
-          Toast.success(res.message)
-        } else {
-          Toast.fail(res.message)
-        }
-      }).catch(res => {
-        console.error(res)
-      })
+      if (!sessionStorage.getItem('authStatus')) {
+        this.$router.push({
+          name: 'home'
+        })
+      } else {
+        this.$post('/api/goodsCar/insertGoodsCar', {
+          goodsId: this.detailData.goodsId,
+          goodsIssueId: this.detailId
+        }).then(res => {
+          if (res.result === 0) {
+            Toast.success(res.message)
+          } else {
+            Toast.fail(res.message)
+          }
+        }).catch(res => {
+          console.error(res)
+        })
+      }
     },
     closePop () {
       this.showPop_select = false
@@ -911,6 +930,13 @@ export default {
     // this.getSelectArray()
     this.getCollectionStatus()
     this.getDefaultAddress()
+    if (this.$route.query.userName) {
+      this.userName = this.$route.query.userName
+      sessionStorage.setItem('userName', this.$route.query.userName)
+    } else {
+      this.userName = sessionStorage.getItem('userName')
+    }
+    console.log('this.userName', this.userName)
   },
   watch: {
   }
