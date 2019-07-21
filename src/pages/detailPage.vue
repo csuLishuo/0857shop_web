@@ -619,10 +619,24 @@ export default {
       testImg: require('../images/imgDel5.png'),
       showPop_share: false,
       qrcode: '',
-      finalImage: ''
+      finalImage: '',
+      base64Obj: ''
     }
   },
   methods: {
+    NetImageToBase64(base64Url){
+      this.$post('/api/file/NetImageToBase64',{
+        base64Url:base64Url
+      }).then(res=>{
+        if(res.result===0){
+          this.base64Obj=res.data.base64;
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res=>{
+        console.error(res)
+      })
+    },
     share () {
       this.showPop_share = true
       let self = this
@@ -638,8 +652,7 @@ export default {
         finalCanvas.height = 704
         let context = finalCanvas.getContext('2d')
         Promise.all([
-          // self.loadimage(self.testImg),
-          self.loadimage(self.filePath + self.bannerData[0]),
+          self.loadimage('data:image/png;base64,'+self.base64Obj),
           self.loadimage(self.qrcode)
         ]).then(res => {
           console.log(res)
@@ -653,7 +666,6 @@ export default {
             self.detailData.title = self.detailData.title.substring(0, 24) + '...'
           }
           self.canvasTextAutoLine(self.detailData.title, finalCanvas, 36, 590, 30)
-          // self.canvasTextAutoLine('【同价618】旗舰店 卡西欧（CASIO）樱花款女表时...', finalCanvas, 36, 590, 30)
           context.font = '30px 微软雅黑'
           context.fillStyle = '#ff3f31'
           context.fillText('￥' + self.detailData.nowPrice, 36, 680)
@@ -688,7 +700,7 @@ export default {
     },
     loadimage (src) {
       var image = new Image()
-      image.setAttribute("crossOrigin",'Anonymous')
+      // image.setAttribute("crossOrigin",'Anonymous')
       image.src = src
       return new Promise((resolve, reject) => {
         image.onload = () => {
@@ -849,6 +861,7 @@ export default {
           this.detailPics = this.detailData.details.split(';')
           this.detailDataAttrs = JSON.parse(this.detailData.attrs)
           this.orderSendData = this.detailDataAttrs[0]
+          this.NetImageToBase64(this.filePath+this.bannerData[0])
         } else {
           Toast.fail(res.message)
         }
