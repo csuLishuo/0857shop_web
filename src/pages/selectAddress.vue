@@ -109,7 +109,7 @@
         @load="getOneMorePage"
       >
         <div class="wrapper" v-for="item in addressList" :key="item.id">
-          <div class="area-1-1 clearfix" @click="select(item.id)">
+          <div class="area-1-1 clearfix" @click="select(item.id, item)">
             <div class="line-1">
               <span class="name">{{item.reciever}}</span>
               <span class="phone">{{item.phone}}</span>
@@ -145,7 +145,7 @@ export default {
     }
   },
   methods: {
-    select (id) {
+    select (id, item) {
       sessionStorage.setItem('addressId', id)
       this.$router.back(-1)
     },

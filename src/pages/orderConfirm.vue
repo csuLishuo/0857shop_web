@@ -356,7 +356,7 @@
       </div>
       <div class="info">
         <div class="title-box ellipsis-2">
-          <div class="name-box" v-if="tabStatus==2">
+          <div class="name-box" v-if="tabStatus==2" @click="goSelectAddress">
             <span>地址</span>{{defaultAddressData.province}}{{defaultAddressData.city}}{{defaultAddressData.county}}{{defaultAddressData.address}}
           </div>
           <div class="name-box" v-if="tabStatus==1">
@@ -467,6 +467,11 @@ export default {
     }
   },
   methods: {
+    goSelectAddress () {
+      this.$router.push({
+        name: 'selectAddress'
+      })
+    },
     handleSubmit () {
       let sendData = {
         list: [
