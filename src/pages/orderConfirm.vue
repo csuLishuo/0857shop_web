@@ -356,7 +356,8 @@
       </div>
       <div class="info">
         <div class="title-box ellipsis-2">
-          <div class="name-box" v-if="tabStatus==2" @click="goSelectAddress">
+          <!-- <div class="name-box" v-if="tabStatus==2" @click="goSelectAddress"> -->
+          <div class="name-box" v-if="tabStatus==2">
             <span>地址</span>{{defaultAddressData.province}}{{defaultAddressData.city}}{{defaultAddressData.county}}{{defaultAddressData.address}}
           </div>
           <div class="name-box" v-if="tabStatus==1">
