@@ -625,16 +625,16 @@ export default {
     }
   },
   methods: {
-    NetImageToBase64(base64Url){
-      this.$post('/api/file/NetImageToBase64',{
-        base64Url:base64Url
-      }).then(res=>{
-        if(res.result===0){
-          this.base64Obj=res.data.base64;
+    NetImageToBase64 (base64Url) {
+      this.$post('/api/file/NetImageToBase64', {
+        base64Url: base64Url
+      }).then(res => {
+        if (res.result === 0) {
+          this.base64Obj = res.data.base64
         } else {
           Toast.fail(res.message)
         }
-      }).catch(res=>{
+      }).catch(res => {
         console.error(res)
       })
     },

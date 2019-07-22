@@ -162,7 +162,7 @@ export default {
       this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
     }
     console.log('this.wxUserInfo', this.wxUserInfo)
-    // localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
+    localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
     sessionStorage.setItem('authStatus', '1')
   },
   watch: {
