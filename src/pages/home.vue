@@ -844,11 +844,14 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.userName) {
-      sessionStorage.setItem('userName', this.$route.query.userName)
-    }
+    // if (this.$route.query.userName) {
+    //   sessionStorage.setItem('userName', this.$route.query.userName)
+    // }
     if (!sessionStorage.getItem('authStatus')) {
-      location.href = 'http://zhusc.wurenyulecang.com/api/user/authorize?returnUrl=1'
+      // location.href = 'http://zhusc.wurenyulecang.com/api/user/authorize?returnUrl=1'
+      this.$router.push({
+        path: '/login'
+      })
     } else {
       this.getBannerList()
       this.getAdImg()

@@ -74,15 +74,15 @@
             display: flex;
             align-items: center;
             // background: #ffc424;
-            background-image: linear-gradient(83deg, 
-		#ff4027 0%, 
-		#802014 0%, 
-		#000000 0%, 
-		#802014 0%, 
-		#ff4027 0%, 
-		#ff296f 100%), 
+            background-image: linear-gradient(83deg,
+		#ff4027 0%,
+		#802014 0%,
+		#000000 0%,
+		#802014 0%,
+		#ff4027 0%,
+		#ff296f 100%),
 	linear-gradient(
-		#ffe324, 
+		#ffe324,
 		#ffe324);
             width: px2rem(136);
             height: px2rem(62);
@@ -316,16 +316,16 @@
       <div class="wrapper">
         <div class="top-box">
           <div class="left-box">
-            <div class="portrait-box"><img :src="wxUserInfo.headerImg" alt=""></div>
+            <div class="portrait-box"><img :src="userInfo.avatar" alt=""></div>
             <div class="text-box">
-              <div class="name">{{wxUserInfo.nickName}}</div>
-              <div class="des">代理用户</div>
+              <div class="name">{{userInfo.userName}}</div>
+              <div class="des">{{userInfo.userLevel}}</div>
             </div>
           </div>
-          <div class="right-box">
+          <!--<div class="right-box">
             <div class="img-box"><img src="../images/icon17.png" alt=""></div>
             <div class="name">签到</div>
-          </div>
+          </div>-->
         </div>
         <div class="area-1-1">
           <div class="wrap" @click="go(1)">
@@ -440,7 +440,7 @@ export default {
         pageNumber: 1,
         pageSize: 4
       },
-      wxUserInfo: {}
+      userInfo: {}
     }
   },
   methods: {
@@ -528,7 +528,7 @@ export default {
   },
   mounted () {
     this.getGoodsList()
-    this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
+    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   },
   watch: {
   }

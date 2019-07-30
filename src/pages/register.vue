@@ -88,7 +88,7 @@
 </style>
 <template>
   <div class="register-container clearfix">
-    <div class="goBack"><img src="../images/icon39.png" alt=""></div>
+    <div class="goBack" @click="goBack"><img src="../images/icon39.png" alt=""></div>
     <div class="page-title">注册</div>
     <div class="form-box">
       <div class="line line-1">
@@ -154,6 +154,7 @@
       <div class="text">确认注册，表示您已阅读同意 <span>《0857商城协议》</span></div>
     </div>
     <div class="area-2" @click="confirm">注册</div>
+    <div class="area-2" @click="goLogin">已注册，立即登录</div>
   </div>
 </template>
 <script>
@@ -180,6 +181,14 @@ export default {
     }
   },
   methods: {
+    goBack () {
+      this.$router.back(-1)
+    },
+    goLogin () {
+      this.$router.push({
+        name: 'login'
+      })
+    },
     confirm () {
       let sendData = this.sendData
       for (let i in sendData) {
@@ -197,9 +206,6 @@ export default {
         return false
       }
       this.$post('/api/user/register', {
-        openId: this.wxUserInfo.openId,
-        nickName: this.wxUserInfo.nickName,
-        gender: this.wxUserInfo.gender,
         mobilePhone: this.sendData.username,
         referee: this.sendData.invitationCode,
         password: this.sendData.password,
@@ -249,16 +255,17 @@ export default {
   mounted () {
   },
   created () {
-    this.wxUserInfo = {
-      openId: this.$route.query.openId,
-      nickName: this.$route.query.nickName,
-      gender: this.$route.query.gender,
-      headerImg: this.$route.query.headerImg
-    }
-    console.log('this.wxUserInfo1', this.wxUserInfo)
-    localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
+    // this.wxUserInfo = {
+    //   openId: this.$route.query.openId,
+    //   nickName: this.$route.query.nickName,
+    //   gender: this.$route.query.gender,
+    //   headerImg: this.$route.query.headerImg
+    // }
+    // console.log('this.wxUserInfo1', this.wxUserInfo)
+    // localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
+    // this.sendData.invitationCode = this.urlUserName = sessionStorage.getItem('userName')
     sessionStorage.setItem('authStatus', '1')
-    this.sendData.invitationCode = this.urlUserName = sessionStorage.getItem('userName')
+    this.sendData.invitationCode = this.urlUserName = this.$route.query.userName
   },
   watch: {
   }

@@ -103,8 +103,8 @@
         <div class="title">推广二维码</div>
       </div>
       <div class="wrapper clearfix">
-        <div class="portrait-box"><img :src="wxUserInfo.headerImg" alt=""></div>
-        <div class="name">{{wxUserInfo.nickName}}</div>
+        <div class="portrait-box"><img :src="userInfo.avatar" alt=""></div>
+        <div class="name">{{userInfo.userName}}</div>
         <div class="qr-box">
           <img :src="qrcode" alt="">
         </div>
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     initQRcode () {
-      let text = 'http://zhusc.wurenyulecang.com/shop/index.html#/home?userName=' + this.userName
+      let text = 'http://zhusc.wurenyulecang.com/shop/index.html#/register?userName=' + this.userName
       let msg = document.createElement('canvas')
       QRCode.toCanvas(msg, text, error => {
         this.qrcode = msg.toDataURL('image/png')
@@ -145,7 +145,7 @@ export default {
     }
   },
   mounted () {
-    this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
+    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     this.userName = sessionStorage.getItem('userName')
     this.initQRcode()
   },
