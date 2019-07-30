@@ -135,6 +135,7 @@ export default {
             sessionStorage.setItem('authStatus', '1')
             sessionStorage.setItem('userName', this.username)
             this.userInfo = res.data
+            console.log('userInfo', this.userInfo)
             sessionStorage.setItem('userInfo', JSON.stringify(this.userInfo))
             this.$router.push({
               name: 'home'

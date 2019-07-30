@@ -178,51 +178,51 @@
       <div class="area-1 clearfix">
         <div class="top-box">
           <div class="left-box">
-            <div class="portrait-box"><img src="../images/icon13.png" alt=""></div>
+            <div class="portrait-box"><img :src="filePath + userInfo.avatar" alt=""></div>
             <div class="text-box">
-              <div class="name">斯嘉丽·约翰逊</div>
+              <div class="name">{{userInfo.userName}}</div>
             </div>
           </div>
-          <div class="right-box">
+          <!-- <div class="right-box">
             <div class="name">推荐人：虞维文</div>
-          </div>
+          </div> -->
         </div>
         <div class="area-1-2">
           <div class="name">总价值(元)</div>
-          <div class="price">1000.00</div>
+          <div class="price">{{(Number(userInfo.couponNumber) / 100 + Number(userInfo.cardNumber) / 100).toFixed(2)}}</div>
         </div>
         <div class="area-1-3">
           <div class="wrap">
             <div class="name">购物券(元)</div>
-            <div class="price">1000.00</div>
+            <div class="price">{{(Number(userInfo.couponNumber) / 100).toFixed(2)}}</div>
           </div>
           <div class="wrap">
             <div class="name">购物卡(元)</div>
-            <div class="price">1000.00</div>
+            <div class="price">{{(Number(userInfo.cardNumber) / 100).toFixed(2)}}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="area-2 clearfix">
       <div class="area-2-1">
-        <div class="wrap" @click="go(1)">
+        <!-- <div class="wrap" @click="go(1)">
           <div class="img-box">
             <img src="../images/icon49.png" alt="">
           </div>
           <div class="name">分销购物卡</div>
-        </div>
+        </div> -->
         <div class="wrap" @click="go(2)">
           <div class="img-box">
             <img src="../images/icon50.png" alt="">
           </div>
           <div class="name">我的分润</div>
         </div>
-        <div class="wrap" @click="go(3)">
+        <!-- <div class="wrap" @click="go(3)">
           <div class="img-box">
             <img src="../images/icon51.png" alt="">
           </div>
           <div class="name">提现明细</div>
-        </div>
+        </div> -->
         <div class="wrap" @click="go(4)">
           <div class="img-box">
             <img src="../images/icon52.png" alt="">
@@ -249,6 +249,8 @@ export default {
   },
   data () {
     return {
+      userInfo: {},
+      filePath: ''
     }
   },
   methods: {
@@ -287,6 +289,9 @@ export default {
   },
   mounted () {
     // this.test()
+    this.filePath = sessionStorage.getItem('filePath')
+    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    console.log('userInfo', this.userInfo)
   },
   watch: {
   }

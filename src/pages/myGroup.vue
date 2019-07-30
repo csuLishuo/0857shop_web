@@ -81,23 +81,29 @@
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
       <div class="title">我的团队</div>
     </div>
-    <van-tabs v-model="active">
-      <van-tab title="全部成员"></van-tab>
-      <van-tab title="A级成员"></van-tab>
-      <van-tab title="B级成员"></van-tab>
+    <van-tabs v-model="active" @change="tabChange">
+      <van-tab title="一级用户"></van-tab>
+      <van-tab title="二级用户"></van-tab>
     </van-tabs>
-    <div class="wrapper">
-      <div class="left-box">
-        <div class="portrait-box"><img src="../images/icon13.png" alt=""></div>
-        <div class="text-box">
-          <div class="name">罗杰斯  15355556666</div>
-          <div class="des">2018-12-05 16:29:45</div>
+    <van-list
+      v-model="loadingList"
+      :finished="finished"
+      :immediate-check="false"
+      finished-text="没有更多了"
+      @load="getOneMorePage"
+    >
+      <div class="wrapper" v-for="item in goodsList" :key="item.id">
+        <div class="left-box">
+          <div class="portrait-box"><img :src="filePath + item.avatar" alt=""></div>
+          <div class="text-box">
+            <div class="name">{{item.updateTime}}</div>
+          </div>
+        </div>
+        <div class="right-box">
+          {{item.userLevel}}
         </div>
       </div>
-      <div class="right-box">
-        普通用户
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
@@ -110,20 +116,75 @@ export default {
   },
   data () {
     return {
-      active: 0
+      active: 0,
+      filePath: '',
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 10
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
+    tabChange (e) {
+      console.log('eeeeeeeeeee', e)
+      this.active = e
+      this.goodsList = []
+      this.total = ''
+      this.totalPage = ''
+      this.sendData = {
+        pageNumber: 1,
+        pageSize: 10
+      }
+      this.loadingList = false
+      this.finished = false
+      this.getGoodsList(this.active)
+    },
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
-      this.$router.push({
-        name: 'detail_bargin'
-      })
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList(this.active)
+        }
+      }, 500)
     },
-    openPop () {
-      this.showPop = true
+    getGoodsList (active) {
+      let url = ''
+      if (active === 0) {
+        url = '/api/user/getTwoUserList'
+      } else {
+        url = '/api/user/getFirstUserList'
+      }
+      this.$post(url, this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
     },
     test () {
       Toast.loading({
@@ -134,6 +195,8 @@ export default {
   },
   mounted () {
     // this.test()
+    this.filePath = sessionStorage.getItem('filePath')
+    this.getGoodsList(0)
   },
   watch: {
   }

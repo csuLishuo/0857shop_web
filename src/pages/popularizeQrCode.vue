@@ -108,12 +108,12 @@
         <div class="qr-box">
           <img :src="qrcode" alt="">
         </div>
-        <div class="info">分享自己的二维码，和朋友一起赚钱</div>
+        <div class="info">长按保存自己的二维码，和朋友一起赚钱</div>
       </div>
     </div>
-    <div class="btn-bottom" @click="go">
+    <!-- <div class="btn-bottom" @click="go">
       保存我的推广码
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -127,7 +127,7 @@ export default {
   },
   data () {
     return {
-      wxUserInfo: {},
+      userInfo: {},
       userName: '',
       qrcode: ''
     }

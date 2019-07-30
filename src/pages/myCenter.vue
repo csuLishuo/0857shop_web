@@ -336,6 +336,10 @@
             <div class="img-box"><img src="../images/icon19.png" alt=""></div>
             <div class="name">收货地址</div>
           </div>
+          <div class="wrap" @click="goScoreGoodsList">
+            <div class="img-box"><img src="../images/icon61.png" alt=""></div>
+            <div class="name">积分商品</div>
+          </div>
           <div class="wrap" @click="go(3)">
             <div class="img-box"><img src="../images/icon20.png" alt=""></div>
             <div class="name">我的奖品</div>
@@ -406,6 +410,10 @@
           <div class="img-box"><img src="../images/icon33.png" alt=""></div>
           <div class="name">申请成为代理</div>
         </div>
+        <div class="wrap" @click="goWarehouse">
+          <div class="img-box"><img src="../images/icon62.png" alt=""></div>
+          <div class="name">我的仓库</div>
+        </div>
       </div>
     </div>
     <div class="area-4 clearfix">
@@ -444,6 +452,14 @@ export default {
     }
   },
   methods: {
+    goScoreGoodsList () {
+
+    },
+    goWarehouse () {
+      this.$router.push({
+        path: 'myWarehouse'
+      })
+    },
     goDetail (id) {
       this.$router.push({
         path: 'detail_hotSale',

@@ -53,6 +53,7 @@ import ActiveList from '@/pages/activeList'
 import DetailActive from '@/pages/detail_active'
 import DetailScore from '@/pages/detail_score'
 import SelectAddress from '@/pages/selectAddress'
+import MyWarehouse from '@/pages/myWarehouse'
 
 Vue.use(Router)
 
@@ -469,6 +470,14 @@ export default new Router({
     path: '/login',
     name: 'login',
     component: Login,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 我的仓库
+    path: '/myWarehouse',
+    name: 'myWarehouse',
+    component: MyWarehouse,
     meta: {
       keepAlive: true,
       isBack: false
