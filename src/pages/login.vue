@@ -126,8 +126,8 @@ export default {
       if (this.username && this.password) {
         this.$post('/api/login/login', {
           userName: this.username,
-          password: this.password
-          // openId: this.wxUserInfo.openId
+          password: this.password,
+          openId: this.wxUserInfo.openId
         }).then(res => {
           if (res.result === 0) {
             Toast.success('登录成功')
@@ -154,19 +154,19 @@ export default {
   mounted () {
   },
   created () {
-    // sessionStorage.setItem('userName', '15133510931')
-    // if (this.$route.query.openId) {
-    //   this.wxUserInfo = {
-    //     openId: this.$route.query.openId,
-    //     nickName: this.$route.query.nickName,
-    //     gender: this.$route.query.gender,
-    //     headerImg: this.$route.query.headerImg
-    //   }
-    // } else {
-    //   this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
-    // }
-    // console.log('this.wxUserInfo', this.wxUserInfo)
-    // localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
+    // sessionStorage.setItem('userName', this.username)
+    if (this.$route.query.openId) {
+      this.wxUserInfo = {
+        openId: this.$route.query.openId,
+        nickName: this.$route.query.nickName,
+        gender: this.$route.query.gender,
+        headerImg: this.$route.query.headerImg
+      }
+    } else {
+      this.wxUserInfo = JSON.parse(localStorage.getItem('wxUserInfo'))
+    }
+    console.log('this.wxUserInfo', this.wxUserInfo)
+    localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
   },
   watch: {
   }

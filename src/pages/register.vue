@@ -206,6 +206,9 @@ export default {
         return false
       }
       this.$post('/api/user/register', {
+        openId: this.wxUserInfo.openId,
+        nickName: this.wxUserInfo.nickName,
+        avatar: this.wxUserInfo.avatar,
         mobilePhone: this.sendData.username,
         referee: this.sendData.invitationCode,
         password: this.sendData.password,
@@ -255,17 +258,17 @@ export default {
   mounted () {
   },
   created () {
-    // this.wxUserInfo = {
-    //   openId: this.$route.query.openId,
-    //   nickName: this.$route.query.nickName,
-    //   gender: this.$route.query.gender,
-    //   headerImg: this.$route.query.headerImg
-    // }
-    // console.log('this.wxUserInfo1', this.wxUserInfo)
-    // localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
-    // this.sendData.invitationCode = this.urlUserName = sessionStorage.getItem('userName')
+    this.wxUserInfo = {
+      openId: this.$route.query.openId,
+      nickName: this.$route.query.nickName,
+      gender: this.$route.query.gender,
+      headerImg: this.$route.query.headerImg
+    }
+    console.log('this.wxUserInfo', this.wxUserInfo)
+    localStorage.setItem('wxUserInfo', JSON.stringify(this.wxUserInfo))
+    this.sendData.invitationCode = this.urlUserName = sessionStorage.getItem('userName')
     sessionStorage.setItem('authStatus', '1')
-    this.sendData.invitationCode = this.urlUserName = this.$route.query.userName
+    // this.sendData.invitationCode = this.urlUserName = this.$route.query.userName
   },
   watch: {
   }
