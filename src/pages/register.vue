@@ -154,7 +154,7 @@
       <div class="text">确认注册，表示您已阅读同意 <span>《0857商城协议》</span></div>
     </div>
     <div class="area-2" @click="confirm">注册</div>
-    <div class="area-2" @click="goLogin">已注册，立即登录</div>
+    <!-- <div class="area-2" @click="goLogin">已注册，立即登录</div> -->
   </div>
 </template>
 <script>
@@ -228,31 +228,47 @@ export default {
       })
     },
     getCaptcha () {
-      let reg = /^1\d{10}$/
-      if (this.timeStatus < 60 && this.timeStatus > 0) {
-        Toast.fail('请勿频繁点击')
-      } else if (!reg.test(this.sendData.username)) {
-        Toast.fail('请按规范格式填写手机号码')
-      } else {
-        const interval = window.setInterval(() => {
-          if (this.timeStatus-- <= 0) {
-            this.timeStatus = 60
-            window.clearInterval(interval)
-          }
-        }, 1000)
-        this.$post('/api/user/sendPhoneMessage', {
-          mobilePhone: this.sendData.username
-        }).then(res => {
-          if (res.result === 0) {
-            Toast.success('获取验证码成功')
-            this.orderSn = res.data.orderSn
+      this.$post('/api/user/getUsersByMobilePhone', {
+        openId: this.wxUserInfo.openId,
+        mobilePhone: this.sendData.username
+      }).then(res => {
+        if (res.result === 0) {
+          let reg = /^1\d{10}$/
+          if (this.timeStatus < 60 && this.timeStatus > 0) {
+            Toast.fail('请勿频繁点击')
+          } else if (!reg.test(this.sendData.username)) {
+            Toast.fail('请按规范格式填写手机号码')
           } else {
-            Toast.fail(res.message)
+            const interval = window.setInterval(() => {
+              if (this.timeStatus-- <= 0) {
+                this.timeStatus = 60
+                window.clearInterval(interval)
+              }
+            }, 1000)
+            this.$post('/api/user/sendPhoneMessage', {
+              mobilePhone: this.sendData.username
+            }).then(res => {
+              if (res.result === 0) {
+                Toast.success('获取验证码成功')
+                this.orderSn = res.data.orderSn
+              } else {
+                Toast.fail(res.message)
+              }
+            }).catch(res => {
+              console.error(res)
+            })
           }
-        }).catch(res => {
-          console.error(res)
-        })
-      }
+        } else if (res.result === 1) {
+          Toast.success('已注册，请前往登录')
+          this.$router.push({
+            name: 'login'
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
     }
   },
   mounted () {

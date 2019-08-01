@@ -113,7 +113,8 @@ export default {
     return {
       username: '',
       password: '',
-      userInfo: {}
+      userInfo: {},
+      wxUserInfo: {}
     }
   },
   methods: {

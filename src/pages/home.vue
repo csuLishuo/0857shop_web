@@ -480,7 +480,7 @@
         <div class="text">更多</div>
       </div>
     </div>
-    <div class="ad-box" @click="goActiveList">
+    <div class="ad-box" v-if="adData" @click="goActiveList">
       <img :src="filePath + adData.bannerPic" alt="">
     </div>
     <div class="area-1 clearfix">
@@ -798,6 +798,7 @@ export default {
           } else {
             this.goodsList = this.goodsList.concat(res.data.list)
           }
+          console.log('111111111111111111goodsList',this.goodsList)
           this.filePath = res.filePath
           sessionStorage.setItem('filePath', this.filePath)
           this.total = res.data.totalCount
