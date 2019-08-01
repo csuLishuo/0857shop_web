@@ -112,30 +112,38 @@
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
       <div class="title">我的分润</div>
     </div>
-    <div class="wrapper">
-      <div class="area-1">
-        <div class="area-1-1">
-          <div class="img-box">
-            <img src="../images/icon44.png" alt="">
+    <van-list
+      v-model="loadingList"
+      :finished="finished"
+      :immediate-check="false"
+      finished-text="没有更多了"
+      @load="getOneMorePage"
+    >
+      <div class="wrapper" v-for="item in goodsList" :key="item.id">
+        <div class="area-1">
+          <div class="area-1-1">
+            <div class="img-box">
+              <img :src="filePath + item.avatar" alt="">
+            </div>
+            <div class="text">斯嘉丽约翰逊</div>
           </div>
-          <div class="text">斯嘉丽约翰逊</div>
+          <div class="tel">15000001111</div>
         </div>
-        <div class="tel">15000001111</div>
+        <div class="area-2">
+          <div class="line-1">
+            <!--<div class="line-1-left"><span>10%</span>分润比例</div>-->
+            <div class="line-1-right"><span>￥</span>{{item.detailValue}}</div>
+          </div>
+          <div class="line-2">
+            订单号：{{item.orderSn}}
+          </div>
+          <div class="line-3">
+            <div class="line-3-left">订单金额：{{item.money}}元</div>
+            <div class="line-3-right">{{item.detailUpdateTime}}</div>
+          </div>
+        </div>
       </div>
-      <div class="area-2">
-        <div class="line-1">
-          <div class="line-1-left"><span>10%</span>分润比例</div>
-          <div class="line-1-right"><span>￥</span>100.00</div>
-        </div>
-        <div class="line-2">
-          订单号：566685442514453
-        </div>
-        <div class="line-3">
-          <div class="line-3-left">订单金额：120.00元</div>
-          <div class="line-3-right">2019.03.13 12:03:23</div>
-        </div>
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
@@ -148,30 +156,59 @@ export default {
   },
   data () {
     return {
-      active: 0
+      filePath: '',
+      goodsList: [],
+      total: '',
+      totalPage: '',
+      sendData: {
+        pageNumber: 1,
+        pageSize: 10
+      },
+      loadingList: false,
+      finished: false
     }
   },
   methods: {
     goBack () {
       this.$router.back(-1)
     },
-    goDetail () {
-      this.$router.push({
-        name: 'detail_bargin'
-      })
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getGoodsList(this.active)
+        }
+      }, 500)
     },
-    openPop () {
-      this.showPop = true
-    },
-    test () {
-      Toast.loading({
-        mask: true,
-        message: '加载中...'
+    getGoodsList () {
+      this.$post('/api/user/getRebateList', this.sendData).then(res => {
+        if (res.result === 0) {
+          if (this.sendData.pageNumber === 1) {
+            this.goodsList = res.data.list
+          } else {
+            this.goodsList = this.goodsList.concat(res.data.list)
+          }
+          this.filePath = res.filePath
+          sessionStorage.setItem('filePath', this.filePath)
+          this.total = res.data.totalCount
+          this.totalPage = res.data.totalPage
+          // 加载状态结束
+          this.loadingList = false
+          // 数据全部加载完成
+          if (this.goodsList.length >= Number(this.total)) {
+            this.finished = true
+          }
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
       })
     }
   },
   mounted () {
     // this.test()
+    this.getGoodsList()
   },
   watch: {
   }

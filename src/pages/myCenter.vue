@@ -348,7 +348,7 @@
       </div>
     </div>
     <div class="area-2 clearfix">
-      <div class="title-box">
+      <div class="title-box" @click="goMyOrder(1)">
         <div class="name">我的订单</div>
         <div class="icon-box"><img src="../images/icon21.png" alt=""></div>
       </div>

@@ -182,6 +182,10 @@
       <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
       <div class="title">我的订单</div>
     </div>
+    <van-tabs v-model="activeCate" @change="handleTabCateChange">
+      <van-tab title="二维码商品"></van-tab>
+      <van-tab title="地址收货商品"></van-tab>
+    </van-tabs>
     <van-tabs v-model="active" @change="handleTabChange">
       <van-tab title="已取消"></van-tab>
       <van-tab title="待付款"></van-tab>
@@ -198,24 +202,31 @@
         finished-text="没有更多了"
         @load="getOneMorePage"
       >
-        <div class="wrapper">
+        <div class="wrapper" v-for="item in orderList" :key="item.id" >
           <div class="wrap-1">
-            <div class="img-box"><img src="../images/icon3.png" alt=""></div>
+            <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
             <div class="right-box">
-              <div class="title ellipsis-2">【立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g立体小脸妆出来】RIRE双头阴影高光修容棒3g+3g</div>
-              <div class="des">红色；175；女款</div>
-              <div class="label">共1件商品 合计：￥1267.00</div>
+              <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
+              <div class="des"><span v-for="(v, index) in item.list" :key="index">{{v.attrTitle}}</span></div>
+              <div class="label">共{{item.number}}件商品 合计：￥{{item.payMoney}}</div>
             </div>
           </div>
           <div class="wrap-2">
-            <div class="text">等待付款</div>
+            <div class="text" v-if="item.status==0">已取消</div>
+            <div class="text" v-if="item.status==1">待付款</div>
+            <div class="text" v-if="item.status==2">待发货</div>
+            <div class="text" v-if="item.status==3">待收货</div>
+            <div class="text" v-if="item.status==4">待评价</div>
+            <div class="text" v-if="item.status==5">已完成</div>
             <div class="btn-box">
-              <div class="btn">取消订单</div>
+              <div class="btn" v-if="item.status==1||item.status==2">取消订单</div>
+              <div class="btn" v-if="item.status==3">确认收货</div>
+              <div class="btn" v-if="item.status==4">去评价</div>
             </div>
           </div>
         </div>
       </van-list>
-      <div class="wrapper">
+      <!--<div class="wrapper">
         <div class="wrap-1">
           <div class="img-box"><img src="../images/icon3.png" alt=""></div>
           <div class="right-box">
@@ -230,7 +241,7 @@
             <div class="btn btn-1" @click="goComment">去评价</div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -245,8 +256,10 @@ export default {
   data () {
     return {
       active: 0,
+      activeCate: 1,
       sendData: {
         status: 1,
+        isFriend: 1,
         pageNumber: 1,
         pageSize: 10
       },
@@ -261,10 +274,16 @@ export default {
   methods: {
     handleTabChange (e) {
       this.sendData.pageNumber = 1
-      this.getOrderList(e)
+      this.sendData.status = e
+      this.getOrderList()
     },
-    getOrderList (status) {
-      this.sendData.status = status
+    handleTabCateChange (e) {
+      console.log('handleTabCateChange', e)
+      this.sendData.pageNumber = 1
+      this.sendData.isFriend = e
+      this.getOrderList()
+    },
+    getOrderList () {
       this.$post('/api/orders/getOrdersListByStatusAndUserId', this.sendData).then(res => {
         if (res.result === 0) {
           if (this.sendData.pageNumber === 1) {
@@ -272,7 +291,6 @@ export default {
           } else {
             this.orderList = this.orderList.concat(res.data.list)
           }
-          sessionStorage.setItem('filePath', this.filePath)
           this.total = res.data.totalCount
           this.totalPage = res.data.totalPage
           // 加载状态结束
@@ -287,6 +305,14 @@ export default {
       }).catch(res => {
         console.error(res)
       })
+    },
+    getOneMorePage () {
+      setTimeout(() => {
+        if (Number(this.sendData.pageNumber) < Number(this.totalPage)) {
+          this.sendData.pageNumber++
+          this.getOrderList()
+        }
+      }, 500)
     },
     goBack () {
       this.$router.back(-1)
@@ -316,7 +342,8 @@ export default {
   },
   created () {
     this.active = this.$route.params.status
-    this.getOrderList(this.active)
+    this.sendData.status = this.$route.params.status
+    this.getOrderList()
   },
   watch: {
   }
