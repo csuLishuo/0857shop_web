@@ -74,16 +74,7 @@
             display: flex;
             align-items: center;
             // background: #ffc424;
-            background-image: linear-gradient(83deg,
-		#ff4027 0%,
-		#802014 0%,
-		#000000 0%,
-		#802014 0%,
-		#ff4027 0%,
-		#ff296f 100%),
-	linear-gradient(
-		#ffe324,
-		#ffe324);
+            background-image: linear-gradient(83deg, #ff4027 0%, #802014 0%, #000000 0%, #802014 0%, #ff4027 0%, #ff296f 100%), linear-gradient(#ffe324, #ffe324);
             width: px2rem(136);
             height: px2rem(62);
             border-radius: px2rem(31) 0px 0px px2rem(31);

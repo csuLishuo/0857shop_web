@@ -222,9 +222,9 @@ export default {
       let list = []
       for (let i = 0; i < this.checkboxResult.length; i++) {
         for (let j = 0; j < this.goodsList.length; j++) {
-          this.selectGoodsList.push(this.goodsList[j])
           let obj = {}
           if (this.checkboxResult[i] === this.goodsList[j].id) {
+            this.selectGoodsList.push(this.goodsList[j])
             obj.shareId = 0
             obj.goodsIssueId = this.goodsList[j].id
             obj.goodsId = this.goodsList[j].goodsId
@@ -258,7 +258,7 @@ export default {
           this.$post('/api/orders/orderBuy', res[0]).then(res => {
             if (res.result === 0) {
               this.$router.push({
-                name: 'orderConfirm',
+                name: 'orderConfirmCart',
                 params: {
                   initData: JSON.stringify(res.data),
                   selectGoodsList: JSON.stringify(this.selectGoodsList)

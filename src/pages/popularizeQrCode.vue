@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { Toast } from 'vant'
+// import { Toast } from 'vant'
 import QRCode from 'qrcode'
 
 export default {

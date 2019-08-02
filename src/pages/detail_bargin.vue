@@ -401,7 +401,7 @@
         }
       }
       .btn{
-        background-image: linear-gradient(-90deg, #ff3657 0%, 	#ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
+        background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         width: px2rem(704);
         height: px2rem(78);
         text-align: center;

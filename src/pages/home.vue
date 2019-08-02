@@ -798,7 +798,6 @@ export default {
           } else {
             this.goodsList = this.goodsList.concat(res.data.list)
           }
-          console.log('111111111111111111goodsList',this.goodsList)
           this.filePath = res.filePath
           sessionStorage.setItem('filePath', this.filePath)
           this.total = res.data.totalCount

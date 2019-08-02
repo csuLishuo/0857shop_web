@@ -7,6 +7,7 @@ import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
 import DetailPage from '@/pages/detailPage'
 import OrderConfirm from '@/pages/orderConfirm'
+import OrderConfirmCart from '@/pages/orderConfirmCart'
 import successBuy from '@/pages/success_buy'
 import GroupBuyList from '@/pages/groupBuyList'
 import SeckillList from '@/pages/seckillList'
@@ -102,6 +103,14 @@ export default new Router({
     path: '/orderConfirm',
     name: 'orderConfirm',
     component: OrderConfirm,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, {
+    path: '/orderConfirmCart',
+    name: 'orderConfirmCart',
+    component: OrderConfirmCart,
     meta: {
       keepAlive: true,
       isBack: false

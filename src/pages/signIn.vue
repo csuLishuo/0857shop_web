@@ -308,7 +308,7 @@ export default {
     changeDate (data) {
       console.log(data) // 左右点击切换月份
       this.markDateArr = []
-      this.sendYearMonth = data.split('/')[0] + '-' + (data.split('/')[1].length == 1 ? '0' + data.split('/')[1] : data.split('/')[1])
+      this.sendYearMonth = data.split('/')[0] + '-' + (data.split('/')[1].length === 1 ? '0' + data.split('/')[1] : data.split('/')[1])
       this.getSignInRecord()
     },
     clickToday (data) {

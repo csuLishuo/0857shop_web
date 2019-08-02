@@ -193,12 +193,7 @@
           background-color: #404040;
         }
         &.btn-2{
-          background-image: linear-gradient(-90deg,
-            #ff3657 0%,
-            #ff7836 100%),
-          linear-gradient(
-              #ff3f31,
-              #ff3f31);
+          background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         }
       }
     }
@@ -383,7 +378,7 @@
         }
       }
       .btn{
-        background-image: linear-gradient(-90deg, #ff3657 0%, 	#ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
+        background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         width: px2rem(704);
         height: px2rem(78);
         text-align: center;
@@ -624,16 +619,16 @@ export default {
     }
   },
   methods: {
-    NetImageToBase64(base64Url){
-      this.$post('/api/file/NetImageToBase64',{
-        base64Url:base64Url
-      }).then(res=>{
-        if(res.result===0){
-          this.base64Obj=res.data.base64;
+    NetImageToBase64 (base64Url) {
+      this.$post('/api/file/NetImageToBase64', {
+        base64Url: base64Url
+      }).then(res => {
+        if (res.result === 0) {
+          this.base64Obj = res.data.base64
         } else {
           Toast.fail(res.message)
         }
-      }).catch(res=>{
+      }).catch(res => {
         console.error(res)
       })
     },
@@ -652,7 +647,7 @@ export default {
         finalCanvas.height = 704
         let context = finalCanvas.getContext('2d')
         Promise.all([
-          self.loadimage('data:image/png;base64,'+self.base64Obj),
+          self.loadimage('data:image/png;base64,' + self.base64Obj),
           self.loadimage(self.qrcode)
         ]).then(res => {
           console.log(res)
@@ -700,7 +695,7 @@ export default {
     },
     loadimage (src) {
       var image = new Image()
-      image.setAttribute("crossOrigin",'Anonymous')
+      // image.setAttribute('crossOrigin', 'Anonymous')
       image.src = src
       return new Promise((resolve, reject) => {
         image.onload = () => {

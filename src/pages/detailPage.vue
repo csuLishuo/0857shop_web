@@ -193,12 +193,7 @@
           background-color: #404040;
         }
         &.btn-2{
-          background-image: linear-gradient(-90deg,
-            #ff3657 0%,
-            #ff7836 100%),
-          linear-gradient(
-              #ff3f31,
-              #ff3f31);
+          background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         }
       }
     }
@@ -383,7 +378,7 @@
         }
       }
       .btn{
-        background-image: linear-gradient(-90deg, #ff3657 0%, 	#ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
+        background-image: linear-gradient(-90deg, #ff3657 0%, #ff7836 100%), linear-gradient(#ff3f31, #ff3f31);
         width: px2rem(704);
         height: px2rem(78);
         text-align: center;
@@ -653,7 +648,7 @@ export default {
         finalCanvas.height = 704
         let context = finalCanvas.getContext('2d')
         Promise.all([
-          self.loadimage('data:image/png;base64,'+self.base64Obj),
+          self.loadimage('data:image/png;base64,' + self.base64Obj),
           self.loadimage(self.qrcode)
         ]).then(res => {
           console.log(res)
@@ -709,28 +704,28 @@ export default {
         }
       })
     },
-    getURLBase64 (url) {
-      return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest()
-        xhr.open('get', url, true)
-        xhr.responseType = 'blob'
-        xhr.onload = function() {
-          if (this.status === 200) {
-            var blob = this.response
-            var fileReader = new FileReader()
-            fileReader.onloadend = function(e) {
-              var result = e.target.result
-              resolve(result)
-            }
-            fileReader.readAsDataURL(blob)
-          }
-        }
-        xhr.onerror = function() {
-          reject()
-        }
-        xhr.send()
-      })
-    },
+    // getURLBase64 (url) {
+    //   return new Promise((resolve, reject) => {
+    //     var xhr = new XMLHttpRequest()
+    //     xhr.open('get', url, true)
+    //     xhr.responseType = 'blob'
+    //     xhr.onload = function () {
+    //       if (this.status === 200) {
+    //         var blob = this.response
+    //         var fileReader = new FileReader()
+    //         fileReader.onloadend = function (e) {
+    //           var result = e.target.result
+    //           resolve(result)
+    //         }
+    //         fileReader.readAsDataURL(blob)
+    //       }
+    //     }
+    //     xhr.onerror = function() {
+    //       reject()
+    //     }
+    //     xhr.send()
+    //   })
+    // },
     goHome () {
       this.$router.push({
         name: 'home'
@@ -888,30 +883,30 @@ export default {
         console.error(res)
       })
     },
-    getSelectArray () {
-      let attrs = [{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/20kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "白色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13}]
-      // title数组
-      let arr1 = attrs[0].attrType.split('/')
-      let arr2 = []
-      for (let i = 0; i < arr1.length; i++) {
-        let n = []
-        attrs.forEach(v => {
-          n.push(v.attrTitle.split('/')[i])
-        })
-        arr2.push(n)
-      }
-      // 规格数组
-      let arr3 = []
-      arr2.forEach((v, i) => {
-        let n = []
-        for (let i = 0; i < v.length; i++) {
-          if (n.indexOf(v[i]) === -1) {
-            n.push(v[i])
-          }
-        }
-        arr3.push(n)
-      })
-    },
+    // getSelectArray () {
+    //   let attrs = [{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "红色/20kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13},{"attrSn": "bba642d481ba4ec4a8d3b7d780b7a4a0","attrTitle": "白色/10kg","attrType": "颜色/重量","goodsId": 0,"lockStock": 0,"pic": "728a10a5-e8fb-4470-a320-7ab298a38b97.png","price": "32","status": 0,"stock": 13}]
+    //   // title数组
+    //   let arr1 = attrs[0].attrType.split('/')
+    //   let arr2 = []
+    //   for (let i = 0; i < arr1.length; i++) {
+    //     let n = []
+    //     attrs.forEach(v => {
+    //       n.push(v.attrTitle.split('/')[i])
+    //     })
+    //     arr2.push(n)
+    //   }
+    //   // 规格数组
+    //   let arr3 = []
+    //   arr2.forEach((v, i) => {
+    //     let n = []
+    //     for (let i = 0; i < v.length; i++) {
+    //       if (n.indexOf(v[i]) === -1) {
+    //         n.push(v[i])
+    //       }
+    //     }
+    //     arr3.push(n)
+    //   })
+    // },
     preview (i) {
       ImagePreview({
         images: this.images,

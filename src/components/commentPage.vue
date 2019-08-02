@@ -141,7 +141,7 @@ export default {
       total: '',
       totalPage: '',
       loadingList: false,
-      finished: false,
+      finished: false
     }
   },
   methods: {

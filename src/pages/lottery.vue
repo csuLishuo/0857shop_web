@@ -292,7 +292,7 @@ export default {
     },
     getLotteryResult (rateArray) {
       console.log('rateArray', rateArray)
-      let random = Math.ceil(Math.random()*100)
+      let random = Math.ceil(Math.random() * 100)
       console.log(random)
       for (let i = 0; i < rateArray.length; i++) {
         if (random <= rateArray[i]) {
@@ -376,20 +376,20 @@ export default {
     },
     // 开始转动
     startRoll () {
-      this.times += 1  // 转动次数
-      this.oneRoll()  // 转动过程调用的每一次转动方法，这里是第一次调用初始化
+      this.times += 1 // 转动次数
+      this.oneRoll() // 转动过程调用的每一次转动方法，这里是第一次调用初始化
 
       // 如果当前转动次数达到要求 && 目前转到的位置是中奖位置
       if (this.times > this.cycle + 10 && this.prize === this.index) {
-        clearTimeout(this.timer)   // 清除转动定时器，停止转动
+        clearTimeout(this.timer) // 清除转动定时器，停止转动
         this.prize = -1
         this.times = 0
         this.click = true
         console.log('你已经中奖了')
       } else {
         if (this.times < this.cycle) {
-          this.speed -= 10   // 加快转动速度
-        } else if (this.times === this.cycle) {    // 随机获得一个中奖位置
+          this.speed -= 10 // 加快转动速度
+        } else if (this.times === this.cycle) { // 随机获得一个中奖位置
           // const index = parseInt(Math.random() * 10, 0) || 0
           const index = this.getLotteryResult(this.rateArray)
           this.prize = index
@@ -413,8 +413,8 @@ export default {
     },
     // 每一次转动
     oneRoll () {
-      let index = this.index  // 当前转动到哪个位置
-      const count = this.count  // 总共有多少个位置
+      let index = this.index // 当前转动到哪个位置
+      const count = this.count // 总共有多少个位置
       index += 1
       if (index > count - 1) {
         index = 0
@@ -429,7 +429,7 @@ export default {
       this.click = false
       this.startRoll()
     },
-    //用户中奖
+    // 用户中奖
     postRewardId (index) {
       if (this.goodsList[index].type !== 1) {
         this.$post('/api/goodsLotteryDraw/insertGoodsLotteryDrawUsers', {
