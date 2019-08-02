@@ -407,12 +407,12 @@
       </div>
     </div>
     <!-- 选择支付方式 -->
-    <!--<div class="area-5">
+    <div class="area-5">
       <van-checkbox-group v-model="checkboxResult" :max="1">
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon42.png" alt=""></div>
-            <div class="name">购物卡1000元，可抵用200元</div>
+            <div class="name">购物卡{{initData.cardNumber}}元，可抵用{{initData.cardNumber}}元</div>
           </div>
           <div class="right-box">
             <van-checkbox :key="0" :name="0" checked-color="#07c160"></van-checkbox>
@@ -421,14 +421,14 @@
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon43.png" alt=""></div>
-            <div class="name">购物券1000元，可抵用200元</div>
+            <div class="name">购物券{{initData.couponNumber}}元，可抵用{{initData.couponNumber}}元</div>
           </div>
           <div class="right-box">
             <van-checkbox :key="1" :name="1" checked-color="#07c160"></van-checkbox>
           </div>
         </div>
       </van-checkbox-group>
-    </div>-->
+    </div>
     <div class="area-bottom">
       <div class="left-box">
         <div class="total">共{{value}}件</div>
