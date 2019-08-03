@@ -385,21 +385,21 @@
       *开关开启状态商品生成二维码赠送好友，关闭状态，商品属于自己
     </div>
     <div class="area-4">
-      <div v-for="(item, index) in selectGoodsList" :key="index">
+      <div v-for="(item, index) in initData.list" :key="index">
         <div class="wrapper">
-          <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+          <div class="img-box"><img :src="filePath + item.pic" alt=""></div>
           <div class="right-box">
             <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
             <!--<div class="des">已售2008件/库存10000件</div>-->
             <div class="price-box">
-              <div class="price">￥<span>{{item.nowPrice}}</span></div>
+              <div class="price">￥<span>{{item.price}}</span></div>
             </div>
           </div>
         </div>
         <div class="area-4-1">
           <div class="name">购买数量</div>
           <div class="step-view">
-            <van-stepper v-model="value" min="1" max="99" />
+            <van-stepper @change="handleNumberChange" v-model="item.number" min="1" max="99" />
           </div>
         </div>
       </div>
@@ -409,12 +409,12 @@
       </div>
     </div>
     <!-- 选择支付方式 -->
-    <!--<div class="area-5">
-      <van-checkbox-group v-model="checkboxResult" :max="1">
+    <div class="area-5">
+      <van-checkbox-group v-model="checkboxResult">
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon42.png" alt=""></div>
-            <div class="name">购物卡1000元，可抵用200元</div>
+            <div class="name">购物卡{{initData.cardNumber}}元，可抵用{{initData.cardNumber}}元</div>
           </div>
           <div class="right-box">
             <van-checkbox :key="0" :name="0" checked-color="#07c160"></van-checkbox>
@@ -423,20 +423,20 @@
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon43.png" alt=""></div>
-            <div class="name">购物券1000元，可抵用200元</div>
+            <div class="name">购物券{{initData.couponNumber}}元，可抵用{{initData.couponNumber}}元</div>            
           </div>
           <div class="right-box">
             <van-checkbox :key="1" :name="1" checked-color="#07c160"></van-checkbox>
           </div>
         </div>
       </van-checkbox-group>
-    </div>-->
+    </div>
     <div class="area-bottom">
       <div class="left-box">
         <div class="total">共{{value}}件</div>
         <div class="price-box">
           合计：
-          <!--<span class="price">￥{{(value * parseFloat(detailData.nowPrice)).toFixed(2)}}</span>-->
+          <span class="price">￥{{totalPrice}}</span>
         </div>
       </div>
       <div class="right-box" @click="handleSubmit">提交订单</div>
@@ -455,8 +455,8 @@ export default {
     return {
       tabStatus: 2,
       checked: false,
-      value: 1,
-      checkboxResult: [1],
+      value: 0,
+      checkboxResult: [0, 1],
       initData: {},
       selectGoodsList: {},
       filePath: '',
@@ -466,26 +466,39 @@ export default {
         city: '长沙市',
         county: '高新区',
         address: '麓谷大道627号麓谷新长海B-1栋208'
-      }
+      },
+      totalPrice: 0
     }
   },
   methods: {
+    handleNumberChange () {
+      this.value = 0
+      this.totalPrice = 0
+      this.initData.list.forEach(v => {
+        this.value += v.number
+        this.totalPrice += v.number * parseFloat(v.price)
+      })
+      this.totalPrice = this.totalPrice.toFixed(2)
+    },
     goSelectAddress () {
       this.$router.push({
         name: 'selectAddress'
       })
     },
     handleSubmit () {
+      let list = []
+      this.initData.list.forEach(item => {
+        let obj = {}
+        obj.goodsFlashSaleId = item.goodsFlashSaleId,
+        obj.goodsIssueId = item.goodsIssueId,
+        obj.goodsId = item.goodsId,
+        obj.attrSn = item.attrSn,
+        obj.number = item.number,
+        obj.shareType = item.shareType
+        list.push(obj)
+      })
       let sendData = {
-        list: [
-          {
-            goodsFlashSaleId: this.initData.list[0].goodsFlashSaleId,
-            goodsIssueId: this.initData.list[0].goodsIssueId,
-            goodsId: this.initData.list[0].goodsId,
-            attrSn: this.initData.list[0].attrSn,
-            number: this.value,
-            shareType: this.initData.list[0].shareType
-          }],
+        list: list,
         platform: 1,
         province: this.tabStatus === 1 ? this.storeAddressData.province : this.defaultAddressData.province,
         city: this.tabStatus === 1 ? this.storeAddressData.city : this.defaultAddressData.city,
@@ -499,8 +512,8 @@ export default {
         isFriend: this.checked ? 1 : 2, // 是否好友商品 1好友 2自己
         number: this.value, // 商品数量(总数量)
         payType: 1, // 支付方式
-        // cardNumber: this.initData.cardNumber, // 购物卡金额
-        // couponNumber: this.initData.cardNumber, // 购物券金额
+        cardNumber: this.checkboxResult.indexOf(0) === -1 ? 0 : this.initData.cardNumber, // 购物卡金额
+        couponNumber: this.checkboxResult.indexOf(1) === -1 ? 0 : this.initData.couponNumber, // 购物券金额
         remark: ''// 订单备注
       }
       this.$post('/api/orders/confirmOrders', sendData).then(res => {
@@ -539,7 +552,11 @@ export default {
     this.initData = JSON.parse(this.$route.params.initData)
     this.selectGoodsList = JSON.parse(this.$route.params.selectGoodsList)
     this.filePath = sessionStorage.getItem('filePath')
-    this.value = this.initData.list[0].value
+    this.initData.list.forEach(v => {
+      this.value += v.number
+      this.totalPrice += v.number * parseFloat(v.price)
+    })
+    this.totalPrice = this.totalPrice.toFixed(2)
     this.getDefaultAddress()
   },
   watch: {

@@ -30,10 +30,14 @@
         background: #fff;
         border-radius: px2rem(10);
         padding-left: px2rem(50);
+        padding-right: px2rem(20);
         height: px2rem(58);
         width: px2rem(564);
         position: relative;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         img{
           width: px2rem(25);
           height: px2rem(25);
@@ -42,9 +46,13 @@
           top: px2rem(17);
         }
         input{
-          width: 100%;
+          width: 80%;
           line-height: px2rem(58);
           font-size: px2rem(25);
+        }
+        .btn{
+          font-size: px2rem(26);
+          color: #666;
         }
       }
       .info{
@@ -433,7 +441,9 @@
       <div class="scan"><img src="../images/icon5.png" alt=""></div>
       <div class="input-box">
         <img src="../images/icon6.png" alt="">
-        <input type="text"></div>
+        <input type="text" v-model="sendData.title">
+        <div class="btn" @click="search">搜索</div>
+      </div>
       <div class="info">
         <img src="../images/icon7.png" alt="">
         <span>1</span>

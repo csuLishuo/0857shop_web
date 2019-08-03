@@ -152,7 +152,8 @@
                     <div class="desc ellipsis-1">{{item.subTitle}}</div>
                   </div>
                   <div class="b">
-                    <div class="price">￥{{item.nowPrice}}</div>
+                    <!-- <div class="price">￥{{item.nowPrice}}</div> -->
+                    <div class="price">￥{{JSON.parse(item.attrs)[0].price}}</div>
                     <div class="good-step-view">
                       <van-stepper v-model="item.number" @change="handleNumChange" min="1" max="99" />
                     </div>
@@ -226,7 +227,7 @@ export default {
           if (this.checkboxResult[i] === this.goodsList[j].id) {
             this.selectGoodsList.push(this.goodsList[j])
             obj.shareId = 0
-            obj.goodsIssueId = this.goodsList[j].id
+            obj.goodsIssueId = this.goodsList[j].goodsIssueId
             obj.goodsId = this.goodsList[j].goodsId
             obj.attrSn = JSON.parse(this.goodsList[j].attrs)[0].attrSn
             obj.number = this.goodsList[j].number
@@ -290,7 +291,8 @@ export default {
       this.totlePrice = 0
       this.goodsList.forEach(v => {
         if (this.checkboxResult.indexOf(v.id) !== -1) {
-          this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+          // this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+          this.totlePrice += Number(v.number) * Number(JSON.parse(v.attrs)[0].price) * 100
         }
       })
     },
@@ -299,7 +301,8 @@ export default {
       this.totlePrice = 0
       this.goodsList.forEach(v => {
         if (value.indexOf(v.id) !== -1) {
-          this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+          // this.totlePrice += Number(v.number) * Number(v.nowPrice) * 100
+          this.totlePrice += Number(v.number) * Number(JSON.parse(v.attrs)[0].price) * 100
         }
       })
     },

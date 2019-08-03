@@ -408,7 +408,7 @@
     </div>
     <!-- 选择支付方式 -->
     <div class="area-5">
-      <van-checkbox-group v-model="checkboxResult" :max="1">
+      <van-checkbox-group v-model="checkboxResult" @change="test">
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon42.png" alt=""></div>
@@ -454,7 +454,7 @@ export default {
       tabStatus: 2,
       checked: false,
       value: 1,
-      checkboxResult: [1],
+      checkboxResult: [0, 1],
       initData: {},
       detailData: {},
       filePath: '',
@@ -468,6 +468,9 @@ export default {
     }
   },
   methods: {
+    test () {
+      console.log('11111', this.checkboxResult)
+    },
     goSelectAddress () {
       this.$router.push({
         name: 'selectAddress'
@@ -497,8 +500,8 @@ export default {
         isFriend: this.checked ? 1 : 2, // 是否好友商品 1好友 2自己
         number: this.value, // 商品数量(总数量)
         payType: 1, // 支付方式
-        // cardNumber: this.initData.cardNumber, // 购物卡金额
-        // couponNumber: this.initData.cardNumber, // 购物券金额
+        cardNumber: this.checkboxResult.indexOf(0) === -1 ? 0 : this.initData.cardNumber, // 购物卡金额
+        couponNumber: this.checkboxResult.indexOf(1) === -1 ? 0 : this.initData.couponNumber, // 购物券金额
         remark: ''// 订单备注
       }
       this.$post('/api/orders/confirmOrders', sendData).then(res => {

@@ -143,17 +143,17 @@
         <div class="text">购买成功</div>
       </div>
       <div class="area-1-3">
-        <div class="btn btn-left">查看订单</div>
-        <div class="btn btn-right">返回首页</div>
+        <div class="btn btn-left" @click="goMyOrder">查看订单</div>
+        <div class="btn btn-right" @click="goHome">返回首页</div>
       </div>
     </div>
     <div class="area-2 clearfix">
       <div class="recommend-list">
-        <div class="wrapper">
-          <div class="img-box"><img src="../images/img2.png" alt=""></div>
-          <div class="name ellipsis-1">PZAAO 中空缎面款色休..PZAAO 中空缎面款色休..</div>
-          <div class="des ellipsis-1">已售1389/剩2000</div>
-          <div class="price">￥<span>599.00</span></div>
+        <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
+          <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+          <div class="name ellipsis-1">{{item.title}}{{item.subTitle}}</div>
+          <!-- <div class="des ellipsis-1">已售1389/剩2000</div> -->
+          <div class="price">￥<span>{{item.nowPrice}}</span></div>
         </div>
       </div>
     </div>
@@ -170,9 +170,49 @@ export default {
   },
   data () {
     return {
+      filePath: '',
+      goodsList: [],
+      sendData: {
+        categoryId: 0,
+        pageNumber: 1,
+        pageSize: 4
+      },
     }
   },
   methods: {
+    goMyOrder () {
+      this.$router.push({
+        name: 'myOrder',
+        params: {
+          status: 2
+        }
+      })
+    },
+    goDetail (id) {
+      this.$router.push({
+        path: 'detail_hotSale',
+        query: {
+          detailId: id
+        }
+      })
+    },
+    getGoodsList () {
+      this.$post('/api/goodsHotSale/getGoodsHotSaleListByCategoryId', this.sendData).then(res => {
+        if (res.result === 0) {
+          this.goodsList = res.data.list
+          this.filePath = res.filePath
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
+    goHome () {
+      this.$router.push({
+        name: 'home'
+      })
+    },
     test () {
       Toast.loading({
         mask: true,
@@ -182,6 +222,7 @@ export default {
   },
   mounted () {
     // this.test()
+    this.getGoodsList()
   },
   watch: {
   }
