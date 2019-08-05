@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Home from '@/pages/home'
+import SearchPage from '@/pages/searchPage'
 import Category from '@/pages/category'
 import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
@@ -63,6 +64,14 @@ export default new Router({
     path: '/home',
     name: 'home',
     component: Home,
+    meta: {
+      keepAlive: false,
+      isBack: false
+    }
+  }, {
+    path: '/searchPage',
+    name: 'searchPage',
+    component: SearchPage,
     meta: {
       keepAlive: false,
       isBack: false

@@ -46,7 +46,7 @@
           top: px2rem(17);
         }
         input{
-          width: 80%;
+          width: 100%;
           line-height: px2rem(58);
           font-size: px2rem(25);
         }
@@ -441,8 +441,9 @@
       <div class="scan"><img src="../images/icon5.png" alt=""></div>
       <div class="input-box">
         <img src="../images/icon6.png" alt="">
-        <input type="text" v-model="sendData.title">
-        <div class="btn" @click="search">搜索</div>
+        <input type="text" @click="search">
+        <!--<input type="text" @click="search" v-model="sendData.title">-->
+        <!--<div class="btn" @click="search">搜索</div>-->
       </div>
       <div class="info">
         <img src="../images/icon7.png" alt="">
@@ -748,10 +749,9 @@ export default {
       this.getGoodsList()
     },
     search () {
-      this.finished = false
-      this.sendData.pageNumber = 1
-      this.goodsList = []
-      this.getGoodsList()
+      this.$router.push({
+        path: 'searchPage'
+      })
     },
     getBannerList () {
       this.$post('/api/banner/getBannerListByBannerType', {
