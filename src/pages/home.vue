@@ -445,9 +445,9 @@
         <!--<input type="text" @click="search" v-model="sendData.title">-->
         <!--<div class="btn" @click="search">搜索</div>-->
       </div>
-      <div class="info">
+      <div class="info" @click="goMyInfo">
         <img src="../images/icon7.png" alt="">
-        <span>1</span>
+        <!--<span>1</span>-->
       </div>
     </div>
     <div class="banner">
@@ -739,6 +739,11 @@ export default {
         query: {
           detailId: id
         }
+      })
+    },
+    goMyInfo () {
+      this.$router.push({
+        path: 'myInfo'
       })
     },
     changeCate (id) {

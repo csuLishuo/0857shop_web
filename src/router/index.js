@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Home from '@/pages/home'
 import SearchPage from '@/pages/searchPage'
+import MyInfo from '@/pages/myInfo'
 import Category from '@/pages/category'
 import Cart from '@/pages/cart'
 import MyCenter from '@/pages/myCenter'
@@ -72,6 +73,14 @@ export default new Router({
     path: '/searchPage',
     name: 'searchPage',
     component: SearchPage,
+    meta: {
+      keepAlive: false,
+      isBack: false
+    }
+  }, {
+    path: '/myInfo',
+    name: 'myInfo',
+    component: MyInfo,
     meta: {
       keepAlive: false,
       isBack: false
