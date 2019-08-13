@@ -57,6 +57,7 @@ import DetailActive from '@/pages/detail_active'
 import DetailScore from '@/pages/detail_score'
 import SelectAddress from '@/pages/selectAddress'
 import MyWarehouse from '@/pages/myWarehouse'
+import ExperienceList from '@/pages/experienceList'
 
 Vue.use(Router)
 
@@ -441,6 +442,14 @@ export default new Router({
     path: '/hotSaleList',
     name: 'hotSaleList',
     component: HotSaleList,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 体验区列表
+    path: '/experienceList',
+    name: 'experienceList',
+    component: ExperienceList,
     meta: {
       keepAlive: true,
       isBack: false

@@ -120,6 +120,52 @@
         height: 100%;
       }
     }
+    .area-experience{
+      background: #fff;
+      width: px2rem(710);
+      margin: px2rem(20) auto;
+      border-radius: px2rem(10);
+      overflow: hidden;
+      padding-bottom: px2rem(20);
+      .img-box-1{
+        height: px2rem(260);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+      .wrapper{
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: flex-start;
+        justify-content: space-around;
+        .img-box-2{
+          width: px2rem(182);
+          height: px2rem(182);
+          border-radius: px2rem(6);
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img{
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+        .btn-box{
+          width: px2rem(68);
+          height: px2rem(182);
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
     .area-1{
       background: #fff;
       .title{
@@ -482,9 +528,9 @@
         <div class="img-box"><img src="../images/icon13.png" alt=""></div>
         <div class="text">任务</div>
       </div>
-      <div class="wrapper" @click="go(7)">
+      <div class="wrapper" @click="goExperienceList">
         <div class="img-box"><img src="../images/icon14.png" alt=""></div>
-        <div class="text">计步</div>
+        <div class="text">体验区</div>
       </div>
       <div class="wrapper" @click="more">
         <div class="img-box"><img src="../images/icon15.png" alt=""></div>
@@ -493,6 +539,15 @@
     </div>
     <div class="ad-box" v-if="adData" @click="goActiveList">
       <img :src="filePath + adData.bannerPic" alt="">
+    </div>
+    <div class="area-experience clearfix">
+      <div class="img-box-1" @click="goExperienceDetail(experienceGoodsList[0].id)"><img v-if="experienceGoodsList[0]" :src="filePath + experienceGoodsList[0].pics.split(';')[0]" alt=""></div>
+      <div class="wrapper">
+        <div class="img-box-2" @click="goExperienceDetail(experienceGoodsList[1].id)"><img v-if="experienceGoodsList[1]" :src="filePath + experienceGoodsList[1].pics.split(';')[0]" alt=""></div>
+        <div class="img-box-2" @click="goExperienceDetail(experienceGoodsList[2].id)"><img v-if="experienceGoodsList[2]" :src="filePath + experienceGoodsList[2].pics.split(';')[0]" alt=""></div>
+        <div class="img-box-2" @click="goExperienceDetail(experienceGoodsList[3].id)"><img v-if="experienceGoodsList[3]" :src="filePath + experienceGoodsList[3].pics.split(';')[0]" alt=""></div>
+        <div class="btn-box" @click="goExperienceList"><img src="../images/btn1.png" alt=""></div>
+      </div>
     </div>
     <div class="area-1 clearfix">
       <div class="title">热卖商品</div>
@@ -646,7 +701,12 @@ export default {
         pageNumber: 1,
         pageSize: 4
       },
-      hotSaleGoodsList: []
+      hotSaleGoodsList: [],
+      experienceGoodsList: [],
+      sendDataExperience: {
+        pageNumber: 1,
+        pageSize: 4
+      }
     }
   },
   methods: {
@@ -667,6 +727,23 @@ export default {
         }
       }).catch(res => {
         console.error(res)
+      })
+    },
+    // 体验区商品列表
+    getExperienceGoodsList () {
+      this.$post('api/goodsCoupon/getGoodsCouponsList', this.sendDataExperience).then(res => {
+        if (res.result === 0) {
+          this.experienceGoodsList = res.data.list
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
+    goExperienceList () {
+      this.$router.push({
+        path: '/experienceList'
       })
     },
     more () {
@@ -864,9 +941,6 @@ export default {
     }
     if (!sessionStorage.getItem('authStatus')) {
       location.href = 'http://zhusc.wurenyulecang.com/api/user/authorize?returnUrl=1'
-      // this.$router.push({
-      //   path: '/login'
-      // })
     } else {
       this.getBannerList()
       this.getAdImg()
@@ -875,6 +949,7 @@ export default {
       this.getSignInData()
       this.getSignScore()
       this.getHotSaleGoodsList()
+      this.getExperienceGoodsList()
     }
   },
   watch: {
