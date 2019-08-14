@@ -113,6 +113,7 @@
         .name{
           font-size: px2rem(26);
           line-height: px2rem(34);
+          height: px2rem(68);
           margin-top: px2rem(16);
           color: #45484f;
           padding: 0 px2rem(26);
@@ -154,8 +155,7 @@
 </style>
 <template>
   <div class="experience-container">
-    123
-    <!--<div class="goodsList">
+    <div class="goodsList">
       <van-list
         v-model="loadingList"
         :finished="finished"
@@ -164,43 +164,23 @@
       >
         <div class="wrapper" v-for="item in goodsList" :key="item.id" @click="goDetail(item.id)">
           <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+          <div class="name ellipsis-2">{{item.title}}{{item.subTitle}}</div>
           <div class="price">
             <div>￥<span>{{item.nowPrice}}</span></div>
-            &lt;!&ndash; <div class="label">满38减10</div> &ndash;&gt;
+            <div class="label">可用体验券</div>
           </div>
-          <div class="name ellipsis-2">{{item.title}}{{item.subTitle}}</div>
         </div>
       </van-list>
-      <div class="wrapper">
-        <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
-        <div class="name ellipsis-2">{{item.title}}{{item.subTitle}}</div>
-        <div class="price">
-          <div>￥<span>{{123123}}</span></div>
-          <div class="label">满38减10</div>
-        </div>
-      </div>
-    </div>-->
-    <div class="goodsList">
-      <div class="wrapper">
-        <div class="img-box"><img src="../images/img1.png" alt=""></div>
-        <div class="name ellipsis-2">{{item.title}}{{item.subTitle}}</div>
-        <div class="price">
-          <div>￥<span>{{123123}}</span></div>
-          <div class="label">满38减10</div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Toast } from 'vant'
-import tabbar from '../components/tabbar'
 
 export default {
   name: 'experienceList',
   components: {
-    tabbar
   },
   data () {
     return {
@@ -263,7 +243,7 @@ export default {
     }
   },
   mounted () {
-    // this.getGoodsList()
+    this.getGoodsList()
   },
   watch: {
   }

@@ -98,6 +98,7 @@
     </div>
     <div class="area-1">
       <div class="text" @click="goRegister">新用户注册</div>
+      <div class="text" @click="goModifyPassword">忘记密码？</div>
     </div>
     <div class="area-2" @click="login">登录</div>
   </div>
@@ -121,6 +122,11 @@ export default {
     goRegister () {
       this.$router.push({
         name: 'register'
+      })
+    },
+    goModifyPassword () {
+      this.$router.push({
+        name: 'modifyPassword'
       })
     },
     login () {

@@ -58,6 +58,7 @@ import DetailScore from '@/pages/detail_score'
 import SelectAddress from '@/pages/selectAddress'
 import MyWarehouse from '@/pages/myWarehouse'
 import ExperienceList from '@/pages/experienceList'
+import ModifyPassword from '@/pages/modifyPassword'
 
 Vue.use(Router)
 
@@ -514,6 +515,14 @@ export default new Router({
     path: '/myWarehouse',
     name: 'myWarehouse',
     component: MyWarehouse,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 忘记密码
+    path: '/modifyPassword',
+    name: 'modifyPassword',
+    component: ModifyPassword,
     meta: {
       keepAlive: true,
       isBack: false

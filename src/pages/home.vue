@@ -503,6 +503,10 @@
         </van-swipe-item>
       </van-swipe>
     </div>
+    <van-notice-bar
+      :text="infoData.summary"
+      left-icon="volume-o"
+    />
     <div class="links">
       <div class="wrapper" @click="go(1)">
         <div class="img-box"><img src="../images/icon8.png" alt=""></div>
@@ -706,10 +710,26 @@ export default {
       sendDataExperience: {
         pageNumber: 1,
         pageSize: 4
-      }
+      },
+      infoData: {}
     }
   },
   methods: {
+    // 获取公告信息
+    getInfoList () {
+      this.$post('/api/systemMessage/getSystemMessageListByUserId', {
+        pageNumber: 1,
+        pageSize: 1
+      }).then(res => {
+        if (res.result === 0) {
+          this.infoData = res.data.list[0]
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     goHotSaleDetail (id) {
       this.$router.push({
         path: 'detail_hotSale',
@@ -950,6 +970,7 @@ export default {
       this.getSignScore()
       this.getHotSaleGoodsList()
       this.getExperienceGoodsList()
+      this.getInfoList()
     }
   },
   watch: {
