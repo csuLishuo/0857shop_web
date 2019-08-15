@@ -104,7 +104,7 @@
       </div>
       <div class="wrapper clearfix">
         <div class="portrait-box"><img :src="userInfo.avatar" alt=""></div>
-        <div class="name">{{userInfo.userName}}</div>
+        <div class="name">{{phone}}</div>
         <div class="qr-box">
           <img :src="qrcode" alt="">
         </div>
@@ -129,7 +129,8 @@ export default {
     return {
       userInfo: {},
       userName: '',
-      qrcode: ''
+      qrcode: '',
+      phone: ''
     }
   },
   methods: {
@@ -146,6 +147,9 @@ export default {
   },
   mounted () {
     this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    console.log(this.userInfo)
+    let phone = this.userInfo.userName
+    this.phone = phone.substring(0, 3) + '****' + phone.substring(7)
     this.userName = sessionStorage.getItem('userName')
     this.initQRcode()
   },

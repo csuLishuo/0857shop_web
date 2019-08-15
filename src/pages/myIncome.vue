@@ -193,7 +193,7 @@
         </div>
         <div class="area-1-3">
           <div class="wrap">
-            <div class="name">购物券(元)</div>
+            <div class="name">体验券(元)</div>
             <div class="price">{{(Number(userInfo.couponNumber) / 100).toFixed(2)}}</div>
           </div>
           <div class="wrap">

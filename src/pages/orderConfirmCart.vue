@@ -423,7 +423,7 @@
         <div class="wrapper">
           <div class="name-box">
             <div class="icon-box"><img src="../images/icon43.png" alt=""></div>
-            <div class="name">购物券{{initData.couponNumber}}元，可抵用{{initData.couponNumber}}元</div>            
+            <div class="name">体验券{{initData.couponNumber}}元，可抵用{{initData.couponNumber}}元</div>
           </div>
           <div class="right-box">
             <van-checkbox :key="1" :name="1" checked-color="#07c160"></van-checkbox>
