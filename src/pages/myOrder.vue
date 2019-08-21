@@ -280,7 +280,7 @@ export default {
     handleTabCateChange (e) {
       console.log('handleTabCateChange', e)
       this.sendData.pageNumber = 1
-      this.sendData.isFriend = e
+      this.sendData.isFriend = e + 1
       this.getOrderList()
     },
     getOrderList () {
@@ -296,7 +296,7 @@ export default {
           // 加载状态结束
           this.loadingList = false
           // 数据全部加载完成
-          if (this.goodsList.length >= Number(this.total)) {
+          if (this.orderList.length >= Number(this.total)) {
             this.finished = true
           }
         } else {
