@@ -294,6 +294,7 @@ export default {
           }
           this.total = res.data.totalCount
           this.totalPage = res.data.totalPage
+          this.filePath = res.filePath
           // 加载状态结束
           this.loadingList = false
           // 数据全部加载完成
