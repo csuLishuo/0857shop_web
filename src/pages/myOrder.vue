@@ -204,7 +204,8 @@
       >
         <div class="wrapper" v-for="item in orderList" :key="item.id" >
           <div class="wrap-1">
-            <div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>
+            <!--<div class="img-box"><img :src="filePath + item.pics.split(';')[0]" alt=""></div>-->
+            <div class="img-box"><img :src="filePath + item.list[0].pic" alt=""></div>
             <div class="right-box">
               <div class="title ellipsis-2">{{item.title}}{{item.subTitle}}</div>
               <div class="des"><span v-for="(v, index) in item.list" :key="index">{{v.attrTitle}}</span></div>
@@ -259,7 +260,7 @@ export default {
       activeCate: 1,
       sendData: {
         status: 1,
-        isFriend: 1,
+        isFriend: 2,
         pageNumber: 1,
         pageSize: 10
       },
