@@ -220,8 +220,8 @@
             <div class="text" v-if="item.status==4">待评价</div>
             <div class="text" v-if="item.status==5">已完成</div>
             <div class="btn-box">
-              <div class="btn" v-if="item.status==1||item.status==2">取消订单</div>
-              <div class="btn" v-if="item.status==3">确认收货</div>
+              <div class="btn" v-if="item.status==1||item.status==2" @click="handelCancelOrder(item.id)">取消订单</div>
+              <div class="btn" v-if="item.status==3" @click="handelConfirmOrder(item.id)">确认收货</div>
               <div class="btn" v-if="item.status==4">去评价</div>
             </div>
           </div>
@@ -273,13 +273,50 @@ export default {
     }
   },
   methods: {
+    handelCancelOrder (id) {
+      this.$post('/api/orders/cancelOrders', {
+        id: id,
+        cancelReason: ''
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success('已取消订单')
+          this.orderList.forEach(v => {
+            if (v.id === id) {
+              v.status = 0
+            }
+          })
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
+    handelConfirmOrder (id) {
+      this.$post('/api/orders/confirmReceipt', {
+        id: id
+      }).then(res => {
+        if (res.result === 0) {
+          Toast.success('收货成功')
+          this.orderList = []
+          this.sendData.pageNumber = 1
+          this.getOrderList()
+        } else {
+          Toast.fail(res.message)
+        }
+      }).catch(res => {
+        console.error(res)
+      })
+    },
     handleTabChange (e) {
+      this.orderList = []
       this.sendData.pageNumber = 1
       this.sendData.status = e
       this.getOrderList()
     },
     handleTabCateChange (e) {
       console.log('handleTabCateChange', e)
+      this.orderList = []
       this.sendData.pageNumber = 1
       this.sendData.isFriend = e + 1
       this.getOrderList()
