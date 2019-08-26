@@ -495,7 +495,7 @@ export default {
         phone: this.tabStatus === 1 ? '' : this.defaultAddressData.phone,
         address: this.tabStatus === 1 ? this.storeAddressData.address : this.defaultAddressData.address,
         zipCode: this.tabStatus === 1 ? '' : this.defaultAddressData.zipCode,
-        userAddressId: this.tabStatus === 1 ? '' : this.defaultAddressData.userAddressId,
+        userAddressId: this.tabStatus === 1 ? '' : this.defaultAddressData.id,
         expressType: this.tabStatus, // 快递状态 1上门取货 2快递配送
         isFriend: this.checked ? 1 : 2, // 是否好友商品 1好友 2自己
         number: this.value, // 商品数量(总数量)
@@ -506,7 +506,7 @@ export default {
       }
       this.$post('/api/orders/confirmOrders', sendData).then(res => {
         if (res.result === 0) {
-          location.href = res.data
+          // location.href = res.data
         } else {
           Toast.fail(res.message)
         }

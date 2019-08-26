@@ -13,6 +13,7 @@ module.exports = {
     proxyTable: {
       '/proxy': {
         target: 'http://clearbye.natapp1.cc',
+        // target: '',
         // target: 'http://zhusc.wurenyulecang.com',
         changeOrigin: true,
         pathRewrite: {
