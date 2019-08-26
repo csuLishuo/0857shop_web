@@ -504,6 +504,7 @@
       </van-swipe>
     </div>
     <van-notice-bar
+      v-if="infoData || infoData.summary"
       :text="infoData.summary"
       left-icon="volume-o"
     />
@@ -722,7 +723,9 @@ export default {
         pageSize: 1
       }).then(res => {
         if (res.result === 0) {
-          this.infoData = res.data.list[0]
+          if (res.data.list > 0) {
+            this.infoData = res.data.list[0]
+          }
         } else {
           Toast.fail(res.message)
         }

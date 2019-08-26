@@ -59,6 +59,7 @@ import SelectAddress from '@/pages/selectAddress'
 import MyWarehouse from '@/pages/myWarehouse'
 import ExperienceList from '@/pages/experienceList'
 import ModifyPassword from '@/pages/modifyPassword'
+import detailCoupon from '@/pages/detail_coupon'
 
 Vue.use(Router)
 
@@ -459,6 +460,14 @@ export default new Router({
     path: '/detail_hotSale',
     name: 'detail_hotSale',
     component: detailHotSale,
+    meta: {
+      keepAlive: true,
+      isBack: false
+    }
+  }, { // 体验区商品详情
+    path: '/detail_coupon',
+    name: 'detail_coupon',
+    component: detailCoupon,
     meta: {
       keepAlive: true,
       isBack: false

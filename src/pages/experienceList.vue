@@ -6,42 +6,26 @@
   .experience-container{
     padding-bottom: px2rem(100);
     .topBar{
-      background: #ff3e31;
-      height: px2rem(94);
-      padding: px2rem(18) 0;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-around;
-      .input-box{
-        background: #fff;
-        border-radius: px2rem(10);
-        padding-left: px2rem(50);
-        padding-right: px2rem(20);
-        height: px2rem(58);
-        width: px2rem(700);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      background: #fff;
+      height: px2rem(100);
+      padding: 0 px2rem(36);
+      position: relative;
+      line-height: px2rem(100);
+      .left-box{
+        width: px2rem(19);
+        height: px2rem(37);
+        position: absolute;
+        left: px2rem(36);
+        top: px2rem(32);
         img{
-          width: px2rem(25);
-          height: px2rem(25);
-          position: absolute;
-          left: px2rem(16);
-          top: px2rem(17);
+          width: 100%;
+          height: 100%;
         }
-        input{
-          width: 80%;
-          line-height: px2rem(58);
-          font-size: px2rem(25);
-        }
-        .btn{
-          font-size: px2rem(26);
-          color: #666;
-        }
+      }
+      .title{
+        font-size: px2rem(32);
+        font-weight: bold;
+        text-align: center;
       }
     }
     .banner{
@@ -155,6 +139,10 @@
 </style>
 <template>
   <div class="experience-container">
+    <div class="topBar">
+      <div class="left-box" @click="goBack"><img src="../images/icon39.png" alt=""></div>
+      <div class="title">体验区</div>
+    </div>
     <div class="goodsList">
       <van-list
         v-model="loadingList"
@@ -200,9 +188,12 @@ export default {
     }
   },
   methods: {
+    goBack () {
+      this.$router.back(-1)
+    },
     goDetail (id) {
       this.$router.push({
-        path: 'detailPage',
+        path: 'detail_coupon',
         query: {
           detailId: id
         }
